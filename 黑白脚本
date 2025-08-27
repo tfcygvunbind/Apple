@@ -20,6 +20,13 @@ game:GetService("StarterGui"):SetCore("SendNotification",{
     Duration = 6,
     Callback = bindable,
 })
+
+game:GetService("StarterGui"):SetCore("SendNotification",{
+    Title = "作者QQ号↓",
+    Text = "2199414565",
+    Duration = 60,
+    Callback = bindable,
+})
 local CoreGui = game:GetService("StarterGui")
 CoreGui:SetCore("SendNotification", {
     Title = "黑白的欢迎",
