@@ -604,7 +604,7 @@ game:GetService("StarterGui"):SetCore("SendNotification",{
 })
 
 local Window = WindUI:CreateWindow({
-    Title = "黑白脚本",
+    Title = "黑白脚本测试版",
     Icon = "door-open",
     Author = "",
     Folder = "CloudHub",
