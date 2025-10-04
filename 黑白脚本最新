@@ -594,14 +594,14 @@ Start = tick()
 Heartbeat:Connect(HeartbeatUpdate)
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
-game:GetService("StarterGui"):SetCore("SendNotification",{
-    Title = "QQ群：946671668",
-    Text = "黑白脚本群",
-    Icon = "rbxassetid://16026568198",
-    Duration = 60,
-    Callback = bindable,
-    setclipboard("946671668")
-})
+local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+
+Notification:Notify(
+        {Title = "欢迎使用黑白脚本", Description = "请加入QQ群：946671668"},
+        {OutlineColor = Color3.fromRGB(0, 0, 0),Time = 9, Type = "image"},
+        {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(258, 58, 68)})
+
 
 local Window = WindUI:CreateWindow({
     Title = "黑白脚本测试版",
