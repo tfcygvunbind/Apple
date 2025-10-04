@@ -690,6 +690,11 @@ Button(Tab1, "免费缝合脚本", function()
     end)
 end)
 
+Button(Tab1, "一路顺风", function()
+    pcall(function()
+    end)
+end)
+
 -- 通用 (Tab2)
 Button(Tab2, "飞行", function() 
     pcall(function()
