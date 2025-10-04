@@ -684,7 +684,7 @@ local function CreateGUI(title)
     agreeFrame.Size = UDim2.new(0.8, 0, 0.5, 0)
     agreeFrame.Position = UDim2.new(0.1, 0, 0.22, 0)
     agreeFrame.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
-    agreeFrame.Text = "1.欢迎使用黑白脚本.\n 2.让每个人免费玩到精品.\n 3.更新：服务器建造一架飞机."
+    agreeFrame.Text = "1.欢迎使用黑白脚本.\n 2.让每个人免费玩到精品.\n 3.更新：服务器建造一架飞机、服务器勘探中、服务器法宝模拟器."
     agreeFrame.TextWrapped = true
 
     
@@ -834,6 +834,8 @@ local Tab8 = Tab("压力")
 local Tab9 = Tab("成为乞丐")
 local Tab10 = Tab("磁铁模拟器")
 local Tab11 = Tab("建造一架飞机")
+local Tab12 = Tab("勘探中")
+local Tab13 = Tab("法宝模拟器")
 
 -- 简介 (Tab1)
 
@@ -857,7 +859,7 @@ Button(Tab1, "祝你游戏愉快", function()
     end)
 end)
 
-Button(Tab1, "免费脚本", function()
+Button(Tab1, "免费缝合脚本", function()
     pcall(function()
     end)
 end)
@@ -1504,7 +1506,7 @@ Button(Tab10, "自动收集硬币", function()
     end)
 end)
 
--- 建造一架飞机 (Tab11
+-- 建造一架飞机 (Tab11）
 Button(Tab11, "一次2600万左右", function()
     pcall(function()
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -1526,5 +1528,19 @@ task.wait(1)
 
 ReturnRemote:FireServer()
 
+    end)
+end)
+
+-- 勘探中 (Tab12)
+Button(Tab12, "勘探中脚本1", function()
+    pcall(function()
+     loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/Prospecting", true))()
+    end)
+end)
+
+-- 法宝模拟器 (Tab13)
+Button(Tab13, "法宝模拟器1（会覆盖）", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/FreeRobloxScripts/anime-fighting/main/simulator"))()
     end)
 end)
