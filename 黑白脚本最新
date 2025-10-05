@@ -691,7 +691,7 @@ local function CreateGUI(title)
     agreeFrame.Size = UDim2.new(0.8, 0, 0.5, 0)
     agreeFrame.Position = UDim2.new(0.1, 0, 0.22, 0)
     agreeFrame.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
-    agreeFrame.Text = "1.欢迎使用黑白脚本.\n 2.让每个人免费玩到精品.\n 3.更新：添加各大脚本和FE、服务器在披萨店工作、服务器战斗勇士、服务器一次尘土的旅行、服务器破坏者谜团2."
+    agreeFrame.Text = "1.欢迎使用黑白脚本.\n 2.更新：服务器模仿者、服务器火箭发射模拟器、服务器只因剑."
     agreeFrame.TextWrapped = true
 
     
@@ -769,7 +769,7 @@ local function CreateGUI(title)
 loadstring(game:HttpGet('https://raw.githubusercontent.com/Asddffgujhh/-/refs/heads/main/BBBBBSSSSS'))()
   end)
 end
-local myTitle = "黑白脚本" 
+local myTitle = "黑白脚本中心" 
 CreateGUI(myTitle)
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
@@ -849,6 +849,9 @@ local Tab16 = Tab("在披萨店工作")
 local Tab17 = Tab("战斗勇士")
 local Tab18 = Tab("一次尘土的旅行")
 local Tab19 = Tab("破坏者谜团2")
+local Tab20 = Tab("模仿者")
+local Tab21 = Tab("火箭发射模拟器")
+local Tab22 = Tab("只因剑")
 
 -- 简介 (Tab1)
 
@@ -858,6 +861,11 @@ Button(Tab1, "作者：不知名相册", function()
 end)
 
 Button(Tab1, "QQ群：946671668", function()
+    pcall(function()
+    end)
+end)
+
+Button(Tab1, "最没母的群570910164千万别进否则会浮木会死掉", function()
     pcall(function()
     end)
 end)
@@ -887,7 +895,7 @@ Button(Tab1, "大部分会在周六周日更新", function()
     end)
 end)
 
-Button(Tab1, "旧黑白脚本已废😭😭😭", function()
+Button(Tab1, "旧黑白脚本", function()
     pcall(function()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/tfcygvunbind/Apple/0a572fcc356231593d062f45acedbcdad42c6fd8/%E9%BB%91%E7%99%BD%E8%84%9A%E6%9C%AC'))()
     end)
@@ -897,6 +905,12 @@ end)
 Button(Tab2, "飞行", function() 
     pcall(function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/dingding123hhh/tt/main/jm%E9%A3%9E..lua"))()
+    end)
+end)
+
+Button(Tab2, "无敌少侠（飞行）", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invinicible-Flight-R15-45414"))()
     end)
 end)
 
@@ -1850,4 +1864,25 @@ Button(Tab19, "透视身份", function()
     pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Ihaveash0rtnamefordiscord/Releases/main/MurderMystery2HighlightESP"))(' Watermelon ?')
     end)
+end)
+
+-- 模仿者 (Tab20)
+Button(Tab20, "模仿者1", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/ttjy9808/obfloadstringmainmimic/main/README.md", true))()
+    end)
+end)
+
+-- 火箭发射模拟器 (Tab21)
+Button(Tab21, "火箭发射模拟器1", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://ayangwp.cn/api/v3/file/get/9245/%E7%8C%AB%E9%80%9A%E7%94%A8.txt?sign=hrWROZdVfK2mtJcIFa3Tvbl-TojP1C86_Zd3q03qttc%3D%3A0"))()
+        end)
+end)
+
+-- 只因剑 (Tab22)
+Button(Tab22, "只因剑1", function()
+    pcall(function()
+     loadstring(game:HttpGet(('https://gist.githubusercontent.com/blox-hub-roblox/021bad62bbc6a0adc4ba4e625f9ad7df/raw/c89af6e1acf587d09e4ce4bc7510e7100e0c0065/swordWarrior.lua'),true))()
+        end)
 end)
