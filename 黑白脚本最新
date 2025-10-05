@@ -1,3 +1,10 @@
+local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+
+Notification:Notify(
+        {Title = "正在加载脚本", Description = "请耐心等待"},
+        {OutlineColor = Color3.fromRGB(0, 0, 0),Time = 20, Type = "image"},
+        {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(258, 58, 68)})
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
@@ -684,7 +691,7 @@ local function CreateGUI(title)
     agreeFrame.Size = UDim2.new(0.8, 0, 0.5, 0)
     agreeFrame.Position = UDim2.new(0.1, 0, 0.22, 0)
     agreeFrame.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
-    agreeFrame.Text = "1.欢迎使用黑白脚本.\n 2.让每个人免费玩到精品.\n 3.更新：添加各大脚本和FE."
+    agreeFrame.Text = "1.欢迎使用黑白脚本.\n 2.让每个人免费玩到精品.\n 3.更新：添加各大脚本和FE、服务器在披萨店工作、服务器战斗勇士、服务器一次尘土的旅行、服务器破坏者谜团2."
     agreeFrame.TextWrapped = true
 
     
@@ -838,6 +845,10 @@ local Tab12 = Tab("磁铁模拟器")
 local Tab13 = Tab("建造一架飞机")
 local Tab14 = Tab("勘探中")
 local Tab15 = Tab("法宝模拟器")
+local Tab16 = Tab("在披萨店工作")
+local Tab17 = Tab("战斗勇士")
+local Tab18 = Tab("一次尘土的旅行")
+local Tab19 = Tab("破坏者谜团2")
 
 -- 简介 (Tab1)
 
@@ -873,6 +884,12 @@ end)
 
 Button(Tab1, "大部分会在周六周日更新", function()
     pcall(function()
+    end)
+end)
+
+Button(Tab1, "旧黑白脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/tfcygvunbind/Apple/0a572fcc356231593d062f45acedbcdad42c6fd8/%E9%BB%91%E7%99%BD%E8%84%9A%E6%9C%AC'))()
     end)
 end)
 
@@ -1291,6 +1308,30 @@ Button(Tab3, "聊天绕过", function()
     end)
 end)
 
+Button(Tab3, "聊天框画画脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/ocfi/_/refs/heads/main/a"))()
+    end)
+end)
+
+Button(Tab5, "偷别人物品栏道具", function()
+    pcall(function()
+    --Copy And Paste:
+for i,v in pairs (game.Players:GetChildren()) do
+wait()
+for i,b in pairs (v.Backpack:GetChildren()) do
+b.Parent = game.Players.LocalPlayer.Backpack
+end
+end
+    end)
+end)
+
+Button(Tab3, "超广角设置", function()
+    pcall(function()
+		Workspace.CurrentCamera.FieldOfView = Value
+    end)
+end)
+
 -- 各大脚本 (Tab4)
 Button(Tab4, "Xi脚本", function()
     pcall(function()
@@ -1503,7 +1544,7 @@ Button(Tab5, "FE舞蹈（超级多）", function()
     end)
 end)
 
-Button(Tab5, "FE变大变小（有些服务器用不了", function()
+Button(Tab5, "FE变大变小（有些服务器用不了）", function()
     pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/tfcygvunbind/Apple/492dc6092ca66e8de1ed30a7ce8880c12f05c1e6/%EF%BC%9F%EF%BC%81%EF%BC%9F%EF%BC%81"))()
     end)
@@ -1667,6 +1708,18 @@ Button(Tab10, "NB", function()
     end)
 end)
 
+Button(Tab10, "压力！！！", function()
+    pcall(function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/ohiojjj/78/main/.github/workflows/Protected_5509067665689579.lua'))()
+    end)
+end)
+
+Button(Tab10, "压力脚本", function()
+    pcall(function()
+    getgenv().lishichuan="1001390385" loadstring(game:HttpGet("https://pastebin.com/raw/iZuasZCc"))()
+    end)
+end)
+
 -- 成为乞丐 (Tab11)
 Button(Tab11, "刷钱", function()
     pcall(function()
@@ -1762,5 +1815,39 @@ end)
 Button(Tab15, "法宝模拟器1（会覆盖）", function()
     pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/FreeRobloxScripts/anime-fighting/main/simulator"))()
+    end)
+end)
+
+-- 在披萨店工作 (Tab16)
+Button(Tab16, "在披萨店工作", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://github.com/CloudX-ScriptsWane/ScriptsDache/raw/main/披萨店工作.luau", true))()
+    end)
+end)
+
+-- 战斗勇士 (Tab17)
+Button(Tab17, "老外杀人脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/IsaaaKK/cwhb/main/cw.txt"))()
+    end)
+end)
+
+-- 一次尘土的旅行 (Tab18)
+Button(Tab18, "老外牛逼脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://scriptblox.com/raw/a-dusty-trip-FREE-CAR-Gui-14352"))()
+    end)
+end)
+
+-- 破坏者谜团2 (Tab19)
+Button(Tab19, "破坏者谜团2", function()
+    pcall(function()
+    loadstring(game:HttpGet(("https://raw.githubusercontent.com/Ethanoj1/EclipseMM2/master/Script"),true))()  
+    end)
+end)
+
+Button(Tab19, "透视身份", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Ihaveash0rtnamefordiscord/Releases/main/MurderMystery2HighlightESP"))(' Watermelon ?')
     end)
 end)
