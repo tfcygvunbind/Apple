@@ -887,7 +887,7 @@ Button(Tab1, "大部分会在周六周日更新", function()
     end)
 end)
 
-Button(Tab1, "旧黑白脚本", function()
+Button(Tab1, "旧黑白脚本已废😭😭😭", function()
     pcall(function()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/tfcygvunbind/Apple/0a572fcc356231593d062f45acedbcdad42c6fd8/%E9%BB%91%E7%99%BD%E8%84%9A%E6%9C%AC'))()
     end)
