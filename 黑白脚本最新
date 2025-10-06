@@ -1,3 +1,54 @@
+-- 黑白脚本风格 - 自定义通知UI
+local function CreateCustomNotify(Title, Text, Duration)
+    Duration = Duration or 3
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Name = "BlackWhiteNotify"
+    ScreenGui.Parent = game.Players.LocalPlayer.PlayerGui
+    
+    -- 通知背景（黑白脚本标志性深色）
+    local Background = Instance.new("Frame")
+    Background.Size = UDim2.new(0, 300, 0, 100)
+    Background.Position = UDim2.new(0.5, -150, 0.1, 0)
+    Background.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    Background.BackgroundTransparency = 0.2
+    Background.Parent = ScreenGui
+    
+    local Corner = Instance.new("UICorner")
+    Corner.CornerRadius = UDim.new(0, 15)
+    Corner.Parent = Background
+    
+    -- 标题（高亮文字）
+    local TitleLabel = Instance.new("TextLabel")
+    TitleLabel.Size = UDim2.new(1, 0, 0, 30)
+    TitleLabel.BackgroundTransparency = 1
+    TitleLabel.Text = Title
+    TitleLabel.TextColor3 = Color3.fromRGB(100, 180, 255) -- 黑白脚本高亮色
+    TitleLabel.TextSize = 18
+    TitleLabel.Font = Enum.Font.GothamBold
+    TitleLabel.Parent = Background
+    
+    -- 内容
+    local TextLabel = Instance.new("TextLabel")
+    TextLabel.Size = UDim2.new(1, 0, 1, -30)
+    TextLabel.Position = UDim2.new(0, 0, 0, 30)
+    TextLabel.BackgroundTransparency = 1
+    TextLabel.Text = Text
+    TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TextLabel.TextSize = 14
+    TextLabel.Font = Enum.Font.Gotham
+    TextLabel.Parent = Background
+    
+    -- 自动销毁
+    task.delay(Duration, function()
+        ScreenGui:Destroy()
+    end)
+end
+
+-- 调用示例
+CreateCustomNotify("战争机器刷钱", "已收集1000金钱", 2.5)
+CreateCustomNotify("黑白脚本-卡密系统", "黑白脚本已启用卡密授权系统")
+
+
 -- 分级授权卡密白名单系统（带指令管理）
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
@@ -20,10 +71,6 @@ local WHITELISTED_PLAYERS = {
 local VALID_KEY = "mc4er736pm"  -- 你的卡密
 local MAX_ATTEMPTS = 3          -- 最大尝试次数
 local ADMIN_PASSWORD = "your_admin_password"  -- 管理员密码，用于执行指令
-
--- 放假模式配置
-local ENABLE_VACATION_MODE = true  -- 放假模式开关，设置为true开启
-local VACATION_END_DATE = os.time({year=2025, month=2, day=28})  -- 放假结束日期
 
 -- ==========================================
 -- 创建UI
@@ -144,7 +191,7 @@ end
 -- 执行远程脚本
 local function ExecuteRemoteScript()
     pcall(function()
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/tfcygvunbind/Apple/main/%E9%BB%91%E7%99%BD%E8%84%9A%E6%9C%AC%E6%9C%80%E6%96%B0'))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/tfcygvunbind/Apple/63226b899b8e814e74ffaf2ba1834f14c1ff504a/%E9%BB%91%E7%99%BD%E8%84%9A%E6%9C%AC%E6%9C%80%E6%96%B0%E6%BA%90%E7%A0%81"))()
     end)
 end
 
@@ -317,19 +364,6 @@ end)
 -- ==========================================
 local function CheckAuthorization()
     local playerName = player.Name
-    
-    -- 0. 检查是否处于放假模式
-    if ENABLE_VACATION_MODE then
-        -- 检查当前时间是否在放假期间
-        local currentTime = os.time()
-        if currentTime <= VACATION_END_DATE then
-            print("[授权系统] 处于放假模式，所有玩家免验证")
-            ExecuteRemoteScript()
-            return true
-        else
-            print("[授权系统] 放假模式已结束")
-        end
-    end
     
     -- 1. 检查是否为白名单玩家
     if IsPlayerWhitelisted(playerName) then
