@@ -691,7 +691,7 @@ local function CreateGUI(title)
     agreeFrame.Size = UDim2.new(0.8, 0, 0.5, 0)
     agreeFrame.Position = UDim2.new(0.1, 0, 0.22, 0)
     agreeFrame.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
-    agreeFrame.Text = "1.欢迎使用黑白脚本.\n 2.更新：服务器墨水游戏"
+    agreeFrame.Text = "1.欢迎使用黑白脚本.\n 2.以前的黑白脚本已失效😭 \n  3.更新：服务器墨水游戏"
     agreeFrame.TextWrapped = true
 
     
@@ -877,7 +877,7 @@ local Tab30 = Tab("墨水游戏")
 
 -- 简介 (Tab1)
 
-Button(Tab1, "作者：不知名相册", function()
+Button(Tab1, "作者：不知名相册2199414565", function()
     pcall(function()
     end)
 end)
@@ -1350,7 +1350,7 @@ Button(Tab3, "聊天框画画脚本", function()
     end)
 end)
 
-Button(Tab5, "偷别人物品栏道具", function()
+Button(Tab3, "偷别人物品栏道具", function()
     pcall(function()
     --Copy And Paste:
 for i,v in pairs (game.Players:GetChildren()) do
