@@ -563,16 +563,20 @@ local LBLG = Instance.new("ScreenGui", getParent)
 local LBL = Instance.new("TextLabel", getParent)
 local player = game.Players.LocalPlayer
 
+-- 1. 创建 UI 容器与文本标签
+local LBLG = Instance.new("ScreenGui")
 LBLG.Name = "LBLG"
 LBLG.Parent = game.CoreGui
 LBLG.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 LBLG.Enabled = true
+
+local LBL = Instance.new("TextLabel")
 LBL.Name = "LBL"
 LBL.Parent = LBLG
 LBL.BackgroundColor3 = Color3.new(1, 1, 1)
 LBL.BackgroundTransparency = 1
 LBL.BorderColor3 = Color3.new(0, 0, 0)
-LBL.Position = UDim2.new(0.75,0,0.010,0)
+LBL.Position = UDim2.new(0.75, 0, 0.010, 0)
 LBL.Size = UDim2.new(0, 133, 0, 30)
 LBL.Font = Enum.Font.GothamSemibold
 LBL.Text = "TextLabel"
@@ -582,24 +586,64 @@ LBL.TextSize = 14
 LBL.TextWrapped = true
 LBL.Visible = true
 
+-- 2. 颜色循环核心：HSV 转 RGB（实现彩虹过渡）
+local Hue = 0  -- 色相（0-1循环，对应彩虹色）
+local Saturation = 0.8  -- 饱和度（0-1，越高颜色越鲜艳）
+local Value = 1  -- 明度（0-1，越高颜色越明亮）
+
+local function HSVToRGB(h, s, v)
+    local r, g, b
+    local i = math.floor(h * 6)
+    local f = h * 6 - i
+    local p = v * (1 - s)
+    local q = v * (1 - f * s)
+    local t = v * (1 - (1 - f) * s)
+    
+    i = i % 6  -- 确保循环在0-5之间
+    if i == 0 then r, g, b = v, t, p
+    elseif i == 1 then r, g, b = q, v, p
+    elseif i == 2 then r, g, b = p, v, t
+    elseif i == 3 then r, g, b = p, q, v
+    elseif i == 4 then r, g, b = t, p, v
+    else r, g, b = v, p, q end
+    
+    return Color3.new(r, g, b)  -- 转换为 Roblox 可用的 Color3 格式
+end
+
+-- 3. 时间显示与 FPS 计算（整合颜色循环）
 local FpsLabel = LBL
 local Heartbeat = game:GetService("RunService").Heartbeat
 local LastIteration, Start
 local FrameUpdateTable = { }
 
 local function HeartbeatUpdate()
-	LastIteration = tick()
-	for Index = #FrameUpdateTable, 1, -1 do
-		FrameUpdateTable[Index + 1] = (FrameUpdateTable[Index] >= LastIteration - 1) and FrameUpdateTable[Index] or nil
-	end
-	FrameUpdateTable[1] = LastIteration
-	local CurrentFPS = (tick() - Start >= 1 and #FrameUpdateTable) or (#FrameUpdateTable / (tick() - Start))
-	CurrentFPS = CurrentFPS - CurrentFPS % 1
-	FpsLabel.Text = ("黑白时间="..os.date("%H").."时"..os.date("%M").."分"..os.date("%S"))
+    -- FPS 计算逻辑（记录1秒内的帧数量）
+    LastIteration = tick()
+    for Index = #FrameUpdateTable, 1, -1 do
+        FrameUpdateTable[Index + 1] = (FrameUpdateTable[Index] >= LastIteration - 1) and FrameUpdateTable[Index] or nil
+    end
+    FrameUpdateTable[1] = LastIteration
+    local CurrentFPS = (tick() - Start >= 1 and #FrameUpdateTable) or (#FrameUpdateTable / (tick() - Start))
+    CurrentFPS = CurrentFPS - CurrentFPS % 1  -- 取整数 FPS 值
+
+    -- 颜色循环更新：每帧微调色相，实现平滑过渡
+    Hue = Hue + 0.008  -- 数值越大，颜色切换越快（建议0.005-0.01）
+    if Hue > 1 then Hue = 0 end  -- 色相超过1时重置，实现无限循环
+    local rainbowColor = HSVToRGB(Hue, Saturation, Value)
+
+    -- 更新文本内容与颜色（时间+可选显示FPS）
+    FpsLabel.Text = ("黑白时间="..os.date("%H").."时"..os.date("%M").."分"..os.date("%S"))  -- 仅时间
+    -- 若需显示FPS，可替换为：FpsLabel.Text = ("黑白时间="..os.date("%H").."时"..os.date("%M").."分"..os.date("%S").." | FPS:"..CurrentFPS)
+    FpsLabel.TextColor3 = rainbowColor  -- 应用彩虹颜色
 end
+
+-- 4. 启动功能
 Start = tick()
 Heartbeat:Connect(HeartbeatUpdate)
+
+-- （可选）用户输入服务（保留原代码结构，可后续扩展功能）
 local UserInputService = game:GetService("UserInputService")
+
 
 local function CreateGUI(title)
     local gui = Instance.new("ScreenGui")
@@ -691,7 +735,7 @@ local function CreateGUI(title)
     agreeFrame.Size = UDim2.new(0.8, 0, 0.5, 0)
     agreeFrame.Position = UDim2.new(0.1, 0, 0.22, 0)
     agreeFrame.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
-    agreeFrame.Text = "1.欢迎使用黑白脚本.\n 2.以前的黑白脚本已失效😭 \n  3.更新：服务器墨水游戏、服务器自然灾害模拟器、服务器穷小子打工记、服务器最后的黎明、服务器索纳里亚世界、服务器河北唐县、服务器被遗弃"
+    agreeFrame.Text = "1.欢迎使用黑白脚本.\n 2.以前的黑白脚本已失效😭 \n  3.更新：添加卡密"
     agreeFrame.TextWrapped = true
 
     
@@ -2195,3 +2239,4 @@ Button(Tab36, "脚本3（卡密:BOBBYHUBKEYWJJEBEKEI1827272）", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/BobJunior1/ForsakenBoi/refs/heads/main/B0bbyHub"))()
     end)
 end)
+
