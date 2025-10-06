@@ -39,7 +39,7 @@ local CONFIG = {
 
 ContentProvider:PreloadAsync({
     CONFIG.LOGO_IMAGE,
-    "rbxassetid://5028857084"
+    "rbxassetid://15613380753"
 })
 
 local screenGui = Instance.new("ScreenGui")
@@ -691,7 +691,7 @@ local function CreateGUI(title)
     agreeFrame.Size = UDim2.new(0.8, 0, 0.5, 0)
     agreeFrame.Position = UDim2.new(0.1, 0, 0.22, 0)
     agreeFrame.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
-    agreeFrame.Text = "1.欢迎使用黑白脚本.\n 2.更新：服务器模仿者、服务器火箭发射模拟器、服务器只因剑."
+    agreeFrame.Text = "1.欢迎使用黑白脚本.\n 2.以前的黑白脚本已失效😭 \n  3.更新：服务器墨水游戏、服务器自然灾害模拟器、服务器穷小子打工记、服务器最后的黎明、服务器索纳里亚世界、服务器河北唐县、服务器被遗弃"
     agreeFrame.TextWrapped = true
 
     
@@ -781,6 +781,20 @@ Notification:Notify(
         {OutlineColor = Color3.fromRGB(0, 0, 0),Time = 9, Type = "image"},
         {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(258, 58, 68)})
 
+local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+
+Notification:Notify(
+        {Title = "已开启反挂机", Description = "作者帮助你开启反挂机了"},
+        {OutlineColor = Color3.fromRGB(0, 0, 0),Time = 9, Type = "image"},
+        {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(258, 58, 68)})
+        local vu = game:GetService("VirtualUser")
+		game:GetService("Players").LocalPlayer.Idled:connect(function()
+		   vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+		   wait(1)
+		   vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+		end)
+
 local Window = WindUI:CreateWindow({
     Title = "黑白脚本",
     Icon = "door-open",
@@ -852,10 +866,24 @@ local Tab19 = Tab("破坏者谜团2")
 local Tab20 = Tab("模仿者")
 local Tab21 = Tab("火箭发射模拟器")
 local Tab22 = Tab("只因剑")
+local Tab23 = Tab("森林里的99夜")
+local Tab24 = Tab("旗帜战争")
+local Tab25 = Tab("逃出建筑")
+local Tab26 = Tab("打墙模拟器")
+local Tab27 = Tab("生存巨人")
+local Tab28 = Tab("健身房之星模拟器")
+local Tab29 = Tab("死铁轨")
+local Tab30 = Tab("墨水游戏")
+local Tab31 = Tab("自然灾害模拟器")
+local Tab32 = Tab("穷小子打工记")
+local Tab33 = Tab("最后的黎明")
+local Tab34 = Tab("索纳里亚世界")
+local Tab35 = Tab("河北唐县")
+local Tab36 = Tab("被遗弃")
 
 -- 简介 (Tab1)
 
-Button(Tab1, "作者：不知名相册", function()
+Button(Tab1, "作者：不知名相册2199414565", function()
     pcall(function()
     end)
 end)
@@ -885,7 +913,7 @@ Button(Tab1, "免费缝合脚本", function()
     end)
 end)
 
-Button(Tab1, "一路顺风", function()
+Button(Tab1, "祝你一路顺风", function()
     pcall(function()
     end)
 end)
@@ -895,7 +923,7 @@ Button(Tab1, "大部分会在周六周日更新", function()
     end)
 end)
 
-Button(Tab1, "旧黑白脚本", function()
+Button(Tab1, "旧黑白脚本已废😭😭😭", function()
     pcall(function()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/tfcygvunbind/Apple/0a572fcc356231593d062f45acedbcdad42c6fd8/%E9%BB%91%E7%99%BD%E8%84%9A%E6%9C%AC'))()
     end)
@@ -914,13 +942,13 @@ Button(Tab2, "无敌少侠（飞行）", function()
     end)
 end)
 
-Slider(Tab2, "移动速度", 1, 600, game.Players.LocalPlayer.Character.Humanoid.WalkSpeed, function(a) 
+Slider(Tab2, "移动速度", 1, 9999999, game.Players.LocalPlayer.Character.Humanoid.WalkSpeed, function(a) 
     pcall(function()
         game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = a
     end)
 end)
 
-Slider(Tab2, "跳跃高度", 1, 600, game.Players.LocalPlayer.Character.Humanoid.JumpPower, function(a) 
+Slider(Tab2, "跳跃高度", 1, 700, game.Players.LocalPlayer.Character.Humanoid.JumpPower, function(a) 
     pcall(function()
         game.Players.LocalPlayer.Character.Humanoid.JumpPower = a
     end)
@@ -1328,7 +1356,7 @@ Button(Tab3, "聊天框画画脚本", function()
     end)
 end)
 
-Button(Tab5, "偷别人物品栏道具", function()
+Button(Tab3, "偷别人物品栏道具", function()
     pcall(function()
     --Copy And Paste:
 for i,v in pairs (game.Players:GetChildren()) do
@@ -1343,6 +1371,18 @@ end)
 Button(Tab3, "超广角设置", function()
     pcall(function()
 		Workspace.CurrentCamera.FieldOfView = Value
+    end)
+end)
+
+Button(Tab3, "自动弹钢琴", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://rawscripts.net/raw/Tac's-Piano-Stuff-Talentless-script-made-by-hellohellohell012321-44088"))()
+    end)
+end)
+
+Button(Tab3, "伪VP", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/randomstring0/Qwerty/refs/heads/main/qwerty45.lua"))()
     end)
 end)
 
@@ -1667,9 +1707,6 @@ Button(Tab6, "普通十字架", function()
     end)
 end)
 
--- 其他标签页功能保持不变，这里只展示部分...
--- 由于代码长度限制，这里只展示部分功能，完整代码包含所有原有功能
-
 -- rooms&doors (Tab7)
 Button(Tab7, "rooms&doors", function()
     pcall(function()
@@ -1885,4 +1922,276 @@ Button(Tab22, "只因剑1", function()
     pcall(function()
      loadstring(game:HttpGet(('https://gist.githubusercontent.com/blox-hub-roblox/021bad62bbc6a0adc4ba4e625f9ad7df/raw/c89af6e1acf587d09e4ce4bc7510e7100e0c0065/swordWarrior.lua'),true))()
         end)
+end)
+
+-- 森林里的99夜 (Tab23)
+Button(Tab23, "二狗子脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/gycgchgyfytdttr/shenqin/refs/heads/main/99day.lua"))()
+    end)
+end)
+
+Button(Tab23, "虚空脚本Kenny汉化", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/ke9460394-dot/ugik/refs/heads/main/99%E5%A4%9C%E8%99%9A%E7%A9%BA.txt"))()
+    end)
+end)
+
+Button(Tab23, "自动刷钻石3.0", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Rezexis/Main-Lua/refs/heads/main/Loader.lua"))()
+    end)
+end)
+
+Button(Tab23, "脚本1", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/VW-Add/main/nightsintheforest.lua", true))()
+    end)
+end)
+
+Button(Tab23, "脚本2", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://rawscripts.net/raw/99-Nights-in-the-Forest-99-NITF-KEYLESS-SCRIPT-48729"))()
+    end)
+end)
+
+Button(Tab23, "脚本三", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Xingtaiduan/Script/refs/heads/main/Games/森林中的99夜.lua"))()
+    end)
+end)
+
+Button(Tab23, "汉化脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/atnew2025/99dayinLEIDIAN/refs/heads/main/99夜汉化小本.txt"))()
+    end)
+end)
+
+Button(Tab23, "汉化脚本二", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/358545698555/roblox-/refs/heads/main/%E5%8F%AF%E6%9D%80%E9%98%9F%E5%8F%8B99%E5%A4%9C"))()
+    end)
+end)
+-- 旗帜战争 (Tab24)
+Button(Tab24, "脚本1", function()
+    pcall(function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/Infinity2346/Tect-Menu/main/Flag%20Wars.txt'))()  
+    end)
+end)
+
+-- 逃出建筑 (Tab25)
+Button(Tab25, "脚本一", function()
+    pcall(function()
+    loadstring(game:HttpGet(('https://raw.githubusercontent.com/rblxscriptsnet/unfair/main/rblxhub.lua'),true))()
+    end)
+end)
+
+-- 打墙模拟器 (Tab26)
+Button(Tab26, "脚本1", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/JunBloxYTPlayz/SORIX-Hub/main/Punch%20Wall%20Simulator"))();
+    end)
+end)
+
+-- 生存巨人 (Tab27)
+Button(Tab27, "脚本1", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/RiseValco/scripts/main/GiantSurvival.lua"))()
+    end)
+end)
+
+-- 健身房之星模拟器 (Tab28)
+Button(Tab28, "脚本1", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://github.com/xiaoSB33/M416/raw/main/v.lua", true))()
+    end)
+end)
+
+-- 死铁轨 (Tab29)
+Button(Tab29, "刷债券1", function()
+    pcall(function()
+    --[[by 退休不退休]]QUN = "160369111"TX = "退休脚本"script = "死铁轨免费刷债券"BY = "退休"loadstring(game:HttpGet("https://raw.githubusercontent.com/JsYb666/Item/refs/heads/main/%E5%88%B7%E5%80%BA%E5%88%B8"))()
+    end)
+end)
+
+Button(Tab29, "刷债券2", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/thantzy/thanhub/refs/heads/main/thanv1"))()
+    end)
+end)
+
+Button(Tab29, "找闪电马脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/wehjf/famineringta.github.io/refs/heads/main/horseringta.lua"))()
+    end)
+end)
+
+Button(Tab29, "找岩浆马脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/fjruie/Warhorse.github.io/refs/heads/main/ringta.lua"))()
+    end)
+end)
+
+Button(Tab29, "攻速脚本", function()
+    pcall(function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/HeadHarse/DeadRails/refs/heads/main/V5OPSWING"))()   
+    end)
+end)
+
+Button(Tab29, "传送脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/badass1ia/Merciful/refs/heads/main/Absurdity111"))()
+    end)
+end)
+
+Button(Tab29, "红叶脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://getnative.cc/script/loader"))()
+    end)
+end)
+
+Button(Tab29, "焊接脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/HeadHarse/Dusty/refs/heads/main/WeldObject"))()
+    end)
+end)
+
+Button(Tab29, "脚本1", function()
+    pcall(function()
+    loadstring(game:HttpGet('https://pastefy.app/7vZN3EwV/raw'))()
+    end)
+end)
+
+Button(Tab29, "脚本2", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Unknownlodfc/Zephyr/refs/heads/main/DeadRails/Main"))()
+    end)
+end)
+
+-- 墨水游戏 (Tab30)
+Button(Tab30, "oP脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/ScripterVaz/InkGameAzure/main/Protected_7974105512464815.lua.txt"))()
+    end)
+end)
+
+Button(Tab30, "汉化脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/XOTRXONY/INKGAME/main/INKGAMEE.lua", true))()
+    end)
+end)
+
+Button(Tab30, "XA脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/hngamingroblox/scripts/main/strongman%20simulator'))()
+    end)
+end)
+
+-- 自然灾害模拟器 (Tab31)
+Button(Tab31, "脚本1", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/2dgeneralspam1/scripts-and-stuff/master/scripts/LoadstringUjHI6RQpz2o8", true))()
+    end)
+end)
+
+Button(Tab31, "万磁王", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://pastebin.com/raw/CMnEfnz8"))()
+    end)
+end)
+
+Button(Tab31, "黑洞v6", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Super-ring-Parts-V6-28581"))()
+    end)
+end)
+
+-- 穷小子打工记 (Tab32)
+Button(Tab32, "神青脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/gycgchgyfytdttr/QQ-9-2-8-9-50173/refs/heads/main/newsqnb.lua"))()
+    end)
+end)
+
+-- 最后的黎明 (Tab33)
+Button(Tab33, "脚本1", function()
+    pcall(function()
+    loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\112\97\115\116\101\102\121\46\97\112\112\47\108\121\98\121\80\50\103\54\47\114\97\119"))()
+    end)
+end)
+
+-- 索纳里亚世界 (Tab34)
+Button(Tab34, "索纳里亚世界1", function()
+    pcall(function()
+    end)
+end)
+
+Button(Tab34, "索纳里亚世界2", function()
+    pcall(function()
+    _G.Enabled = true
+-- If you want to turn it off, just change true to false and execute again!
+loadstring(game:HttpGet("https://pastebin.com/raw/CPPehxn8", true))()
+    end)
+end)
+
+Button(Tab34, "索纳里亚世界3", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangnex/Lunar-Hub/refs/heads/main/FreeLoader.lua"))()
+    end)
+end)
+
+Button(Tab34, "索纳里亚世界4", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Looser3itx/Hmmmmmmmmmmmmmmmmmmmmmmmmmmmm/main/loader.lua"))()
+    end)
+end)
+
+-- 河北唐县 (Tab35)
+Button(Tab35, "皮脚本-河北唐县", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/Pi-script-Hebeitangxian.lua"))()
+    end)
+end)
+
+Button(Tab35, "卡车刷钱", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaoyi-boop/-/refs/heads/main/YItangxian.lua",true))()
+    end)
+end)
+
+Button(Tab35, "脚本1", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Sw1ndlerScripts/RobloxScripts/main/Tang%20Country.lua"))()
+    end)
+end)
+
+Button(Tab35, "脚本2", function()
+    pcall(function()
+    getgenv().Leng="冷脚本QQ群815883059" loadstring(game:HttpGet("https://raw.githubusercontent.com/odhdshhe/Tang-County-Hebei-Province/refs/heads/main/LENG%20Tang%20County%2C%20Hebei%20Province.txt"))()
+    end)
+end)
+
+-- 被遗弃 (Tab36)
+Button(Tab36, "脚本1", function()
+    pcall(function()
+    loadstring(utf8.char((function() return table.unpack({108,111,97,100,115,116,114,105,110,103,40,103,97,109,101,58,72,116,116,112,71,101,116,40,34,104,116,116,112,115,58,47,47,114,97,119,46,103,105,116,104,117,98,117,115,101,114,99,111,110,116,101,110,116,46,99,111,109,47,67,104,105,110,97,81,89,47,45,47,109,97,105,110,47,37,69,54,37,56,51,37,56,53,37,69,52,37,66,65,37,57,49,34,41,41,40,41})end)()))()
+    end)
+end)
+
+Button(Tab36, "脚本2", function()
+    pcall(function()
+    loadstring(game:HttpGetAsync(("https://raw.githubusercontent.com/ivannetta/ShitScripts/refs/heads/main/forsaken.lua")))()
+    end)
+end)
+
+Button(Tab36, "汉化脚本（卡密：Samuelspizzatrip", function()
+    pcall(function()
+    getgenv().XiaoPi="被遗弃-B0bby[汉化版]" loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/187ec501507e956200e0741a7bc38ca1cd83973f/%E8%A2%AB%E9%81%97%E5%BC%83B0bby%E6%B1%89%E5%8C%96%20(1).lua"))()
+    end)
+end)
+
+Button(Tab36, "脚本3（卡密:BOBBYHUBKEYWJJEBEKEI1827272）", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/BobJunior1/ForsakenBoi/refs/heads/main/B0bbyHub"))()
+    end)
 end)
