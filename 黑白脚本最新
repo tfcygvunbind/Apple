@@ -191,7 +191,7 @@ end
 -- 执行远程脚本
 local function ExecuteRemoteScript()
     pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/tfcygvunbind/Apple/63226b899b8e814e74ffaf2ba1834f14c1ff504a/%E9%BB%91%E7%99%BD%E8%84%9A%E6%9C%AC%E6%9C%80%E6%96%B0%E6%BA%90%E7%A0%81"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/tfcygvunbind/Apple/83db676a23a57e5349610cf76abff2a32b7032aa/%E9%BB%91%E7%99%BD%E8%84%9A%E6%9C%AC%E6%9C%80%E6%96%B0%E6%BA%90%E7%A0%81"))()
     end)
 end
 
