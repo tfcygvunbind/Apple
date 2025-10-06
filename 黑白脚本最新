@@ -879,6 +879,7 @@ local Tab32 = Tab("穷小子打工记")
 local Tab33 = Tab("最后的黎明")
 local Tab34 = Tab("索纳里亚世界")
 local Tab35 = Tab("河北唐县")
+local Tab36 = Tab("被遗弃")
 
 -- 简介 (Tab1)
 
