@@ -39,7 +39,7 @@ local CONFIG = {
 
 ContentProvider:PreloadAsync({
     CONFIG.LOGO_IMAGE,
-    "rbxassetid://5028857084"
+    "rbxassetid://15613380753"
 })
 
 local screenGui = Instance.new("ScreenGui")
@@ -691,7 +691,7 @@ local function CreateGUI(title)
     agreeFrame.Size = UDim2.new(0.8, 0, 0.5, 0)
     agreeFrame.Position = UDim2.new(0.1, 0, 0.22, 0)
     agreeFrame.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
-    agreeFrame.Text = "1.欢迎使用黑白脚本.\n 2.更新：服务器模仿者、服务器火箭发射模拟器、服务器只因剑、服务器森林里的99夜…………."
+    agreeFrame.Text = "1.欢迎使用黑白脚本.\n 2.更新：服务器墨水游戏"
     agreeFrame.TextWrapped = true
 
     
@@ -873,6 +873,7 @@ local Tab26 = Tab("打墙模拟器")
 local Tab27 = Tab("生存巨人")
 local Tab28 = Tab("健身房之星模拟器")
 local Tab29 = Tab("死铁轨")
+local Tab30 = Tab("墨水游戏")
 
 -- 简介 (Tab1)
 
@@ -1367,6 +1368,12 @@ Button(Tab3, "超广角设置", function()
     end)
 end)
 
+Button(Tab3, "自动弹钢琴", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://rawscripts.net/raw/Tac's-Piano-Stuff-Talentless-script-made-by-hellohellohell012321-44088"))()
+    end)
+end)
+
 -- 各大脚本 (Tab4)
 Button(Tab4, "Xi脚本", function()
     pcall(function()
@@ -1687,9 +1694,6 @@ Button(Tab6, "普通十字架", function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/cbhlyy/lyycbh/main/shizizhen"))()
     end)
 end)
-
--- 其他标签页功能保持不变，这里只展示部分...
--- 由于代码长度限制，这里只展示部分功能，完整代码包含所有原有功能
 
 -- rooms&doors (Tab7)
 Button(Tab7, "rooms&doors", function()
@@ -2044,6 +2048,25 @@ end)
 Button(Tab29, "脚本2", function()
     pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Unknownlodfc/Zephyr/refs/heads/main/DeadRails/Main"))()
+    end)
+end)
+
+-- 墨水游戏 (Tab30)
+Button(Tab30, "oP脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/ScripterVaz/InkGameAzure/main/Protected_7974105512464815.lua.txt"))()
+    end)
+end)
+
+Button(Tab30, "汉化脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/XOTRXONY/INKGAME/main/INKGAMEE.lua", true))()
+    end)
+end)
+
+Button(Tab30, "XA脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/hngamingroblox/scripts/main/strongman%20simulator'))()
     end)
 end)
 
