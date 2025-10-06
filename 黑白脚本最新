@@ -324,23 +324,6 @@ local function CheckAuthorization()
         local currentTime = os.time()
         if currentTime <= VACATION_END_DATE then
             print("[授权系统] 处于放假模式，所有玩家免验证")
-            
-            -- 创建放假模式提示
-            local VacationNotice = Instance.new("TextLabel")
-            VacationNotice.Name = "VacationNotice"
-            VacationNotice.Parent = ScreenGui
-            VacationNotice.BackgroundTransparency = 1
-            VacationNotice.Position = UDim2.new(0.5, -100, 0.5, -20)
-            VacationNotice.Size = UDim2.new(0, 200, 0, 40)
-            VacationNotice.Text = "假期时间不用卡密"
-            VacationNotice.TextColor3 = Color3.fromRGB(46, 204, 113)
-            VacationNotice.TextSize = 20
-            VacationNotice.Font = Enum.Font.SourceSansBold
-            
-            -- 3秒后自动隐藏提示
-            task.wait(3)
-            VacationNotice:Destroy()
-            
             ExecuteRemoteScript()
             return true
         else
