@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索功能示例</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        
+        .search-container {
+            margin-bottom: 20px;
+        }
+        
+        #search-input {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .search-item {
+            padding: 10px;
+            margin-bottom: 8px;
+            background-color: #f8f8f8;
+            border-radius: 4px;
+        }
+        
+        .search-item h3 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+        
+        .search-item p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="输入关键词搜索...">
+    </div>
+
+    <div id="search-results">
+        <div class="search-item">
+            <h3>黑白脚本</h3>
+            <p>一个功能强大的自动化脚本工具</p>
+        </div>
+        <div class="search-item">
+            <h3>卡密系统</h3>
+            <p>用于验证和管理用户授权的系统</p>
+        </div>
+        <div class="search-item">
+            <h3>自动化工具</h3>
+            <p>可以自动完成各种重复任务的软件</p>
+        </div>
+        <div class="search-item">
+            <h3>安全验证</h3>
+            <p>保护账号和数据安全的重要措施</p>
+        </div>
+        <div class="search-item">
+            <h3>用户授权</h3>
+            <p>管理用户使用权限的机制</p>
+        </div>
+    </div>
+
+    <script>
+        // 获取搜索输入框和结果容器
+        const searchInput = document.getElementById('search-input');
+        const searchResults = document.getElementById('search-results');
+        
+        // 为搜索输入框添加事件监听器
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            const items = searchResults.getElementsByClassName('search-item');
+            
+            // 遍历所有项目，检查是否包含搜索词
+            for (let i = 0; i < items.length; i++) {
+                const itemText = items[i].textContent.toLowerCase();
+                
+                // 如果包含搜索词，显示项目；否则隐藏
+                if (itemText.includes(searchTerm)) {
+                    items[i].style.display = '';
+                } else {
+                    items[i].style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
