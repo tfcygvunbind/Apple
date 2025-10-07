@@ -470,7 +470,7 @@ agreementBox.Name = "AgreementBox"
 agreementBox.Size = UDim2.new(0.9, 0, 1, 0)
 agreementBox.Position = UDim2.new(0.05, 0, 0, 0)
 agreementBox.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-agreementBox.Text = "1.欢迎使用黑白脚本.\n2.以前的黑白脚本已失效😭\n3.今日更新：服务器骨折模拟器、服务器地下城任务、服务器极速传奇"
+agreementBox.Text = "1.欢迎使用黑白脚本.\n2.以前的黑白脚本已失效😭\n3.今日更新：无"
 agreementBox.TextColor3 = Color3.fromRGB(240, 240, 240)
 agreementBox.TextSize = 14
 agreementBox.Font = Enum.Font.SourceSans
@@ -1287,7 +1287,7 @@ end)
 
 Button(Tab3, "隐身", function()
     pcall(function()
-        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-35376"))()
+    loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-35376"))()
     end)
 end)
 
@@ -1364,6 +1364,18 @@ Button(Tab3, "美丽天空", function()
     local bloom = Instance.new("BloomEffect")
     local sun = Instance.new("SunRaysEffect")
     local blur = Inst
+    end)
+end)
+
+Button(Tab3, "玩家进入提示", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/boyscp/scriscriptsc/main/bbn.lua"))()
+    end)
+end)
+
+Button(Tab3, "替身", function()
+    pcall(function()
+    loadstring(game:HttpGet(('https://raw.githubusercontent.com/SkrillexMe/SkrillexLoader/main/SkrillexLoadMain')))()
     end)
 end)
 
