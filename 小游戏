@@ -1,0 +1,306 @@
+-- 创建手机版小游戏UI
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "MiniGamesUI"
+ScreenGui.Parent = game.Players.LocalPlayer.PlayerGui
+
+-- 主窗口
+local MainFrame = Instance.new("Frame")
+MainFrame.Name = "MainFrame"
+MainFrame.Size = UDim2.new(0, 280, 0, 300)
+MainFrame.Position = UDim2.new(0.5, -140, 0.5, -150)
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+MainFrame.BorderColor3 = Color3.fromRGB(80, 80, 80)
+MainFrame.BorderSizePixel = 1
+MainFrame.Active = true
+MainFrame.Draggable = true
+MainFrame.Parent = ScreenGui
+
+-- 标题栏
+local TitleBar = Instance.new("Frame")
+TitleBar.Name = "TitleBar"
+TitleBar.Size = UDim2.new(1, 0, 0, 24)
+TitleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+TitleBar.Parent = MainFrame
+
+local TitleLabel = Instance.new("TextLabel")
+TitleLabel.Name = "TitleLabel"
+TitleLabel.Size = UDim2.new(1, 0, 1, 0)
+TitleLabel.BackgroundTransparency = 1
+TitleLabel.Text = "小游戏中心"
+TitleLabel.TextColor3 = Color3.fromRGB(240, 240, 240)
+TitleLabel.TextSize = 13
+TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+TitleLabel.Position = UDim2.new(0, 8, 0, 0)
+TitleLabel.Parent = TitleBar
+
+-- 关闭按钮
+local CloseButton = Instance.new("TextButton")
+CloseButton.Name = "CloseButton"
+CloseButton.Size = UDim2.new(0, 24, 0, 24)
+CloseButton.Position = UDim2.new(1, -24, 0, 0)
+CloseButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
+CloseButton.Text = "X"
+CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseButton.TextSize = 11
+CloseButton.Parent = TitleBar
+CloseButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+
+-- 游戏按钮
+local games = {
+    {name = "贪吃蛇", color = Color3.fromRGB(0, 180, 0)},
+    {name = "打砖块", color = Color3.fromRGB(0, 0, 180)},
+    {name = "俄罗斯方块", color = Color3.fromRGB(180, 180, 0)},
+    {name = "2048", color = Color3.fromRGB(180, 0, 180)},
+    {name = "记忆翻牌", color = Color3.fromRGB(100, 100, 100)}
+}
+
+local y = 30
+for i, game in ipairs(games) do
+    local x = (i % 2 == 1) and 10 or 150
+    if i % 2 == 0 then y = y + 40 end
+    
+    local GameButton = Instance.new("TextButton")
+    GameButton.Name = game.name .. "Button"
+    GameButton.Size = UDim2.new(0, 120, 0, 35)
+    GameButton.Position = UDim2.new(0, x, 0, y)
+    GameButton.BackgroundColor3 = game.color
+    GameButton.Text = game.name
+    GameButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    GameButton.TextSize = 12
+    GameButton.Parent = MainFrame
+    
+    GameButton.MouseButton1Click:Connect(function()
+        -- 显示游戏界面
+        for _, child in ipairs(MainFrame:GetChildren()) do
+            if child.Name:find("Button") and child ~= GameButton then
+                child.Visible = false
+            end
+        end
+        
+        local GameFrame = Instance.new("Frame")
+        GameFrame.Name = "GameFrame"
+        GameFrame.Size = UDim2.new(1, -20, 1, -80)
+        GameFrame.Position = UDim2.new(0, 10, 0, 60)
+        GameFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+        GameFrame.Parent = MainFrame
+        
+        local GameTitle = Instance.new("TextLabel")
+        GameTitle.Name = "GameTitle"
+        GameTitle.Size = UDim2.new(1, 0, 0, 20)
+        GameTitle.BackgroundTransparency = 1
+        GameTitle.Text = game.name
+        GameTitle.TextColor3 = Color3.fromRGB(240, 240, 240)
+        GameTitle.TextSize = 12
+        GameTitle.Parent = GameFrame
+        
+        local BackButton = Instance.new("TextButton")
+        BackButton.Name = "BackButton"
+        BackButton.Size = UDim2.new(0, 50, 0, 20)
+        BackButton.Position = UDim2.new(1, -55, 0, 0)
+        BackButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        BackButton.Text = "返回"
+        BackButton.TextColor3 = Color3.fromRGB(240, 240, 240)
+        BackButton.TextSize = 11
+        BackButton.Parent = GameFrame
+        BackButton.MouseButton1Click:Connect(function()
+            GameFrame:Destroy()
+            for _, child in ipairs(MainFrame:GetChildren()) do
+                if child.Name:find("Button") then
+                    child.Visible = true
+                end
+            end
+        end)
+        
+        -- 启动游戏
+        if game.name == "贪吃蛇" then
+            loadSnakeGame(GameFrame)
+        else
+            local Label = Instance.new("TextLabel")
+            Label.Size = UDim2.new(1, 0, 1, -20)
+            Label.Position = UDim2.new(0, 0, 0, 20)
+            Label.BackgroundTransparency = 1
+            Label.Text = game.name .. "\n开发中..."
+            Label.TextColor3 = Color3.fromRGB(200, 200, 200)
+            Label.TextSize = 14
+            Label.TextScaled = true
+            Label.Parent = GameFrame
+        end
+    end)
+end
+
+-- 贪吃蛇游戏
+function loadSnakeGame(parentFrame)
+    local gridSize = 14
+    local cellSize = 14
+    local snake = {
+        {x = 7, y = 7},
+        {x = 6, y = 7},
+        {x = 5, y = 7}
+    }
+    local food = {x = math.random(1, gridSize), y = math.random(1, gridSize)}
+    local direction = "right"
+    local score = 0
+    
+    -- 创建网格
+    local GridFrame = Instance.new("Frame")
+    GridFrame.Name = "GridFrame"
+    GridFrame.Size = UDim2.new(0, gridSize*cellSize, 0, gridSize*cellSize)
+    GridFrame.Position = UDim2.new(0.5, -(gridSize*cellSize)/2, 0, 30)
+    GridFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    GridFrame.Parent = parentFrame
+    
+    for y = 1, gridSize do
+        for x = 1, gridSize do
+            local Cell = Instance.new("Frame")
+            Cell.Name = "Cell_" .. x .. "_" .. y
+            Cell.Size = UDim2.new(0, cellSize-1, 0, cellSize-1)
+            Cell.Position = UDim2.new(0, (x-1)*cellSize, 0, (y-1)*cellSize)
+            Cell.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+            Cell.Parent = GridFrame
+        end
+    end
+    
+    -- 分数
+    local ScoreLabel = Instance.new("TextLabel")
+    ScoreLabel.Name = "ScoreLabel"
+    ScoreLabel.Size = UDim2.new(0, 80, 0, 20)
+    ScoreLabel.Position = UDim2.new(0, 5, 0, 5)
+    ScoreLabel.BackgroundTransparency = 1
+    ScoreLabel.Text = "分数: " .. score
+    ScoreLabel.TextColor3 = Color3.fromRGB(240, 240, 240)
+    ScoreLabel.TextSize = 11
+    ScoreLabel.Parent = parentFrame
+    
+    -- 控制按钮
+    local ControlsFrame = Instance.new("Frame")
+    ControlsFrame.Name = "ControlsFrame"
+    ControlsFrame.Size = UDim2.new(0, 100, 0, 100)
+    ControlsFrame.Position = UDim2.new(1, -105, 1, -105)
+    ControlsFrame.BackgroundTransparency = 1
+    ControlsFrame.Parent = parentFrame
+    
+    -- 方向按钮
+    local UpButton = createControlButton("↑", UDim2.new(0.5, -15, 0, 0), function()
+        if direction ~= "down" then direction = "up" end
+    end, ControlsFrame)
+    
+    local DownButton = createControlButton("↓", UDim2.new(0.5, -15, 0, 70), function()
+        if direction ~= "up" then direction = "down" end
+    end, ControlsFrame)
+    
+    local LeftButton = createControlButton("←", UDim2.new(0, 0, 0, 35), function()
+        if direction ~= "right" then direction = "left" end
+    end, ControlsFrame)
+    
+    local RightButton = createControlButton("→", UDim2.new(0, 70, 0, 35), function()
+        if direction ~= "left" then direction = "right" end
+    end, ControlsFrame)
+    
+    -- 游戏循环
+    while true do
+        -- 更新蛇位置
+        local head = {x = snake[1].x, y = snake[1].y}
+        
+        if direction == "up" then
+            head.y = head.y - 1
+        elseif direction == "down" then
+            head.y = head.y + 1
+        elseif direction == "left" then
+            head.x = head.x - 1
+        elseif direction == "right" then
+            head.x = head.x + 1
+        end
+        
+        -- 边界检测
+        if head.x < 1 or head.x > gridSize or head.y < 1 or head.y > gridSize then
+            break
+        end
+        
+        -- 自身碰撞
+        for i, segment in ipairs(snake) do
+            if segment.x == head.x and segment.y == head.y then
+                break
+            end
+        end
+        
+        -- 添加头部
+        table.insert(snake, 1, head)
+        
+        -- 食物检测
+        if head.x == food.x and head.y == food.y then
+            score = score + 10
+            ScoreLabel.Text = "分数: " .. score
+            food = {x = math.random(1, gridSize), y = math.random(1, gridSize)}
+        else
+            -- 移除尾部
+            table.remove(snake)
+        end
+        
+        -- 渲染
+        for y = 1, gridSize do
+            for x = 1, gridSize do
+                local Cell = GridFrame:FindFirstChild("Cell_" .. x .. "_" .. y)
+                if Cell then
+                    Cell.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+                end
+            end
+        end
+        
+        -- 渲染蛇
+        for i, segment in ipairs(snake) do
+            local Cell = GridFrame:FindFirstChild("Cell_" .. segment.x .. "_" .. segment.y)
+            if Cell then
+                Cell.BackgroundColor3 = (i == 1) and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(0, 150, 0)
+            end
+        end
+        
+        -- 渲染食物
+        local FoodCell = GridFrame:FindFirstChild("Cell_" .. food.x .. "_" .. food.y)
+        if FoodCell then
+            FoodCell.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+        end
+        
+        wait(0.3)
+    end
+    
+    -- 游戏结束
+    local GameOver = Instance.new("TextLabel")
+    GameOver.Size = UDim2.new(1, 0, 0, 40)
+    GameOver.Position = UDim2.new(0, 0, 0, 80)
+    GameOver.BackgroundTransparency = 1
+    GameOver.Text = "游戏结束!\n分数: " .. score
+    GameOver.TextColor3 = Color3.fromRGB(255, 0, 0)
+    GameOver.TextSize = 14
+    GameOver.TextScaled = true
+    GameOver.Parent = parentFrame
+end
+
+-- 创建控制按钮的辅助函数
+function createControlButton(text, pos, callback, parent)
+    local Button = Instance.new("TextButton")
+    Button.Size = UDim2.new(0, 30, 0, 30)
+    Button.Position = pos
+    Button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    Button.Text = text
+    Button.TextColor3 = Color3.fromRGB(240, 240, 240)
+    Button.TextSize = 12
+    Button.Parent = parent
+    Button.MouseButton1Click:Connect(callback)
+    return Button
+end
+
+-- 显示提示
+local Notification = Instance.new("TextLabel")
+Notification.Size = UDim2.new(0, 200, 0, 30)
+Notification.Position = UDim2.new(0.5, -100, 0, 10)
+Notification.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Notification.Text = "小游戏UI已加载"
+Notification.TextColor3 = Color3.fromRGB(255, 255, 255)
+Notification.TextSize = 12
+Notification.Parent = ScreenGui
+
+wait(2)
+Notification:Destroy()
+
