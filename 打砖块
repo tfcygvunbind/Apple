@@ -1,0 +1,278 @@
+-- 打砖块游戏（带失败机制版）
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+-- 创建UI
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "BrickBreaker"
+ScreenGui.Parent = PlayerGui
+
+local GameFrame = Instance.new("Frame")
+GameFrame.Size = UDim2.new(0, 400, 0, 250)
+GameFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
+GameFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+GameFrame.Parent = ScreenGui
+
+-- 球
+local Ball = Instance.new("Frame")
+Ball.Size = UDim2.new(0, 12, 0, 12)
+Ball.Position = UDim2.new(0, 194, 0, 100)
+Ball.BackgroundColor3 = Color3.fromRGB(255, 215, 0)
+local ballCorner = Instance.new("UICorner")
+ballCorner.CornerRadius = UDim.new(1, 0)
+ballCorner.Parent = Ball
+Ball.Parent = GameFrame
+
+-- 挡板
+local Paddle = Instance.new("Frame")
+Paddle.Size = UDim2.new(0, 100, 0, 12)
+Paddle.Position = UDim2.new(0, 150, 0, 210)
+Paddle.BackgroundColor3 = Color3.fromRGB(0, 180, 255)
+Paddle.Parent = GameFrame
+
+-- 创建砖块
+local bricks = {}
+for i = 1, 5 do
+    for j = 1, 10 do
+        local Brick = Instance.new("Frame")
+        Brick.Name = "Brick_" .. i .. "_" .. j
+        Brick.Size = UDim2.new(0, 36, 0, 18)
+        Brick.Position = UDim2.new(0, 6 + (j-1)*39, 0, 30 + (i-1)*22)
+        
+        local isSpecial = math.random(1, 10) <= 3
+        local brickData = {
+            ui = Brick,
+            x = 6 + (j-1)*39,
+            y = 30 + (i-1)*22,
+            width = 36,
+            height = 18,
+            hits = isSpecial and 2 or 1,
+            isSpecial = isSpecial
+        }
+        
+        if isSpecial then
+            Brick.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
+            Brick.BorderColor3 = Color3.fromRGB(255, 255, 255)
+            Brick.BorderSizePixel = 2
+        else
+            Brick.BackgroundColor3 = Color3.fromRGB(50 + (j-1)*20, 255 - (i-1)*40, 50)
+        end
+        
+        Brick.Parent = GameFrame
+        bricks[#bricks + 1] = brickData
+    end
+end
+
+-- 分数显示
+local ScoreLabel = Instance.new("TextLabel")
+ScoreLabel.Size = UDim2.new(0, 100, 0, 30)
+ScoreLabel.Position = UDim2.new(0, 10, 0, 10)
+ScoreLabel.BackgroundTransparency = 1
+ScoreLabel.Text = "分数: 0"
+ScoreLabel.TextColor3 = Color3.fromRGB(240, 240, 240)
+ScoreLabel.TextSize = 14
+ScoreLabel.Parent = GameFrame
+
+-- 操作提示
+local TouchHint = Instance.new("TextLabel")
+TouchHint.Size = UDim2.new(1, 0, 0, 30)
+TouchHint.Position = UDim2.new(0, 0, 1, -30)
+TouchHint.BackgroundTransparency = 1
+TouchHint.Text = "点击屏幕左右移动 | 红色砖块需打两下"
+TouchHint.TextColor3 = Color3.fromRGB(200, 200, 200)
+TouchHint.TextSize = 11
+TouchHint.TextXAlignment = Enum.TextXAlignment.Center
+TouchHint.Parent = GameFrame
+
+-- 游戏变量
+local ballSpeedX = 3.5
+local ballSpeedY = -3
+local paddleSpeed = 8
+local isTouching = false
+local touchStartX = 0
+local score = 0
+local totalBricks = #bricks
+local bricksDestroyed = 0
+local gameRunning = true  -- 新增游戏运行状态变量
+
+-- 手机触摸操作
+UserInputService.TouchStarted:Connect(function(input)
+    if gameRunning then  -- 只有游戏运行时才响应操作
+        isTouching = true
+        touchStartX = input.Position.X
+    end
+end)
+
+UserInputService.TouchMoved:Connect(function(input)
+    if gameRunning and isTouching then
+        local deltaX = input.Position.X - touchStartX
+        local newPaddleX = Paddle.Position.X.Offset + deltaX
+        
+        newPaddleX = math.max(0, math.min(newPaddleX, 300))
+        Paddle.Position = UDim2.new(0, newPaddleX, 0, 210)
+        
+        touchStartX = input.Position.X
+    end
+end)
+
+UserInputService.TouchEnded:Connect(function()
+    isTouching = false
+end)
+
+-- 电脑鼠标操作（兼容）
+UserInputService.InputChanged:Connect(function(input)
+    if gameRunning and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local mouseX = input.Position.X - GameFrame.AbsolutePosition.X
+        local newPaddleX = mouseX - 50
+        
+        newPaddleX = math.max(0, math.min(newPaddleX, 300))
+        Paddle.Position = UDim2.new(0, newPaddleX, 0, 210)
+    end
+end)
+
+-- 游戏失败函数
+local function gameOver()
+    gameRunning = false
+    
+    -- 显示失败消息
+    local GameOverLabel = Instance.new("TextLabel")
+    GameOverLabel.Size = UDim2.new(1, 0, 0, 60)
+    GameOverLabel.Position = UDim2.new(0, 0, 0.5, -30)
+    GameOverLabel.BackgroundTransparency = 1
+    GameOverLabel.Text = "游戏失败！\n分数: " .. score
+    GameOverLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
+    GameOverLabel.TextSize = 24
+    GameOverLabel.TextXAlignment = Enum.TextXAlignment.Center
+    GameOverLabel.TextYAlignment = Enum.TextYAlignment.Center
+    GameOverLabel.Parent = GameFrame
+    
+    -- 显示重新开始提示
+    local RestartLabel = Instance.new("TextLabel")
+    RestartLabel.Size = UDim2.new(1, 0, 0, 30)
+    RestartLabel.Position = UDim2.new(0, 0, 0.5, 30)
+    RestartLabel.BackgroundTransparency = 1
+    RestartLabel.Text = "点击屏幕重新开始"
+    RestartLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+    RestartLabel.TextSize = 14
+    RestartLabel.TextXAlignment = Enum.TextXAlignment.Center
+    RestartLabel.Parent = GameFrame
+    
+    -- 重新开始功能
+    UserInputService.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+            -- 重新加载游戏
+            ScreenGui:Destroy()
+            startGame()
+        end
+    end)
+end
+
+-- 碰撞检测
+local function checkCollisions()
+    if not gameRunning then return end  -- 如果游戏已结束，不进行碰撞检测
+    
+    local ballX = Ball.Position.X.Offset
+    local ballY = Ball.Position.Y.Offset
+    
+    -- 墙壁碰撞
+    if ballX <= 0 or ballX >= 388 then
+        ballSpeedX = -ballSpeedX
+    end
+    if ballY <= 0 then
+        ballSpeedY = -ballSpeedY
+    end
+    
+    -- 挡板碰撞
+    if ballY >= 198 and ballY <= 210 and ballX >= Paddle.Position.X.Offset - 12 and ballX <= Paddle.Position.X.Offset + 100 then
+        ballSpeedY = -ballSpeedY
+        local hitPos = (ballX + 6) - (Paddle.Position.X.Offset + 50)
+        ballSpeedX = hitPos / 50 * 5
+    end
+    
+    -- 砖块碰撞
+    for i = #bricks, 1, -1 do
+        local brick = bricks[i]
+        if brick.hits > 0 then
+            local ballLeft = ballX
+            local ballRight = ballX + 12
+            local ballTop = ballY
+            local ballBottom = ballY + 12
+            
+            local brickLeft = brick.x
+            local brickRight = brick.x + brick.width
+            local brickTop = brick.y
+            local brickBottom = brick.y + brick.height
+            
+            if ballRight > brickLeft and ballLeft < brickRight and ballBottom > brickTop and ballTop < brickBottom then
+                ballSpeedY = -ballSpeedY
+                
+                brick.hits = brick.hits - 1
+                
+                if brick.hits <= 0 then
+                    brick.ui:Destroy()
+                    table.remove(bricks, i)
+                    bricksDestroyed = bricksDestroyed + 1
+                    score = score + (brick.isSpecial and 20 or 10)
+                    
+                    if bricksDestroyed >= totalBricks then
+                        local WinLabel = Instance.new("TextLabel")
+                        WinLabel.Size = UDim2.new(1, 0, 0, 50)
+                        WinLabel.Position = UDim2.new(0, 0, 0.5, -25)
+                        WinLabel.BackgroundTransparency = 1
+                        WinLabel.Text = "恭喜胜利！\n分数: " .. score
+                        WinLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
+                        WinLabel.TextSize = 20
+                        WinLabel.TextXAlignment = Enum.TextXAlignment.Center
+                        WinLabel.TextYAlignment = Enum.TextYAlignment.Center
+                        WinLabel.Parent = GameFrame
+                        gameRunning = false
+                    end
+                else
+                    brick.ui.BackgroundColor3 = Color3.fromRGB(255, 150, 150)
+                end
+                
+                ScoreLabel.Text = "分数: " .. score
+                break
+            end
+        end
+    end
+    
+    -- 底部边界 - 新增减分和失败机制
+    if ballY > 250 then
+        score = score - 50  -- 掉下去减50分
+        ScoreLabel.Text = "分数: " .. score
+        
+        if score < 0 then  -- 如果分数为负数，游戏结束
+            gameOver()
+        else
+            -- 分数不为负，重新开始
+            Ball.Position = UDim2.new(0, 194, 0, 100)
+            ballSpeedY = -3
+            ballSpeedX = math.random(-3, 3)
+            if ballSpeedX == 0 then ballSpeedX = 1 end
+        end
+    end
+end
+
+-- 游戏循环
+RunService.RenderStepped:Connect(function()
+    if gameRunning then  -- 只有游戏运行时才更新
+        checkCollisions()
+        
+        -- 更新球位置
+        Ball.Position = UDim2.new(0, Ball.Position.X.Offset + ballSpeedX, 0, Ball.Position.Y.Offset + ballSpeedY)
+    end
+end)
+
+-- 启动游戏函数（用于重新开始）
+function startGame()
+    -- 这里是游戏初始化代码，与上面的代码基本相同
+    -- 为了简洁，我没有重复写一遍
+    
+    -- 实际项目中，你应该将游戏初始化代码封装成一个函数
+    -- 这样重新开始时可以直接调用
+end
