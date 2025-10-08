@@ -1,3 +1,31 @@
+-- 黑白脚本完整版 - 包含升级版黑名单系统
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- ====================== 升级版黑名单系统 ======================
+local BLACKLIST = {
+    ["123456789"] = true,  -- 示例：用玩家ID屏蔽
+    ["BadPlayer"] = true,   -- 示例：用玩家名称屏蔽
+    ["无"] = true,     -- 已添加：用玩家名称屏蔽
+    -- 在这里添加更多需要屏蔽的玩家
+}
+
+local function checkBlacklist()
+    -- 检查玩家是否在黑名单中
+    if BLACKLIST[tostring(player.UserId)] or BLACKLIST[player.Name] then
+        -- 尝试踢出玩家
+        pcall(function()
+            player:Kick("你已被列入黑名单，无法使用黑白脚本。")
+        end)
+        return true
+    end
+    return false
+end
+
+-- 立即执行黑名单检查
+if checkBlacklist() then
+    return  -- 终止脚本运行
+end
 local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 
@@ -471,7 +499,7 @@ agreementBox.Name = "AgreementBox"
 agreementBox.Size = UDim2.new(0.9, 0, 1, 0)
 agreementBox.Position = UDim2.new(0.05, 0, 0, 0)
 agreementBox.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-agreementBox.Text = "1.欢迎使用黑白脚本.\n2.以前的黑白脚本已失效😭\n3.今日更新：服务器一路向西、服务器汽车经销商大亨"
+agreementBox.Text = "1.欢迎使用黑白脚本.\n2.以前的黑白脚本已失效😭\n3.今日更新：服务器一路向西、服务器汽车经销商大亨、更新黑名单系统、更新小游戏（在简介里）"
 agreementBox.TextColor3 = Color3.fromRGB(240, 240, 240)
 agreementBox.TextSize = 14
 agreementBox.Font = Enum.Font.SourceSans
@@ -889,9 +917,10 @@ Button(Tab1, "大部分会在周六周日更新", function()
     end)
 end)
 
-Button(Tab1, "旧黑白脚本已废😭😭😭", function()
+Button(Tab1, "小游戏", function()
     pcall(function()
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/tfcygvunbind/Apple/0a572fcc356231593d062f45acedbcdad42c6fd8/%E9%BB%91%E7%99%BD%E8%84%9A%E6%9C%AC'))()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/tfcygvunbind/Apple/7de4d4365f369205dffe10c090e0d042d663a628/%E5%B0%8F%E6%B8%B8%E6%88%8F'))()
+
     end)
 end)
 
