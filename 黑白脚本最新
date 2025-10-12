@@ -423,7 +423,7 @@ end
 coroutine.wrap(vipPulseAnimation)()
 game:GetService("RunService").Heartbeat:Connect(UpdateDisplay)
 
--- 黑白脚本中心 - 带粒子特效版
+-- 黑白脚本公告 - 带粒子特效版
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
@@ -467,7 +467,7 @@ titleText.Name = "TitleText"
 titleText.Size = UDim2.new(1, -40, 1, 0)
 titleText.Position = UDim2.new(0, 10, 0, 0)
 titleText.BackgroundTransparency = 1
-titleText.Text = "黑白脚本中心"
+titleText.Text = "黑白脚本公告"
 titleText.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleText.TextSize = 18
 titleText.Font = Enum.Font.SourceSansBold
@@ -883,7 +883,6 @@ local Tab45 = Tab("战争大亨")
 local Tab46 = Tab("吃掉世界")
 
 -- 简介 (Tab1)
-
 Button(Tab1, "作者：不知名相册2199414565", function()
     pcall(function()
     end)
@@ -941,6 +940,12 @@ end)
 Button(Tab2, "无敌少侠R15（飞行）", function()
     pcall(function()
     loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Invinicible-Flight-R15-45414"))()
+    end)
+end)
+
+Button(Tab2, "无敌少侠r6（飞行）", function()
+    pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/ke9460394-dot/ugik/refs/heads/main/%E6%97%A0%E6%95%8C%E5%B0%91%E4%BE%A0%E9%A3%9E%E8%A1%8Cr6.txt"))()
     end)
 end)
 
