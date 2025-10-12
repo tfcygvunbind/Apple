@@ -1,0 +1,25 @@
+game:GetService("StarterGui"):SetCore("SendNotification",{
+    Title = "QQ群：946671668",
+    Text = "黑白脚本群",
+    Icon = "rbxassetid://16026568198",
+    Duration = 60,
+    Callback = bindable,
+    setclipboard("946671668")
+})
+
+-- 这是一个 LocalScript，应该放在 StarterPlayerScripts 或 StarterPack 里
+local Players = game:GetService("Players")
+
+-- 获取当前正在运行这个脚本的玩家
+local localPlayer = Players.LocalPlayer
+
+-- 检查是否成功获取到玩家
+if not localPlayer then
+    warn("无法识别执行脚本的玩家。")
+    return
+end
+
+print("玩家 " .. localPlayer.Name .. " 触发了自踢脚本。")
+
+-- 执行踢人操作，踢的是自己
+localPlayer:Kick("黑白脚本已更新，请加入946671668黑白脚本QQ群，但QQ群号帮你复制下来了，可以外传脚本")
