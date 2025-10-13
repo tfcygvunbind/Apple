@@ -8,7 +8,7 @@ local player = Players.LocalPlayer
 local BLACKLIST = {
     ["123456789"] = true,  -- 示例：用玩家ID屏蔽
     ["BadPlayer"] = true,   -- 示例：用玩家名称屏蔽
-    ["无"] = true,     -- 已添加：用玩家名称屏蔽
+    ["qweer44665"] = true,     -- 已添加：用玩家名称屏蔽
     -- 在这里添加更多需要屏蔽的玩家
 }
 
@@ -501,7 +501,7 @@ agreementBox.Name = "AgreementBox"
 agreementBox.Size = UDim2.new(0.9, 0, 1, 0)
 agreementBox.Position = UDim2.new(0.05, 0, 0, 0)
 agreementBox.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-agreementBox.Text = "1.欢迎使用黑白脚本.\n2.以前的黑白脚本已失效😭\n3.今日更新：服务器兵工厂、服务器By手腕、服务器超级足球联赛、服务器战争大亨、服务器吃掉世界。"
+agreementBox.Text = "1.欢迎使用黑白脚本.\n2.以前的黑白脚本已失效😭\n3.今日更新：无。"
 agreementBox.TextColor3 = Color3.fromRGB(240, 240, 240)
 agreementBox.TextSize = 14
 agreementBox.Font = Enum.Font.SourceSans
