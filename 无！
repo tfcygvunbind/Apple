@@ -1,1 +1,46 @@
+         -- services --
 
+local runService = game:GetService("RunService")
+local players = game:GetService("Players")
+local localPlayer = players.LocalPlayer
+local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+-- utils --
+function findfirstchild(parent, childName)
+return parent and parent:FindFirstChild(childName)
+end
+function findfirstchildwhichisa(parent, childName)
+return parent and parent:FindFirstChildWhichIsA(childName)
+end
+-- objects --
+local basesFolder = findfirstchild(workspace, "Bases")
+-- table(s) --
+local data = {
+myBase = nil,
+begPrompt = nil,
+basePrompt = nil,
+}
+-- main code --
+for _, base in ipairs(basesFolder:GetChildren()) do
+if not base then continue end
+local owner = findfirstchild(base, "Owner")
+if not owner or owner.Value ~= localPlayer then continue end
+data.myBase = base
+local begPrompt = findfirstchild(base, "BegPrompt")
+if not begPrompt then continue end
+data.begPrompt = begPrompt
+local basePrompt = findfirstchildwhichisa(begPrompt, "ProximityPrompt")
+data.basePrompt = basePrompt
+break
+end
+local hrp = findfirstchild(character, "HumanoidRootPart")
+if hrp then
+hrp.CFrame = data.begPrompt.CFrame
+fireproximityprompt(data.basePrompt)
+end
+if cashConnection then
+cashConnection:Disconnect()
+cashConnection = nil
+end
+getgenv().cashConnection = runService.Heartbeat:Connect(function()
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("MinigameEvent"):FireServer(true)
+end)
