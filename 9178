@@ -8,7 +8,7 @@ local Tab = Window:MakeTab({
     PremiumOnly = false
 })
 
-Tab:AddParagraph("作者","乐子脚本")
+Tab:AddParagraph("作者","因涉嫌国家机密，系统自动永久封禁")
 Tab:AddLabel("此脚本完全免费")
 
 local Tab = Window:MakeTab({
