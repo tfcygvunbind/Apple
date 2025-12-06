@@ -1,1 +1,447 @@
---[[ v1.0.0 https://wearedevs.net/obfuscator ]] return(function(...)local o={"\097\083\086\050";"\112\069\101\090\113\112\082\068\047\083\052\100\097\083\103\061","\079\118\065\077\114\112\088\118\047\112\068\068\086\053\056\116\113\043\075\061","";"\122\043\101\050\122\043\052\118";"\082\104\052\089\051\080\086\088\051\121\047\068\051\052\081\070","\112\069\101\073\113\072\067\061","\047\083\052\100\097\083\103\061";"\112\069\101\102\097\078\082\121\114\119\061\061","\086\083\052\090\051\083\086\116\056\081\082\121\047\083\086\055\047\083\086\099\056\075\061\061";"\097\083\101\068\113\080\088\118\051\078\121\050\113\057\061\061";"\115\086\113\112\076\103\071\067\086\103\102\102\113\086\065\048";"\051\043\086\118\097\072\086\118\122\112\082\068\122\078\110\121";"\051\083\088\068\097\083\057\061";"\047\083\101\050\047\072\069\100\113\112\056\061","\072\083\068\067\111\053\121\052\079\087\061\061","\086\103\071\076\082\043\101\099\103\080\065\105\079\080\119\116\097\086\103\061","\051\078\052\050\113\083\101\090";"\047\083\101\117\047\080\065\102\097\078\051\061","\079\099\110\108","\113\043\113\077\072\078\075\070\104\083\069\067\086\112\082\111","\113\078\110\054\097\070\056\061";"\097\072\052\118\076\119\061\061","\113\112\065\116\097\070\056\061";"\097\055\065\072\086\103\065\102\114\052\088\088\076\112\119\069\114\078\122\061","\097\049\056\061";"\097\049\081\061";"\047\072\071\057\122\072\088\106","\103\070\052\052\051\053\088\081\086\083\121\053\113\104\088\068\076\075\061\061","\076\053\086\120\072\083\113\103\075\053\086\056\088\078\118\069\122\075\061\061","\051\070\082\116\076\072\071\053";"\107\120\087\082\071\068\120\082\100\113\049\078\117\079\120\053\108\110\068\103\107\081\099\071\099\108\055\056\068\071\105\087\074\115\107\048\067\049\118\084\072\120\105\108\075\117\075\112\109\076\066\073\050\116\086\071\051\119\077\083\056\081\050\119\082\109\073\103\057\083\090\098\086\088\103\049\069\099\103\098\086\074\078\103\115\080\116\112\110\121\105\069\117\049\079\100\081\108\100\113\119\097\115\051\106\065\080\090\087\051\099\116\083\089\099\117\082\049\101\070\076\111\121\082\115\069\118\098\049\112\068\073\120\081\116\079\077\087\104\102\079\071\106\108\114\052\090\049\108\100\101\121\069\084\115\121\066\067\103\071\076\050\052\103\087\088\102\051\084\051\067\061","\082\117\056\070\103\052\105\054\097\103\090\053\103\086\047\115\122\057\061\061","\115\100\087\121\113\089\048\102\115\087\061\061";"\113\043\052\090\113\075\061\061";"\115\087\061\061";"\079\080\082\118\051\081\047\121\047\119\061\061","\122\043\068\068\051\087\061\061","\113\043\069\068\047\083\088\048";"\051\078\086\090\097\070\113\121","\051\103\101\102\076\086\121\105\104\043\087\110\088\083\099\043";"\111\052\102\050\097\121\086\110";"\122\053\121\118\113\075\061\061","\122\053\121\069\076\069\068\043\122\053\047\102\103\069\103\043\104\080\111\061";"\075\103\052\049\103\086\086\081\111\053\068\116\076\104\087\061","\112\069\101\053\122\057\061\061";"\113\070\088\069\122\087\061\061"}local function S(S)return o[S+(-151185-(-203523))]end for S,v in ipairs({{479673-479672,33874-33827},{592453-592452;-225847-(-225873)},{-982311+982338,-314302-(-314349)}})do while v[141553-141552]<v[-126469+126471]do o[v[481281-481280]],o[v[-349801-(-349803)]],v[-479032+479033],v[521731+-521729]=o[v[353129-353127]],o[v[481540-481539]],v[656153+-656152]+(-486608-(-486609)),v[-33969-(-33971)]-(335009+-335008)end end do local S=table.concat local v=o local h=string.len local p={W=13611-13579;["\048"]=-409307+409347,["\047"]=-332889+332918;N=-821665-(-821703),Q=-4799-(-4803),E=-947341-(-947394),t=-785586-(-785636);q=1006190+-1006165;s=600653-600639,M=70375-70360,G=-583348+583405;f=-863990-(-864031),J=469353-469290,X=470144-470131;F=535118+-535063;l=-814627-(-814637),V=187532-187511,C=929170+-929114;d=654491+-654457;K=-579220-(-579236),b=840098-840067;I=-850374-(-850418);z=-1047377+1047401;["\051"]=711172-711144,U=-565496-(-565554),g=-1041963-(-1041983),a=-524215-(-524242);p=918585+-918562;h=-352846-(-352865),["\049"]=-727012-(-727015),y=-386017+386054,B=-851082-(-851144),k=479776-479765,["\052"]=-679903-(-679908),A=891043+-891034,n=879628-879579;x=-884482+884524,["\054"]=982598+-982551;r=-11318-(-11348);c=179263+-179227,H=704674+-704652,["\043"]=-515622-(-515676),["\057"]=-913156-(-913204);Y=496043+-496041;O=713530-713512,w=-406305-(-406305),S=-629144+629150;["\055"]=1009706-1009671,R=-993042-(-993059),D=364623-364590,e=-271171+271232,o=-875233-(-875245);["\056"]=832318+-832310,v=-875279+875331;u=-645319+645370;m=-299477+299537,P=840549-840542,j=-1021933+1021976;T=377515-377456,["\053"]=305768+-305729,["\050"]=121007-120961;i=86938-86937,Z=-900398-(-900443),L=893214+-893188}local D=table.insert local V=string.sub local L=type local a=math.floor local Y=string.char for o=282091+-282090,#v,91103-91102 do local I=v[o]if L(I)=="\115\116\114\105\110\103"then local L=h(I)local O={}local m=332254+-332253 local C=845586-845586 local f=-867458+867458 while m<=L do local o=V(I,m,m)local S=p[o]if S then C=C+S*(-284517-(-284581))^((850164-850161)-f)f=f+(947684+-947683)if f==-1006687-(-1006691)then f=-51303+51303 local o=a(C/(459490-393954))local S=a((C%(546651-481115))/(719749+-719493))local v=C%(801193-800937)D(O,Y(o,S,v))C=954222-954222 end elseif o=="\061"then D(O,Y(a(C/(883499+-817963))))if m>=L or V(I,m+(-688571+688572),m+(-765023+765024))~="\061"then D(O,Y(a((C%(-427919-(-493455)))/(-539650-(-539906)))))end break end m=m+(-643170-(-643171))end v[o]=S(O)end end end return(function(o,h,p,D,V,L,a,Q,f,k,H,q,v,O,Y,C,m,I,e,A,b)I,q,Q,Y,f,O,m,e,v,A,b,k,C,H={},function(o,S)local h=C(S)local p=function(p,D)return v(o,{p,D},S,h)end return p end,function(o,S)local h=C(S)local p=function(...)return v(o,{...},S,h)end return p end,{},function(o)local S,v=978188+-978187,o[529484-529483]while v do I[v],S=I[v]-(-755397-(-755398)),(-32445-(-32446))+S if-368003-(-368003)==I[v]then I[v],Y[v]=nil,nil end v=o[S]end end,function()m=m+(39204-39203)I[m]=-985630-(-985631)return m end,-128000-(-128000),function(o,S)local h=C(S)local p=function()return v(o,{},S,h)end return p end,function(v,p,D,V)local C,s,K,i,E,n,t,W,B,x,f,d,j,m,Q,c,N,I,G,P,a,g,y,u,Z,w,R,r,T,U,z,F,M,X while v do if v<7038125-(-461731)then if v<-221539+3857276 then if v<-847292+2871884 then if v<1186154-(-86654)then if v<297731+461490 then if v<-157633+670111 then if v<388481-(-89124)then v={}Y[D[839046-839044]]=v x=S(-782106-(-729778))a=Y[D[-1040569-(-1040572)]]Q=35184373123625-1034793 f=a g=-899373-(-899628)v=8738179-(-846541)a=m%Q Y[D[-532332-(-532336)]]=a d=m%g g=-684616+684618 Z=961736-961735 Q=d+g Y[D[-514548+514553]]=Q g=o[x]x=S(-369592+317281)d=g[x]x=-583918-(-583919)g=d(I)F=Z d=S(-980449+928141)C[m]=d d=148245-148046 Z=-94361-(-94361)U=F<Z y=g Z=x-F else v=a and 4992263-(-812370)or-425467+15484534 end else C=704276+7136786 m=S(-308397+256083)I=m^C a=-796305+10642515 v=a-I I=v a=S(-649019+596723)v=a/I a={v}v=o[S(-15506-36828)]end else if v<416397+811330 then c=653207-653205 w=P[c]c=Y[z]v=-228952+2223676 n=w==c j=n else c=-137430-(-137431)w=P[c]K=v c=false n=w==c v=n and 52735+1064668 or 2468668-473944 j=n end end else if v<1790499-193391 then if v<304191-(-999521)then v=15804372-745305 I=nil Y[D[-389248-(-389253)]]=a else v=1760334-484451 C=Y[D[1015375-1015369]]m=C==I a=m end else if v<44779+1938535 then a={m}v=o[S(838508-890803)]else a=j v=K v=6398173-(-841073)end end end else if v<3827742-710114 then if v<99828+2312652 then if v<-513347+2759471 then if v<1866960-(-255339)then I=p[531155-531154]m=p[-628092-(-628094)]v=Y[D[-395284-(-395285)]]C=v v=C[m]v=v and 12363438-(-229545)or 7488+217737 else m=Y[D[-874554-(-874556)]]C=147874+-147657 I=m*C m=743353+14056404582872 a=I+m I=35184372502014-413182 v=a%I Y[D[810247+-810245]]=v m=-334375-(-334376)v=5267997-(-118722)I=Y[D[1035967+-1035964]]a=I~=m end else y=O()Y[y]=a F=-349606+349671 Z=396961-396958 v=Y[g]a=v(Z,F)M=S(-559152-(-506854))Z=O()G=e(-427264+947480,{})Y[Z]=a v=-283302+283302 a=o[M]F=v v=981913+-981913 M={a(G)}U=v X=S(-284740-(-232447))a=-78585+78587 v={h(M)}M=v v=M[a]a=S(-138040+85743)G=v v=o[a]T=Y[C]E=o[X]X=E(G)E=S(992824-1045149)i=T(X,E)T={i()}a=v(h(T))T=O()Y[T]=a i=Y[Z]v=10675123-(-123637)a=322538+-322537 E=i i=456397+-456396 X=i i=-948904+948904 N=X<i i=a-X end else if v<3529716-806631 then I=p m=O()C=S(722430-774758)f=O()v=true Q=O()Y[m]=v x=e(954113+12575677,{Q})a=o[C]C=S(-882353+830033)v=a[C]C=O()Y[C]=v g=S(302113-354411)v=q(-272104+3963399,{})Y[f]=v v=false Y[Q]=v d=o[g]g=d(x)v=g and 4765542-(-437157)or 3475944-(-66970)a=g else v=true v=v and 3884621-(-442905)or 9421134-895316 end end else if v<2511963-(-875879)then if v<-780758+3974869 then v=-615390+15772505 else N=S(-591061-(-538728))v=o[N]N=S(-528036-(-475704))o[N]=v v=3697732-555871 end else if v<2670959-(-886169)then U=S(180445+-232749)d=a g=S(455798+-508134)x=S(-194866-(-142562))a=o[g]g=S(-565184-(-512890))v=a[g]g=O()Y[g]=v a=o[x]x=S(454907-507214)v=a[x]x=v F=o[U]y=F Z=v v=F and 10445260-(-208318)or 8129890-800355 else v=6019738-(-565973)end end end end else if v<6328998-624649 then if v<5574473-382276 then if v<-635212+4956623 then if v<113517+3931350 then if v<-7525+3711107 then I=S(-727204-(-674902))a=S(-139126+86791)v=o[a]a=v(I)v=o[S(370285+-422603)]a={}else C=-210571-(-210571)I=S(280242+-332577)v=o[I]m=Y[D[-347225+347233]]I=v(m,C)v=940953+7396086 end else I=Y[D[121324-121323]]a=#I I=383116-383116 v=a==I v=v and 2901048-665218 or 13327109-740580 end else if v<70545+4275211 then a=S(199466+-251799)I=S(205103-257435)v=o[a]a=o[I]I=S(342887-395219)o[I]=v v=-963929+4062645 I=S(627458+-679791)o[I]=a I=Y[D[-1006531-(-1006532)]]m=I()else m=Y[D[134712+-134710]]v=1400670-897859 C=Y[D[-593727-(-593730)]]I=m==C a=I end end else if v<5063281-(-321152)then if v<4614389-(-632773)then v=-870216+4413130 d=Y[Q]a=d else Y[m]=j c=Y[B]r=823484+-823483 w=c+r n=P[w]K=F+n n=9059-8803 v=K%n w=Y[u]n=U+w F=v v=9957167-666591 w=331115+-330859 K=n%w U=K end else if v<1022486+4509045 then C=-834094+834245 m=Y[D[-532901+532904]]v=-184209+15439686 I=m*C m=293458+-293201 a=I%m Y[D[58483-58480]]=a else Z=S(283838+-336169)y=o[Z]v=2491895-113987 a=y end end end else if v<-575975+7165816 then if v<123164+6328978 then if v<760551+5380137 then if v<-926682+6725105 then a=15562463-765521 m=S(-434078+381761)C=1819536-(-461689)I=m^C v=a-I I=v a=S(-133296-(-81004))v=a/I a={v}v=o[S(-831836+779536)]else y=q(968068+4737442,{})a=S(-147808-(-95511))x=S(-272870+220572)v=o[a]f=S(-936097-(-883804))I=Y[D[231820-231816]]C=o[f]g=o[x]x={g(y)}g=-19056+19058 d={h(x)}Q=d[g]f=C(Q)C=S(871623+-923948)m=I(f,C)I={m()}a=v(h(I))I=a m=Y[D[555270-555265]]v=m and 676079+630967 or 499189+776694 a=m end else v=A(7338490-851684,{f})E={v()}a={h(E)}v=o[S(-1045721-(-993430))]end else if v<5786755-(-785742)then v=684975+2413741 else Q=k(Q)f=k(f)x=nil d=nil Z=k(Z)G=nil C=k(C)C=nil F=nil Z=O()g=k(g)m=k(m)y=k(y)U=nil m=nil M=nil d=S(711549-763885)x=S(788409-840713)Q=o[d]U=O()d=S(162022+-214359)T=k(T)f=Q[d]Q=O()Y[Q]=f g=S(-1060518-(-1008182))d=o[g]G=54433-54432 y=S(607713-660041)g=S(-880449-(-828155))f=d[g]g=o[x]x=S(-418665-(-366346))d=g[x]x=o[y]y=S(-940600+888279)g=x[y]F={}y=O()x=416962-416962 Y[y]=x x=-617105-(-617107)Y[Z]=x x={}Y[U]=F v=11240709-697441 M={}T=-363364+363620 F=825564-825564 N=T T=-750033-(-750034)t=T T=-417412+417412 W=t<T T=G-t end end else if v<6720427-(-312991)then if v<-570726+7269568 then t=O()Y[t]=i W=S(697986-750322)u=-190854+190954 R=139800+-129800 B=-641362-(-641617)a=o[W]W=S(-878985-(-826691))v=a[W]W=-1015448+1015449 a=v(W,u)W=O()Y[W]=a u=787324+-787324 v=Y[g]a=v(u,B)z=421819-421818 u=O()r=23136-23136 Y[u]=a v=Y[g]s=Y[W]P=80300+-80298 B=-911100+911101 a=v(B,s)B=O()Y[B]=a a=Y[g]s=a(z,P)a=-292763+292764 n=S(-1031222-(-978929))v=s==a P=S(-424266+371943)a=S(384570+-436895)s=O()Y[s]=v v=S(942607+-994919)K=o[n]w=Y[g]c={w(r,R)}n=K(h(c))v=G[v]K=S(718030+-770353)j=n..K z=P..j v=v(G,a,z)z=O()j=H(-147226+11819381,{g;t;Z,C;m;T;s;z,W;B,u,y})Y[z]=v P=S(-690054+637756)a=o[P]P={a(j)}v={h(P)}P=v v=Y[s]v=v and 15072076-(-783050)or-153398+12786722 else n=nil T=O()W=S(-542871-(-490572))t=O()g=nil G={}Y[T]=G P=S(857373-909683)f=nil G=O()s=S(435606+-487909)N=b(-812523+4886424,{T;y,Z;Q})Q=k(Q)Y[G]=N N={}Y[t]=N u={}d=nil N=o[W]F=nil x=nil z=Y[t]B={[s]=z;[P]=n}M=nil W=N(u,B)g=S(158423+-210747)C=W Q=S(880153-932454)N=H(-409226+2458940,{t;T;U;y,Z,G})m=N T=k(T)y=k(y)F=541326+21795279709463 Z=k(Z)f=o[Q]G=k(G)d=o[g]U=k(U)Z=S(655850-708177)y=m(Z,F)t=k(t)a={}x=C[y]v=o[S(-365723-(-313397))]y=S(-1029169+976847)y=d[y]g={y(d,x)}Q=f(h(g))f=Q()C=nil m=nil end else if v<-120504+7383822 then v=900107+8390469 Y[m]=a else v=Z a=y v=y and-509953+2887861 or 506515+5165835 end end end end end else if v<-473562+13092275 then if v<10537951-804217 then if v<-895112+9417549 then if v<8105693-114577 then if v<-715558+8583346 then if v<158075+7691162 then v=Y[D[-235644+235654]]m=Y[D[319689-319678]]I[v]=m v=Y[D[-439810+439822]]m={v(I)}a={h(m)}v=o[S(421759+-474065)]else m=Y[D[238683+-238680]]C=-650086+650118 I=m%C F=277891+-277878 f=Y[D[-980232+980236]]y=361151+-361149 g=Y[D[393051-393049]]G=Y[D[48760+-48757]]M=G-I G=850412+-850380 U=M/G Z=F-U x=y^Z d=g/x Q=f(d)v=12253243-(-333286)f=50468+4294916828 C=Q%f Q=850950+-850948 f=Q^I x=838996-838995 y=410318-410062 m=C/f f=Y[D[-691946+691950]]F=-410884+411140 g=m%x x=4295462596-495300 d=g*x Q=f(d)f=Y[D[-948663-(-948667)]]d=f(m)g=478130+-412594 C=Q+d Q=275366+-209830 f=C%Q d=C-f I=nil Q=d/g g=-165321-(-165577)d=f%g x=f-d C=nil g=x/y f=nil y=-52764-(-53020)x=Q%y Z=Q-x y=Z/F Q=nil m=nil Z={d,g,x;y}x=nil g=nil d=nil Y[D[-81473+81474]]=Z y=nil end else v=10428401-(-114867)G=T u=G M[G]=u G=nil end else if v<540235+7770617 then E=F==U v=17040101-533318 i=E else v={}m=464806+-464805 I=v C=Y[D[-336004-(-336013)]]f=C C=561095+-561094 Q=C C=-149846+149846 d=Q<C v=15935695-(-683643)C=m-Q end end else if v<9025456-(-346558)then if v<1021113+7515381 then v=o[S(-595934-(-543604))]a={}else z=k(z)s=k(s)B=k(B)v=11740446-941686 P=nil t=k(t)u=k(u)W=k(W)end else if v<8610731-(-997973)then Z=Z+F x=Z<=y M=not U x=M and x M=Z>=y M=U and M x=M or x M=1000115+14281694 v=x and M x=9859155-140948 v=v or x else g=nil f=nil v=1061278-(-652263)d=nil end end end else if v<-703961+11720262 then if v<87431+10486087 then if v<10955805-534240 then if v<11252474-960460 then v=o[S(-193946-(-141617))]a={}else N=-1030796-(-1030796)T=#M G=T==N v=G and 7850872-835935 or 808203+13094238 end else u=not W T=T+t G=T<=N G=u and G u=T>=N u=W and u G=u or G u=-395447+8266625 v=G and u G=577443+14479140 v=v or G end else if v<10209221-(-479085)then v=7473610-144075 M=S(-411801+359497)U=o[M]M=S(231297+-283628)F=U[M]y=F else i=i+X a=i<=E t=not N a=t and a t=i>=E t=N and t a=t or a t=6046376-(-563451)v=a and t a=14272813-942660 v=v or a end end else if v<12525470-450863 then if v<10630806-(-996730)then v=true v=v and 12528719-(-899057)or 6199849-(-227983)else Q=497798-497796 f=-821077+821078 m=Y[D[206913+-206912]]C=m(f,Q)m=-676615-(-676616)I=C==m a=I v=I and 28999+473812 or-39312+4400894 end else if v<72001+12515196 then C=S(316740+-369044)m=o[C]C=S(770728-823047)I=m[C]C=Y[D[-589541+589542]]v=o[S(905958-958273)]m={I(C)}a={h(m)}else v=1294296-(-419245)end end end end else if v<-448452+15557818 then if v<639201+12947277 then if v<-58433+13395788 then if v<979621+12328187 then if v<-708018+13711516 then K=Y[m]v=K and 14223108-(-976629)or-957406+6267234 j=K else X=306045-306044 N=-9163-(-9169)v=Y[g]E=v(X,N)N=S(579533-631866)v=S(355979+-408312)o[v]=E X=o[N]N=-168685+168687 v=X>N v=v and 15840282-469729 or 3340439-7158 end else E=Y[m]v=E and 8444056-231526 or 15519699-(-987084)i=E end else if v<14169728-716959 then v=15157401-286 else v=true a={}Y[D[924566+-924565]]=v v=o[S(827181+-879490)]end end else if v<14207475-(-87654)then if v<13851148-72848 then m=C y=-775102-(-775357)x=-68452-(-68452)v=Y[D[-370825+370826]]g=v(x,y)I[m]=g v=17217483-598145 m=nil else T=-335972+335973 N=#M u=502873+-502872 G=f(T,N)T=d(M,G)N=Y[U]W=T-u t=g(W)N[T]=t T=nil v=-122206+10443133 G=nil end else if v<-671548+15728584 then v=13256446-(-645995)N=564182+-564182 T=#M G=T==N else v=Y[D[-896295+896302]]v=v and 799445+3060493 or-820394+9157433 end end end else if v<178999+15291683 then if v<-81897+15352643 then if v<15572517-350369 then if v<-802788+15980074 then v=true v=v and 1405+13018241 or 9902341-63705 else v=5103483-(-206345)n=-286957+286958 K=P[n]j=K end else C=-752974+752975 m=Y[D[-933491-(-933494)]]I=m~=C v=I and 360670+7507041 or 4678522-(-708197)end else if v<16232522-931400 then X=S(525896+-578224)E=o[X]X=S(-228583-(-176267))v=10611785-1027065 x=Z i=E[X]E=i(I,x)i=Y[D[-532+538]]X=i()T=E+X X=479021-479020 x=nil G=T+d T=-771894-(-772150)M=G%T T=C[m]d=M E=d+X i=f[E]G=T..i C[m]=G else X=S(601189+-653482)t=S(132349-184681)v=o[X]N=o[t]X=v(N)v=S(-260818+208485)o[v]=X v=-40704+3182565 end end else if v<16815694-286192 then if v<-780938+16932782 then j=Y[m]v=j and-1000184+2271781 or-542496+7781742 a=j else Y[m]=i v=Y[m]v=v and 859275+2730230 or 1016524+15533045 end else if v<-1222+16590489 then v=true v=-915267+7343099 else C=C+Q g=not d m=C<=f m=g and m g=C>=f g=d and g m=g or m g=-185689+13841112 v=m and g m=66711+7485140 v=v or m end end end end end end end v=#V return h(a)end,function(o,S)local h=C(S)local p=function(p)return v(o,{p},S,h)end return p end,function(o,S)local h=C(S)local p=function(p,D,V,L,a)return v(o,{p;D;V,L;a},S,h)end return p end,function(o)I[o]=I[o]-(600474+-600473)if 237837-237837==I[o]then I[o],Y[o]=nil,nil end end,function(o)for S=1015242+-1015241,#o,-162277+162278 do I[o[S]]=I[o[S]]+(-733576+733577)end if p then local v=p(true)local h=V(v)h[S(588220+-640523)],h[S(634394-686707)],h[S(-182870+130565)]=o,f,function()return-790722-(-403313)end return v else return D({},{[S(113009+-165322)]=f,[S(147524-199827)]=o;[S(-620973-(-568668))]=function()return-639266-(-251857)end})end end,function(o,S)local h=C(S)local p=function(p,D,V)return v(o,{p;D;V},S,h)end return p end return(Q(-169675+2683192,{}))(h(a))end)(getfenv and getfenv()or _ENV,unpack or table[S(907790+-960121)],newproxy,setmetatable,getmetatable,select,{...})end)(...)
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local Lighting = game:GetService("Lighting")
+local RunService = game:GetService("RunService")
+local SoundService = game:GetService("SoundService")
+local player = Players.LocalPlayer
+
+-- 🎯 修复版配置
+local CONFIG = {
+    TEXT = "BW",
+    BLUR = {START = 0, END = 18, DURATION = 0.3},
+    BG = {
+        COLOR = Color3.fromRGB(3, 3, 8),
+        TRANSPARENCY = {START = 1, END = 0.1, DURATION = 0.25}
+    },
+    LETTER = {
+        SPACING = 80,
+        INIT_SIZE = 60,
+        FINAL_SIZE = 70,
+        INIT_TEXT = 40,
+        FINAL_TEXT = 55,
+        SHADOW_OFFSET = 3
+    },
+    TIMING = {
+        ENTRY_STAGGER = 0.15,
+        ENTRY_DURATION = 0.22,
+        BREATHE_SPEED = 1.5,
+        DISPLAY_TIME = 1.0,
+        EXIT_DURATION = 0.35
+    },
+    SOUND = {
+        -- 结束音效配置
+        END_SOUND_ID = "rbxassetid://9129543124",  -- 高质量完成音效
+        VOLUME = 0.5,
+        PITCH = 1.0,
+        PLAY_ON_EXIT = true
+    },
+    COLORS = {
+        WHITE = Color3.fromRGB(255, 255, 255),
+        WHITE_98 = Color3.fromRGB(250, 250, 250),
+        WHITE_95 = Color3.fromRGB(242, 242, 242),
+        GRAY_90 = Color3.fromRGB(230, 230, 230),
+        GRAY_80 = Color3.fromRGB(204, 204, 204),
+        GRAY_60 = Color3.fromRGB(153, 153, 153),
+        GRAY_40 = Color3.fromRGB(102, 102, 102),
+        GRAY_20 = Color3.fromRGB(51, 51, 51),
+        BLACK_10 = Color3.fromRGB(26, 26, 26),
+        BLACK_05 = Color3.fromRGB(13, 13, 13),
+        SHADOW = Color3.fromRGB(0, 0, 0)
+    }
+}
+
+-- ⚡ 修复状态管理
+local State = {
+    active = false,
+    cleanupQueue = {}
+}
+
+local function safeDestroy(obj)
+    if obj and obj.Parent then
+        obj:Destroy()
+    end
+end
+
+local function cleanupAll()
+    for _, obj in ipairs(State.cleanupQueue) do
+        if type(obj) == "function" then
+            obj()  -- 如果是函数，执行清理
+        else
+            safeDestroy(obj)
+        end
+    end
+    State.cleanupQueue = {}
+    State.active = false
+end
+
+-- 🔊 音效系统
+local function createSoundEffect()
+    local sound = Instance.new("Sound")
+    sound.SoundId = CONFIG.SOUND.END_SOUND_ID
+    sound.Volume = CONFIG.SOUND.VOLUME
+    sound.Pitch = CONFIG.SOUND.PITCH
+    sound.Name = "LoaderCompleteSound"
+    
+    -- 添加到清理队列
+    table.insert(State.cleanupQueue, sound)
+    
+    return sound
+end
+
+local function playExitSound()
+    if not CONFIG.SOUND.PLAY_ON_EXIT then return end
+    
+    local sound = createSoundEffect()
+    sound.Parent = SoundService
+    
+    -- 播放音效
+    sound:Play()
+    
+    -- 音效播放完成后自动销毁
+    sound.Ended:Connect(function()
+        safeDestroy(sound)
+    end)
+    
+    -- 如果音效卡住，5秒后强制销毁
+    task.delay(5, function()
+        safeDestroy(sound)
+    end)
+end
+
+-- ✨ 预设动画曲线
+local TWEEN = {
+    SNAP = TweenInfo.new(0.18, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+    SMOOTH = TweenInfo.new(0.25, Enum.EasingStyle.Cubic, Enum.EasingDirection.Out),
+    BOUNCE = TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.Out, 0, false, 0),
+    FADE = TweenInfo.new(0.3, Enum.EasingStyle.Cubic, Enum.EasingDirection.In)
+}
+
+-- 🎨 修复文字渲染系统
+local function createPremiumText(char, index, parent)
+    local totalWidth = (#CONFIG.TEXT - 1) * CONFIG.LETTER.SPACING
+    local startX = -totalWidth / 2
+    local posX = startX + (index - 1) * CONFIG.LETTER.SPACING
+    
+    -- 主文字
+    local mainLabel = Instance.new("TextLabel")
+    mainLabel.Text = char
+    mainLabel.Font = Enum.Font.GothamBlack
+    mainLabel.TextColor3 = CONFIG.COLORS.WHITE
+    mainLabel.TextSize = CONFIG.LETTER.INIT_TEXT
+    mainLabel.Size = UDim2.new(0, CONFIG.LETTER.INIT_SIZE, 0, CONFIG.LETTER.INIT_SIZE)
+    mainLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+    mainLabel.Position = UDim2.new(0.5, posX, 0.5, 40)
+    mainLabel.BackgroundTransparency = 1
+    mainLabel.TextTransparency = 1
+    mainLabel.ZIndex = 4
+    mainLabel.TextXAlignment = Enum.TextXAlignment.Center
+    mainLabel.TextYAlignment = Enum.TextYAlignment.Center
+    mainLabel.Parent = parent
+    
+    -- 修复阴影层
+    local shadowLayer = Instance.new("TextLabel")
+    shadowLayer.Text = char
+    shadowLayer.Font = Enum.Font.GothamBlack
+    shadowLayer.TextColor3 = CONFIG.COLORS.SHADOW
+    shadowLayer.TextSize = CONFIG.LETTER.INIT_TEXT + 4
+    shadowLayer.Size = mainLabel.Size
+    shadowLayer.AnchorPoint = mainLabel.AnchorPoint
+    shadowLayer.Position = mainLabel.Position + UDim2.new(0, CONFIG.LETTER.SHADOW_OFFSET, 0, CONFIG.LETTER.SHADOW_OFFSET)
+    shadowLayer.BackgroundTransparency = 1
+    shadowLayer.TextTransparency = 0.8
+    shadowLayer.ZIndex = 3
+    shadowLayer.TextXAlignment = Enum.TextXAlignment.Center
+    shadowLayer.TextYAlignment = Enum.TextYAlignment.Center
+    shadowLayer.Parent = parent
+    
+    -- 修复光晕层
+    local glowLayer = Instance.new("TextLabel")
+    glowLayer.Text = char
+    glowLayer.Font = Enum.Font.GothamBlack
+    glowLayer.TextColor3 = CONFIG.COLORS.WHITE_98
+    glowLayer.TextSize = CONFIG.LETTER.INIT_TEXT + 8
+    glowLayer.Size = mainLabel.Size + UDim2.new(0, 16, 0, 16)
+    glowLayer.AnchorPoint = mainLabel.AnchorPoint
+    glowLayer.Position = mainLabel.Position
+    glowLayer.BackgroundTransparency = 1
+    glowLayer.TextTransparency = 0.95
+    glowLayer.ZIndex = 2
+    glowLayer.TextXAlignment = Enum.TextXAlignment.Center
+    glowLayer.TextYAlignment = Enum.TextYAlignment.Center
+    glowLayer.Parent = parent
+    
+    -- 修复渐变效果
+    local gradient = Instance.new("UIGradient")
+    gradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0.0, CONFIG.COLORS.WHITE),
+        ColorSequenceKeypoint.new(0.1, CONFIG.COLORS.WHITE_95),
+        ColorSequenceKeypoint.new(0.2, CONFIG.COLORS.GRAY_90),
+        ColorSequenceKeypoint.new(0.3, CONFIG.COLORS.GRAY_80),
+        ColorSequenceKeypoint.new(0.4, CONFIG.COLORS.GRAY_60),
+        ColorSequenceKeypoint.new(0.5, CONFIG.COLORS.GRAY_40),
+        ColorSequenceKeypoint.new(0.6, CONFIG.COLORS.GRAY_20),
+        ColorSequenceKeypoint.new(0.7, CONFIG.COLORS.BLACK_10),
+        ColorSequenceKeypoint.new(0.8, CONFIG.COLORS.BLACK_05),
+        ColorSequenceKeypoint.new(0.9, CONFIG.COLORS.SHADOW),
+        ColorSequenceKeypoint.new(1.0, CONFIG.COLORS.SHADOW)
+    })
+    gradient.Transparency = NumberSequence.new({
+        NumberSequenceKeypoint.new(0, 0),
+        NumberSequenceKeypoint.new(0.8, 0),
+        NumberSequenceKeypoint.new(1, 0.1)
+    })
+    gradient.Rotation = 92
+    gradient.Parent = mainLabel
+    
+    -- 添加到清理队列
+    table.insert(State.cleanupQueue, function()
+        mainLabel:Destroy()
+        shadowLayer:Destroy()
+        glowLayer:Destroy()
+    end)
+    
+    return {
+        main = mainLabel,
+        shadow = shadowLayer,
+        glow = glowLayer,
+        initialPos = UDim2.new(0.5, posX, 0.5, 0)
+    }
+end
+
+-- 🚀 修复入场动画
+local function playPremiumEntry(letters)
+    for i, letter in ipairs(letters) do
+        local delay = (i - 1) * CONFIG.TIMING.ENTRY_STAGGER
+        
+        task.delay(delay, function()
+            if not letter.main or not letter.main.Parent then return end
+            
+            -- 主文字弹跳入场
+            local mainTween = TweenService:Create(letter.main, TWEEN.BOUNCE, {
+                TextTransparency = 0,
+                TextSize = CONFIG.LETTER.FINAL_TEXT,
+                Size = UDim2.new(0, CONFIG.LETTER.FINAL_SIZE, 0, CONFIG.LETTER.FINAL_SIZE),
+                Position = UDim2.new(0.5, letter.initialPos.X.Offset, 0.5, -8)
+            })
+            mainTween:Play()
+            
+            -- 阴影同步动画
+            local shadowTween = TweenService:Create(letter.shadow, TWEEN.BOUNCE, {
+                TextTransparency = 0.5,
+                TextSize = CONFIG.LETTER.FINAL_TEXT + 4,
+                Size = UDim2.new(0, CONFIG.LETTER.FINAL_SIZE, 0, CONFIG.LETTER.FINAL_SIZE),
+                Position = UDim2.new(0.5, letter.initialPos.X.Offset + 2, 0.5, -6)
+            })
+            shadowTween:Play()
+            
+            -- 光晕层动画
+            local glowTween = TweenService:Create(letter.glow, TWEEN.SMOOTH, {
+                TextTransparency = 0.85,
+                TextSize = CONFIG.LETTER.FINAL_TEXT + 12,
+                Size = UDim2.new(0, CONFIG.LETTER.FINAL_SIZE + 20, 0, CONFIG.LETTER.FINAL_SIZE + 20)
+            })
+            glowTween:Play()
+            
+            -- 微调至最终位置
+            task.delay(CONFIG.TIMING.ENTRY_DURATION, function()
+                if letter.main and letter.main.Parent then
+                    TweenService:Create(letter.main, TWEEN.SNAP, {
+                        Position = letter.initialPos
+                    }):Play()
+                    
+                    TweenService:Create(letter.shadow, TWEEN.SNAP, {
+                        Position = letter.initialPos + UDim2.new(0, 2, 0, 2)
+                    }):Play()
+                end
+            end)
+        end)
+    end
+end
+
+-- 💫 修复呼吸效果
+local function createBreatheEffect(letters)
+    local time = 0
+    local heartbeat
+    
+    heartbeat = RunService.Heartbeat:Connect(function(delta)
+        time = time + delta * CONFIG.TIMING.BREATHE_SPEED
+        
+        local breathe1 = 0.98 + math.sin(time) * 0.02
+        local breathe2 = 0.95 + math.sin(time * 1.3) * 0.03
+        local pulse = 1 + math.sin(time * 0.8) * 0.08
+        
+        for _, letter in ipairs(letters) do
+            if letter.main and letter.main.Parent then
+                -- 主文字呼吸
+                letter.main.TextTransparency = 1 - breathe1
+                letter.main.TextSize = CONFIG.LETTER.FINAL_TEXT * pulse
+                
+                -- 阴影呼吸
+                letter.shadow.TextTransparency = 0.4 + (1 - breathe2) * 0.3
+                
+                -- 光晕脉动
+                letter.glow.TextTransparency = 0.8 + math.sin(time * 0.5) * 0.15
+                letter.glow.TextSize = (CONFIG.LETTER.FINAL_TEXT + 12) * pulse
+            end
+        end
+    end)
+    
+    table.insert(State.cleanupQueue, function()
+        if heartbeat then
+            heartbeat:Disconnect()
+        end
+    end)
+    
+    return heartbeat
+end
+
+-- 🌌 修复退出序列（带音效）
+local function playPremiumExit(letters, blur, bg)
+    -- 播放结束音效
+    playExitSound()
+    
+    -- 字母分阶段退出
+    for i, letter in ipairs(letters) do
+        local exitDelay = (i - 1) * 0.05
+        local upDistance = -60 - (i * 5)
+        
+        task.delay(exitDelay, function()
+            if letter.main and letter.main.Parent then
+                -- 主文字向上淡出
+                TweenService:Create(letter.main, TWEEN.FADE, {
+                    TextTransparency = 1,
+                    Position = UDim2.new(0.5, letter.initialPos.X.Offset, 0.5, upDistance),
+                    TextSize = 30,
+                    Rotation = (i % 2 == 0) and 15 or -15
+                }):Play()
+                
+                -- 阴影淡出
+                TweenService:Create(letter.shadow, TWEEN.FADE, {
+                    TextTransparency = 1,
+                    Position = UDim2.new(0.5, letter.initialPos.X.Offset + 2, 0.5, upDistance + 2)
+                }):Play()
+                
+                -- 光晕消散
+                TweenService:Create(letter.glow, TWEEN.FADE, {
+                    TextTransparency = 1,
+                    TextSize = 20,
+                    Size = UDim2.new(0, 30, 0, 30)
+                }):Play()
+            end
+        end)
+    end
+    
+    -- 背景效果淡出
+    if bg then
+        TweenService:Create(bg, TWEEN.FADE, {
+            BackgroundTransparency = 1
+        }):Play()
+    end
+    
+    if blur then
+        TweenService:Create(blur, TWEEN.FADE, {
+            Size = 0
+        }):Play()
+    end
+end
+
+-- 🔗 加载外部脚本（只加载第二个脚本）
+local function loadExternalScript()
+    local success, result = pcall(function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/tfcygvunbind/Apple/main/哇！'))()
+    end)
+    
+    if not success then
+        warn("脚本加载失败:", result)
+    end
+end
+
+-- ⚡ 修复主执行流程
+local function initLoader()
+    if State.active then return end
+    State.active = true
+    
+    -- 创建核心UI
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "PremiumLoader"
+    screenGui.ResetOnSpawn = false
+    screenGui.IgnoreGuiInset = true
+    screenGui.DisplayOrder = 999
+    
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(1, 0, 1, 0)
+    frame.BackgroundTransparency = 1
+    frame.Parent = screenGui
+    
+    -- 确保PlayerGui存在
+    local playerGui = player:WaitForChild("PlayerGui")
+    screenGui.Parent = playerGui
+    
+    -- 深色背景
+    local bg = Instance.new("Frame")
+    bg.Size = UDim2.new(1, 0, 1, 0)
+    bg.BackgroundColor3 = CONFIG.BG.COLOR
+    bg.BackgroundTransparency = CONFIG.BG.TRANSPARENCY.START
+    bg.ZIndex = 0
+    bg.Parent = frame
+    
+    TweenService:Create(bg, TWEEN.SMOOTH, {
+        BackgroundTransparency = CONFIG.BG.TRANSPARENCY.END
+    }):Play()
+    
+    -- 背景模糊
+    local blur = Instance.new("BlurEffect")
+    blur.Size = CONFIG.BLUR.START
+    blur.Parent = Lighting
+    
+    TweenService:Create(blur, TWEEN.SMOOTH, {
+        Size = CONFIG.BLUR.END
+    }):Play()
+    
+    -- 创建BW两个字母
+    local letters = {}
+    for i = 1, #CONFIG.TEXT do
+        local letter = createPremiumText(CONFIG.TEXT:sub(i, i), i, frame)
+        table.insert(letters, letter)
+    end
+    
+    -- 添加到清理队列
+    table.insert(State.cleanupQueue, screenGui)
+    table.insert(State.cleanupQueue, blur)
+    table.insert(State.cleanupQueue, bg)
+    
+    -- 🎬 动画序列
+    task.delay(0.05, function()
+        -- 第一阶段：字母入场
+        playPremiumEntry(letters)
+        
+        -- 第二阶段：启动呼吸效果
+        task.delay(CONFIG.TIMING.ENTRY_DURATION * 3, function()
+            createBreatheEffect(letters)
+        end)
+        
+        -- 第三阶段：退出并加载外部脚本
+        task.delay(CONFIG.TIMING.DISPLAY_TIME, function()
+            playPremiumExit(letters, blur, bg)
+            
+            task.delay(CONFIG.TIMING.EXIT_DURATION + 0.15, function()
+                cleanupAll()
+                -- 加载外部脚本
+                loadExternalScript()
+            end)
+        end)
+    end)
+    
+    return true
+end
+
+-- 🛡️ 安全启动
+task.spawn(function()
+    local success, err = pcall(initLoader)
+    if not success then
+        warn("加载动画失败:", err)
+        cleanupAll()
+        -- 直接加载外部脚本
+        loadExternalScript()
+    end
+end)
