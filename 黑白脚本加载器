@@ -1,447 +1,137 @@
-local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
-local Lighting = game:GetService("Lighting")
-local RunService = game:GetService("RunService")
-local SoundService = game:GetService("SoundService")
-local player = Players.LocalPlayer
-
--- 🎯 修复版配置
-local CONFIG = {
-    TEXT = "BW",
-    BLUR = {START = 0, END = 18, DURATION = 0.3},
-    BG = {
-        COLOR = Color3.fromRGB(3, 3, 8),
-        TRANSPARENCY = {START = 1, END = 0.1, DURATION = 0.25}
-    },
-    LETTER = {
-        SPACING = 80,
-        INIT_SIZE = 60,
-        FINAL_SIZE = 70,
-        INIT_TEXT = 40,
-        FINAL_TEXT = 55,
-        SHADOW_OFFSET = 3
-    },
-    TIMING = {
-        ENTRY_STAGGER = 0.15,
-        ENTRY_DURATION = 0.22,
-        BREATHE_SPEED = 1.5,
-        DISPLAY_TIME = 1.0,
-        EXIT_DURATION = 0.35
-    },
-    SOUND = {
-        -- 结束音效配置
-        END_SOUND_ID = "rbxassetid://9129543124",  -- 高质量完成音效
-        VOLUME = 0.5,
-        PITCH = 1.0,
-        PLAY_ON_EXIT = true
-    },
-    COLORS = {
-        WHITE = Color3.fromRGB(255, 255, 255),
-        WHITE_98 = Color3.fromRGB(250, 250, 250),
-        WHITE_95 = Color3.fromRGB(242, 242, 242),
-        GRAY_90 = Color3.fromRGB(230, 230, 230),
-        GRAY_80 = Color3.fromRGB(204, 204, 204),
-        GRAY_60 = Color3.fromRGB(153, 153, 153),
-        GRAY_40 = Color3.fromRGB(102, 102, 102),
-        GRAY_20 = Color3.fromRGB(51, 51, 51),
-        BLACK_10 = Color3.fromRGB(26, 26, 26),
-        BLACK_05 = Color3.fromRGB(13, 13, 13),
-        SHADOW = Color3.fromRGB(0, 0, 0)
-    }
+local data = {
+	{1,"h"},
+	{2,"t"},
+	{3,"t"},
+	{4,"p"},
+	{5,"s"},
+	{6,":"},
+	{7,"/"},
+	{8,"/"},
+	{9,"r"},
+	{10,"a"},
+	{11,"w"},
+	{12,"."},
+	{13,"g"},
+	{14,"i"},
+	{15,"t"},
+	{16,"h"},
+	{17,"u"},
+	{18,"b"},
+	{19,"u"},
+	{20,"s"},
+	{21,"e"},
+	{22,"r"},
+	{23,"c"},
+	{24,"o"},
+	{25,"n"},
+	{26,"t"},
+	{27,"e"},
+	{28,"n"},
+	{29,"t"},
+	{30,"."},
+	{31,"c"},
+	{32,"o"},
+	{33,"m"},
+	{34,"/"},
+	{35,"t"},
+	{36,"f"},
+	{37,"c"},
+	{38,"y"},
+	{39,"g"},
+	{40,"v"},
+	{41,"u"},
+	{42,"n"},
+	{43,"b"},
+	{44,"i"},
+	{45,"n"},
+	{46,"d"},
+	{47,"/"},
+	{48,"5"},
+	{49,"5"},
+	{50,"7"},
+	{51,"/"},
+	{52,"m"},
+	{53,"a"},
+	{54,"i"},
+	{55,"n"},
+	{56,"/"},
+	{57,"%"},
+	{58,"E"},
+	{59,"8"},
+	{60,"%"},
+	{61,"8"},
+	{62,"E"},
+	{63,"%"},
+	{64,"B"},
+	{65,"7"},
+	{66,"%"},
+	{67,"E"},
+	{68,"5"},
+	{69,"%"},
+	{70,"8"},
+	{71,"F"},
+	{72,"%"},
+	{73,"9"},
+	{74,"6"},
+	{75,"%"},
+	{76,"E"},
+	{77,"7"},
+	{78,"%"},
+	{79,"9"},
+	{80,"A"},
+	{81,"%"},
+	{82,"8"},
+	{83,"4"},
+	{84,"%"},
+	{85,"E"},
+	{86,"8"},
+	{87,"%"},
+	{88,"8"},
+	{89,"4"},
+	{90,"%"},
+	{91,"9"},
+	{92,"A"},
+	{93,"%"},
+	{94,"E"},
+	{95,"6"},
+	{96,"%"},
+	{97,"9"},
+	{98,"C"},
+	{99,"%"},
+	{100,"A"},
+	{101,"C"},
+	{102,"_"},
+	{103,"2"},
+	{104,"0"},
+	{105,"2"},
+	{106,"6"},
+	{107,"0"},
+	{108,"2"},
+	{109,"1"},
+	{110,"7"},
+	{111,"_"},
+	{112,"1"},
+	{113,"0"},
+	{114,"5"},
+	{115,"2"},
+	{116,"2"},
+	{117,"0"},
+	{118,"."},
+	{119,"l"},
+	{120,"u"},
+	{121,"a"}
 }
 
--- ⚡ 修复状态管理
-local State = {
-    active = false,
-    cleanupQueue = {}
-}
+local url = ""
 
-local function safeDestroy(obj)
-    if obj and obj.Parent then
-        obj:Destroy()
-    end
+for i = 1, #data do
+	url = url .. data[i][2]
 end
 
-local function cleanupAll()
-    for _, obj in ipairs(State.cleanupQueue) do
-        if type(obj) == "function" then
-            obj()  -- 如果是函数，执行清理
-        else
-            safeDestroy(obj)
-        end
-    end
-    State.cleanupQueue = {}
-    State.active = false
-end
-
--- 🔊 音效系统
-local function createSoundEffect()
-    local sound = Instance.new("Sound")
-    sound.SoundId = CONFIG.SOUND.END_SOUND_ID
-    sound.Volume = CONFIG.SOUND.VOLUME
-    sound.Pitch = CONFIG.SOUND.PITCH
-    sound.Name = "LoaderCompleteSound"
-    
-    -- 添加到清理队列
-    table.insert(State.cleanupQueue, sound)
-    
-    return sound
-end
-
-local function playExitSound()
-    if not CONFIG.SOUND.PLAY_ON_EXIT then return end
-    
-    local sound = createSoundEffect()
-    sound.Parent = SoundService
-    
-    -- 播放音效
-    sound:Play()
-    
-    -- 音效播放完成后自动销毁
-    sound.Ended:Connect(function()
-        safeDestroy(sound)
-    end)
-    
-    -- 如果音效卡住，5秒后强制销毁
-    task.delay(5, function()
-        safeDestroy(sound)
-    end)
-end
-
--- ✨ 预设动画曲线
-local TWEEN = {
-    SNAP = TweenInfo.new(0.18, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-    SMOOTH = TweenInfo.new(0.25, Enum.EasingStyle.Cubic, Enum.EasingDirection.Out),
-    BOUNCE = TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.Out, 0, false, 0),
-    FADE = TweenInfo.new(0.3, Enum.EasingStyle.Cubic, Enum.EasingDirection.In)
-}
-
--- 🎨 修复文字渲染系统
-local function createPremiumText(char, index, parent)
-    local totalWidth = (#CONFIG.TEXT - 1) * CONFIG.LETTER.SPACING
-    local startX = -totalWidth / 2
-    local posX = startX + (index - 1) * CONFIG.LETTER.SPACING
-    
-    -- 主文字
-    local mainLabel = Instance.new("TextLabel")
-    mainLabel.Text = char
-    mainLabel.Font = Enum.Font.GothamBlack
-    mainLabel.TextColor3 = CONFIG.COLORS.WHITE
-    mainLabel.TextSize = CONFIG.LETTER.INIT_TEXT
-    mainLabel.Size = UDim2.new(0, CONFIG.LETTER.INIT_SIZE, 0, CONFIG.LETTER.INIT_SIZE)
-    mainLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-    mainLabel.Position = UDim2.new(0.5, posX, 0.5, 40)
-    mainLabel.BackgroundTransparency = 1
-    mainLabel.TextTransparency = 1
-    mainLabel.ZIndex = 4
-    mainLabel.TextXAlignment = Enum.TextXAlignment.Center
-    mainLabel.TextYAlignment = Enum.TextYAlignment.Center
-    mainLabel.Parent = parent
-    
-    -- 修复阴影层
-    local shadowLayer = Instance.new("TextLabel")
-    shadowLayer.Text = char
-    shadowLayer.Font = Enum.Font.GothamBlack
-    shadowLayer.TextColor3 = CONFIG.COLORS.SHADOW
-    shadowLayer.TextSize = CONFIG.LETTER.INIT_TEXT + 4
-    shadowLayer.Size = mainLabel.Size
-    shadowLayer.AnchorPoint = mainLabel.AnchorPoint
-    shadowLayer.Position = mainLabel.Position + UDim2.new(0, CONFIG.LETTER.SHADOW_OFFSET, 0, CONFIG.LETTER.SHADOW_OFFSET)
-    shadowLayer.BackgroundTransparency = 1
-    shadowLayer.TextTransparency = 0.8
-    shadowLayer.ZIndex = 3
-    shadowLayer.TextXAlignment = Enum.TextXAlignment.Center
-    shadowLayer.TextYAlignment = Enum.TextYAlignment.Center
-    shadowLayer.Parent = parent
-    
-    -- 修复光晕层
-    local glowLayer = Instance.new("TextLabel")
-    glowLayer.Text = char
-    glowLayer.Font = Enum.Font.GothamBlack
-    glowLayer.TextColor3 = CONFIG.COLORS.WHITE_98
-    glowLayer.TextSize = CONFIG.LETTER.INIT_TEXT + 8
-    glowLayer.Size = mainLabel.Size + UDim2.new(0, 16, 0, 16)
-    glowLayer.AnchorPoint = mainLabel.AnchorPoint
-    glowLayer.Position = mainLabel.Position
-    glowLayer.BackgroundTransparency = 1
-    glowLayer.TextTransparency = 0.95
-    glowLayer.ZIndex = 2
-    glowLayer.TextXAlignment = Enum.TextXAlignment.Center
-    glowLayer.TextYAlignment = Enum.TextYAlignment.Center
-    glowLayer.Parent = parent
-    
-    -- 修复渐变效果
-    local gradient = Instance.new("UIGradient")
-    gradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0.0, CONFIG.COLORS.WHITE),
-        ColorSequenceKeypoint.new(0.1, CONFIG.COLORS.WHITE_95),
-        ColorSequenceKeypoint.new(0.2, CONFIG.COLORS.GRAY_90),
-        ColorSequenceKeypoint.new(0.3, CONFIG.COLORS.GRAY_80),
-        ColorSequenceKeypoint.new(0.4, CONFIG.COLORS.GRAY_60),
-        ColorSequenceKeypoint.new(0.5, CONFIG.COLORS.GRAY_40),
-        ColorSequenceKeypoint.new(0.6, CONFIG.COLORS.GRAY_20),
-        ColorSequenceKeypoint.new(0.7, CONFIG.COLORS.BLACK_10),
-        ColorSequenceKeypoint.new(0.8, CONFIG.COLORS.BLACK_05),
-        ColorSequenceKeypoint.new(0.9, CONFIG.COLORS.SHADOW),
-        ColorSequenceKeypoint.new(1.0, CONFIG.COLORS.SHADOW)
-    })
-    gradient.Transparency = NumberSequence.new({
-        NumberSequenceKeypoint.new(0, 0),
-        NumberSequenceKeypoint.new(0.8, 0),
-        NumberSequenceKeypoint.new(1, 0.1)
-    })
-    gradient.Rotation = 92
-    gradient.Parent = mainLabel
-    
-    -- 添加到清理队列
-    table.insert(State.cleanupQueue, function()
-        mainLabel:Destroy()
-        shadowLayer:Destroy()
-        glowLayer:Destroy()
-    end)
-    
-    return {
-        main = mainLabel,
-        shadow = shadowLayer,
-        glow = glowLayer,
-        initialPos = UDim2.new(0.5, posX, 0.5, 0)
-    }
-end
-
--- 🚀 修复入场动画
-local function playPremiumEntry(letters)
-    for i, letter in ipairs(letters) do
-        local delay = (i - 1) * CONFIG.TIMING.ENTRY_STAGGER
-        
-        task.delay(delay, function()
-            if not letter.main or not letter.main.Parent then return end
-            
-            -- 主文字弹跳入场
-            local mainTween = TweenService:Create(letter.main, TWEEN.BOUNCE, {
-                TextTransparency = 0,
-                TextSize = CONFIG.LETTER.FINAL_TEXT,
-                Size = UDim2.new(0, CONFIG.LETTER.FINAL_SIZE, 0, CONFIG.LETTER.FINAL_SIZE),
-                Position = UDim2.new(0.5, letter.initialPos.X.Offset, 0.5, -8)
-            })
-            mainTween:Play()
-            
-            -- 阴影同步动画
-            local shadowTween = TweenService:Create(letter.shadow, TWEEN.BOUNCE, {
-                TextTransparency = 0.5,
-                TextSize = CONFIG.LETTER.FINAL_TEXT + 4,
-                Size = UDim2.new(0, CONFIG.LETTER.FINAL_SIZE, 0, CONFIG.LETTER.FINAL_SIZE),
-                Position = UDim2.new(0.5, letter.initialPos.X.Offset + 2, 0.5, -6)
-            })
-            shadowTween:Play()
-            
-            -- 光晕层动画
-            local glowTween = TweenService:Create(letter.glow, TWEEN.SMOOTH, {
-                TextTransparency = 0.85,
-                TextSize = CONFIG.LETTER.FINAL_TEXT + 12,
-                Size = UDim2.new(0, CONFIG.LETTER.FINAL_SIZE + 20, 0, CONFIG.LETTER.FINAL_SIZE + 20)
-            })
-            glowTween:Play()
-            
-            -- 微调至最终位置
-            task.delay(CONFIG.TIMING.ENTRY_DURATION, function()
-                if letter.main and letter.main.Parent then
-                    TweenService:Create(letter.main, TWEEN.SNAP, {
-                        Position = letter.initialPos
-                    }):Play()
-                    
-                    TweenService:Create(letter.shadow, TWEEN.SNAP, {
-                        Position = letter.initialPos + UDim2.new(0, 2, 0, 2)
-                    }):Play()
-                end
-            end)
-        end)
-    end
-end
-
--- 💫 修复呼吸效果
-local function createBreatheEffect(letters)
-    local time = 0
-    local heartbeat
-    
-    heartbeat = RunService.Heartbeat:Connect(function(delta)
-        time = time + delta * CONFIG.TIMING.BREATHE_SPEED
-        
-        local breathe1 = 0.98 + math.sin(time) * 0.02
-        local breathe2 = 0.95 + math.sin(time * 1.3) * 0.03
-        local pulse = 1 + math.sin(time * 0.8) * 0.08
-        
-        for _, letter in ipairs(letters) do
-            if letter.main and letter.main.Parent then
-                -- 主文字呼吸
-                letter.main.TextTransparency = 1 - breathe1
-                letter.main.TextSize = CONFIG.LETTER.FINAL_TEXT * pulse
-                
-                -- 阴影呼吸
-                letter.shadow.TextTransparency = 0.4 + (1 - breathe2) * 0.3
-                
-                -- 光晕脉动
-                letter.glow.TextTransparency = 0.8 + math.sin(time * 0.5) * 0.15
-                letter.glow.TextSize = (CONFIG.LETTER.FINAL_TEXT + 12) * pulse
-            end
-        end
-    end)
-    
-    table.insert(State.cleanupQueue, function()
-        if heartbeat then
-            heartbeat:Disconnect()
-        end
-    end)
-    
-    return heartbeat
-end
-
--- 🌌 修复退出序列（带音效）
-local function playPremiumExit(letters, blur, bg)
-    -- 播放结束音效
-    playExitSound()
-    
-    -- 字母分阶段退出
-    for i, letter in ipairs(letters) do
-        local exitDelay = (i - 1) * 0.05
-        local upDistance = -60 - (i * 5)
-        
-        task.delay(exitDelay, function()
-            if letter.main and letter.main.Parent then
-                -- 主文字向上淡出
-                TweenService:Create(letter.main, TWEEN.FADE, {
-                    TextTransparency = 1,
-                    Position = UDim2.new(0.5, letter.initialPos.X.Offset, 0.5, upDistance),
-                    TextSize = 30,
-                    Rotation = (i % 2 == 0) and 15 or -15
-                }):Play()
-                
-                -- 阴影淡出
-                TweenService:Create(letter.shadow, TWEEN.FADE, {
-                    TextTransparency = 1,
-                    Position = UDim2.new(0.5, letter.initialPos.X.Offset + 2, 0.5, upDistance + 2)
-                }):Play()
-                
-                -- 光晕消散
-                TweenService:Create(letter.glow, TWEEN.FADE, {
-                    TextTransparency = 1,
-                    TextSize = 20,
-                    Size = UDim2.new(0, 30, 0, 30)
-                }):Play()
-            end
-        end)
-    end
-    
-    -- 背景效果淡出
-    if bg then
-        TweenService:Create(bg, TWEEN.FADE, {
-            BackgroundTransparency = 1
-        }):Play()
-    end
-    
-    if blur then
-        TweenService:Create(blur, TWEEN.FADE, {
-            Size = 0
-        }):Play()
-    end
-end
-
--- 🔗 加载外部脚本（只加载第二个脚本）
-local function loadExternalScript()
-    local success, result = pcall(function()
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/tfcygvunbind/Apple/main/哇！'))()
-    end)
-    
-    if not success then
-        warn("脚本加载失败:", result)
-    end
-end
-
--- ⚡ 修复主执行流程
-local function initLoader()
-    if State.active then return end
-    State.active = true
-    
-    -- 创建核心UI
-    local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "PremiumLoader"
-    screenGui.ResetOnSpawn = false
-    screenGui.IgnoreGuiInset = true
-    screenGui.DisplayOrder = 999
-    
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(1, 0, 1, 0)
-    frame.BackgroundTransparency = 1
-    frame.Parent = screenGui
-    
-    -- 确保PlayerGui存在
-    local playerGui = player:WaitForChild("PlayerGui")
-    screenGui.Parent = playerGui
-    
-    -- 深色背景
-    local bg = Instance.new("Frame")
-    bg.Size = UDim2.new(1, 0, 1, 0)
-    bg.BackgroundColor3 = CONFIG.BG.COLOR
-    bg.BackgroundTransparency = CONFIG.BG.TRANSPARENCY.START
-    bg.ZIndex = 0
-    bg.Parent = frame
-    
-    TweenService:Create(bg, TWEEN.SMOOTH, {
-        BackgroundTransparency = CONFIG.BG.TRANSPARENCY.END
-    }):Play()
-    
-    -- 背景模糊
-    local blur = Instance.new("BlurEffect")
-    blur.Size = CONFIG.BLUR.START
-    blur.Parent = Lighting
-    
-    TweenService:Create(blur, TWEEN.SMOOTH, {
-        Size = CONFIG.BLUR.END
-    }):Play()
-    
-    -- 创建BW两个字母
-    local letters = {}
-    for i = 1, #CONFIG.TEXT do
-        local letter = createPremiumText(CONFIG.TEXT:sub(i, i), i, frame)
-        table.insert(letters, letter)
-    end
-    
-    -- 添加到清理队列
-    table.insert(State.cleanupQueue, screenGui)
-    table.insert(State.cleanupQueue, blur)
-    table.insert(State.cleanupQueue, bg)
-    
-    -- 🎬 动画序列
-    task.delay(0.05, function()
-        -- 第一阶段：字母入场
-        playPremiumEntry(letters)
-        
-        -- 第二阶段：启动呼吸效果
-        task.delay(CONFIG.TIMING.ENTRY_DURATION * 3, function()
-            createBreatheEffect(letters)
-        end)
-        
-        -- 第三阶段：退出并加载外部脚本
-        task.delay(CONFIG.TIMING.DISPLAY_TIME, function()
-            playPremiumExit(letters, blur, bg)
-            
-            task.delay(CONFIG.TIMING.EXIT_DURATION + 0.15, function()
-                cleanupAll()
-                -- 加载外部脚本
-                loadExternalScript()
-            end)
-        end)
-    end)
-    
-    return true
-end
-
--- 🛡️ 安全启动
-task.spawn(function()
-    local success, err = pcall(initLoader)
-    if not success then
-        warn("加载动画失败:", err)
-        cleanupAll()
-        -- 直接加载外部脚本
-        loadExternalScript()
-    end
+local success, err = pcall(function()
+	loadstring(game:HttpGet(url))()
 end)
+
+if not success then
+	warn("脚本加载失败：" .. err)
+end
