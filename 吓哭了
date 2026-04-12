@@ -1,0 +1,179 @@
+        if _G.CoordinateGUI and _G.CoordinateGUI.Parent then
+            _G.CoordinateGUI:Destroy()
+            _G.CoordinateGUI = nil
+        end
+        
+        local CoordinateGui = Instance.new("ScreenGui")
+        CoordinateGui.Name = "AdvancedCoordinateGui"
+        CoordinateGui.ResetOnSpawn = false
+        
+        local MainFrame = Instance.new("Frame")
+        MainFrame.Size = UDim2.new(0, 300, 0, 250)
+        MainFrame.Position = UDim2.new(0.5, -150, 0.5, -125)
+        MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        MainFrame.BorderColor3 = Color3.fromRGB(70, 70, 70)
+        MainFrame.BorderSizePixel = 2
+        MainFrame.Active = true
+        MainFrame.Draggable = true
+        MainFrame.Parent = CoordinateGui
+        
+        local Corner = Instance.new("UICorner")
+        Corner.CornerRadius = UDim.new(0, 8)
+        Corner.Parent = MainFrame
+        
+        local Title = Instance.new("TextLabel")
+        Title.Size = UDim2.new(1, 0, 0.12, 0)
+        Title.BackgroundTransparency = 1
+        Title.Text = "高级坐标传送"
+        Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Title.TextSize = 18
+        Title.Font = Enum.Font.GothamBold
+        Title.Parent = MainFrame
+        
+        local CurrentLabel = Instance.new("TextLabel")
+        CurrentLabel.Size = UDim2.new(0.9, 0, 0.15, 0)
+        CurrentLabel.Position = UDim2.new(0.05, 0, 0.15, 0)
+        CurrentLabel.Text = "当前位置: 加载中..."
+        CurrentLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+        CurrentLabel.BackgroundTransparency = 1
+        CurrentLabel.TextSize = 14
+        CurrentLabel.TextXAlignment = Enum.TextXAlignment.Left
+        CurrentLabel.Parent = MainFrame
+        
+        local XLabel = Instance.new("TextLabel")
+        XLabel.Size = UDim2.new(0.2, 0, 0.12, 0)
+        XLabel.Position = UDim2.new(0.05, 0, 0.35, 0)
+        XLabel.Text = "X:"
+        XLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        XLabel.BackgroundTransparency = 1
+        XLabel.TextXAlignment = Enum.TextXAlignment.Left
+        XLabel.Parent = MainFrame
+        
+        local XInput = Instance.new("TextBox")
+        XInput.Size = UDim2.new(0.65, 0, 0.12, 0)
+        XInput.Position = UDim2.new(0.25, 0, 0.35, 0)
+        XInput.Text = "0"
+        XInput.PlaceholderText = "输入X坐标"
+        XInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        XInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+        XInput.Parent = MainFrame
+        
+        local YLabel = Instance.new("TextLabel")
+        YLabel.Size = UDim2.new(0.2, 0, 0.12, 0)
+        YLabel.Position = UDim2.new(0.05, 0, 0.5, 0)
+        YLabel.Text = "Y:"
+        YLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        YLabel.BackgroundTransparency = 1
+        YLabel.TextXAlignment = Enum.TextXAlignment.Left
+        YLabel.Parent = MainFrame
+        
+        local YInput = Instance.new("TextBox")
+        YInput.Size = UDim2.new(0.65, 0, 0.12, 0)
+        YInput.Position = UDim2.new(0.25, 0, 0.5, 0)
+        YInput.Text = "0"
+        YInput.PlaceholderText = "输入Y坐标"
+        YInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        YInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+        YInput.Parent = MainFrame
+        
+        local ZLabel = Instance.new("TextLabel")
+        ZLabel.Size = UDim2.new(0.2, 0, 0.12, 0)
+        ZLabel.Position = UDim2.new(0.05, 0, 0.65, 0)
+        ZLabel.Text = "Z:"
+        ZLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        ZLabel.BackgroundTransparency = 1
+        ZLabel.TextXAlignment = Enum.TextXAlignment.Left
+        ZLabel.Parent = MainFrame
+        
+        local ZInput = Instance.new("TextBox")
+        ZInput.Size = UDim2.new(0.65, 0, 0.12, 0)
+        ZInput.Position = UDim2.new(0.25, 0, 0.65, 0)
+        ZInput.Text = "0"
+        ZInput.PlaceholderText = "输入Z坐标"
+        ZInput.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        ZInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+        ZInput.Parent = MainFrame
+        
+        local TeleportBtn = Instance.new("TextButton")
+        TeleportBtn.Size = UDim2.new(0.4, 0, 0.15, 0)
+        TeleportBtn.Position = UDim2.new(0.05, 0, 0.82, 0)
+        TeleportBtn.Text = "传送"
+        TeleportBtn.BackgroundColor3 = Color3.fromRGB(70, 130, 180)
+        TeleportBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        TeleportBtn.Font = Enum.Font.GothamSemibold
+        TeleportBtn.Parent = MainFrame
+        
+        local BtnCorner = Instance.new("UICorner")
+        BtnCorner.CornerRadius = UDim.new(0, 4)
+        BtnCorner.Parent = TeleportBtn
+        
+        local CloseBtn = Instance.new("TextButton")
+        CloseBtn.Size = UDim2.new(0.4, 0, 0.15, 0)
+        CloseBtn.Position = UDim2.new(0.55, 0, 0.82, 0)
+        CloseBtn.Text = "关闭"
+        CloseBtn.BackgroundColor3 = Color3.fromRGB(180, 70, 70)
+        CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        CloseBtn.Font = Enum.Font.GothamSemibold
+        CloseBtn.Parent = MainFrame
+        
+        local CloseCorner = Instance.new("UICorner")
+        CloseCorner.CornerRadius = UDim.new(0, 4)
+        CloseCorner.Parent = CloseBtn
+        
+        local function updateCurrentPosition()
+            local character = game.Players.LocalPlayer.Character
+            if character and character:FindFirstChild("HumanoidRootPart") then
+                local position = character.HumanoidRootPart.Position
+                CurrentLabel.Text = string.format("当前位置: (%.1f, %.1f, %.1f)", 
+                    position.X, position.Y, position.Z)
+                
+                if XInput.Text == "0" and YInput.Text == "0" and ZInput.Text == "0" then
+                    XInput.Text = tostring(math.floor(position.X))
+                    YInput.Text = tostring(math.floor(position.Y))
+                    ZInput.Text = tostring(math.floor(position.Z))
+                end
+            end
+        end
+        
+        TeleportBtn.MouseButton1Click:Connect(function()
+            local x = tonumber(XInput.Text)
+            local y = tonumber(YInput.Text)
+            local z = tonumber(ZInput.Text)
+            
+            if x and y and z then
+                local character = game.Players.LocalPlayer.Character
+                if character and character:FindFirstChild("HumanoidRootPart") then
+                    character.HumanoidRootPart.CFrame = CFrame.new(x, y, z)
+                    WindUI:Notify({
+                        Title = "坐标传送",
+                        Content = string.format("已传送到坐标 (%.1f, %.1f, %.1f)", x, y, z),
+                        Icon = "map-pin",
+                        Duration = 3
+                    })
+                else
+                    WindUI:Notify({
+                        Title = "传送失败",
+                        Content = "角色未找到",
+                        Icon = "error",
+                        Duration = 3
+                    })
+                end
+            else
+                WindUI:Notify({
+                    Title = "输入错误",
+                    Content = "请输入有效的坐标数字",
+                    Icon = "error",
+                    Duration = 3
+                })
+            end
+        end)
+        
+        CloseBtn.MouseButton1Click:Connect(function()
+            CoordinateGui:Destroy()
+            _G.CoordinateGUI = nil
+        end)
+        
+        game:GetService("RunService").RenderStepped:Connect(updateCurrentPosition)
+        
+        CoordinateGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+        _G.CoordinateGUI = CoordinateGui
