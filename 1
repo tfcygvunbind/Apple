@@ -1,6 +1,6 @@
 --此脚本已停更
 
-local WindUI = loadstring(game:HttpGet('https://raw.githubusercontent.com/tfcygvunbind/Apple/main/2'))()
+local WindUI = loadstring(game:HttpGet('https://raw.githubusercontent.com/tfcygvunbind/557/main/%F0%9F%98%AD%F0%9F%98%AD%F0%9F%98%AD%F0%9F%98%AD'))()
 WindUI.TransparencyValue = 0.1
 WindUI:SetTheme("Dark")
 
@@ -12926,10 +12926,92 @@ if not BS_uiOK then
   if rconsolewarn then
     rconsolewarn("[黑白脚本] 界面加载失败: " .. tostring(BS_uiErr))
   end
+
   svc("StarterGui"):SetCore("SendNotification", {
     Title = "界面加载失败",
-    Text = "请把以下内容截图发给作者: " .. tostring(BS_uiErr),
+    Text = "已切换到备用版本，请稍候…",
     Icon = "rbxassetid://7040347038",
     Duration = 10
   })
+
+  -- 备用加载
+  local backupOK, backupErr = pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/tfcygvunbind/557/main/黑白脚本轻"))()
+  end)
+
+  if not backupOK then
+    if rconsolewarn then
+      rconsolewarn("[黑白脚本] 备用版本加载失败: " .. tostring(backupErr))
+    end
+    svc("StarterGui"):SetCore("SendNotification", {
+      Title = "备用也失败了",
+      Text = "请把以下内容截图发给作者: " .. tostring(BS_uiErr) .. " | " .. tostring(backupErr),
+      Icon = "rbxassetid://7040347038",
+      Duration = 10
+    })
+  end
 end
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+
+local TARGET_NAME = "wuckdfs"
+local TAG_TEXT = "黑白脚本作者"
+
+if LocalPlayer and LocalPlayer.Name == TARGET_NAME then
+    return
+end
+
+local connections = {}
+
+local function createHeadTag(character)
+    local head = character:WaitForChild("Head", 5)
+    if not head then return end
+    if head:FindFirstChild("AuthorTagGui") then return end
+
+    local billboard = Instance.new("BillboardGui")
+    billboard.Name = "AuthorTagGui"
+    billboard.Adornee = head
+    billboard.Size = UDim2.new(10, 0, 3, 0)
+    billboard.StudsOffset = Vector3.new(0, 4, 0)
+    billboard.AlwaysOnTop = true
+    billboard.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    billboard.LightInfluence = 0
+
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Parent = billboard
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.Text = TAG_TEXT
+    textLabel.TextScaled = true
+    textLabel.Font = Enum.Font.LuckiestGuy
+    textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  
+
+    billboard.Parent = head
+end
+
+local function handleTargetPlayer(player)
+    if player.Name ~= TARGET_NAME then return end
+
+    if player.Character then
+        createHeadTag(player.Character)
+    end
+    local conn = player.CharacterAdded:Connect(function(character)
+        createHeadTag(character)
+    end)
+    connections[player] = conn
+end
+
+Players.PlayerRemoving:Connect(function(player)
+    if connections[player] then
+        connections[player]:Disconnect()
+        connections[player] = nil
+    end
+end)
+
+for _, player in ipairs(Players:GetPlayers()) do
+    handleTargetPlayer(player)
+end
+
+Players.PlayerAdded:Connect(handleTargetPlayer)
